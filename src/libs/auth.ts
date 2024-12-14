@@ -23,6 +23,8 @@ export const authOptions: NextAuthOptions = {
 	secret: process.env.SECRET,
 	session: {
 		strategy: "jwt",
+		maxAge: 30 * 24 * 60 * 60, // 30 days
+		updateAge: 24 * 60 * 60, // 24 hours
 	},
 
 	providers: [
@@ -167,53 +169,29 @@ export const authOptions: NextAuthOptions = {
 	],
 
 	callbacks: {
-		jwt: async (payload: any) => {
-			const { token, trigger, session } = payload;
-			const user: User = payload.user;
-
-			if (trigger === "update") {
-				// console.log(token.picture, session.user);
-				return {
-					...token,
-					...session.user,
-					picture: session.user.image,
-					image: session.user.image,
-					priceId: session.user.priceId,
-					currentPeriodEnd: session.user.currentPeriodEnd,
-					subscriptionId: session.user.subscriptionId,
-					customerId: session.user.customerId,
-				};
-			}
-
+		async jwt({ token, user }) {
 			if (user) {
-				return {
-					...token,
-					uid: user.id,
-					priceId: user.priceId,
-					currentPeriodEnd: user.currentPeriodEnd,
-					subscriptionId: user.subscriptionId,
-					role: user.role,
-					picture: user.image,
-					image: user.image,
-				};
+				token.id = user.id;
+				token.email = user.email;
+				token.role = user.role;
+				token.priceId = user.priceId;
+				token.currentPeriodEnd = user.currentPeriodEnd;
+				token.subscriptionId = user.subscriptionId;
+				token.picture = user.image;
+				token.image = user.image;
 			}
 			return token;
 		},
 
-		session: async ({ session, token }) => {
+		async session({ session, token }) {
 			if (session?.user) {
-				return {
-					...session,
-					user: {
-						...session.user,
-						id: token.sub,
-						priceId: token.priceId,
-						currentPeriodEnd: token.currentPeriodEnd,
-						subscriptionId: token.subscriptionId,
-						role: token.role,
-						image: token.picture,
-					},
-				};
+				session.user.id = token.id as string;
+				session.user.email = token.email;
+				session.user.role = token.role;
+				session.user.priceId = token.priceId;
+				session.user.currentPeriodEnd = token.currentPeriodEnd;
+				session.user.subscriptionId = token.subscriptionId;
+				session.user.image = token.picture;
 			}
 			return session;
 		},

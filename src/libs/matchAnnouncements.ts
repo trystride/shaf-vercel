@@ -1,4 +1,6 @@
 import { db } from './db';
+import { sendMatchNotifications } from './notifications';
+import { normalizeArabicText } from './textUtils';
 
 export async function matchAnnouncementsWithKeywords() {
   try {
@@ -21,12 +23,22 @@ export async function matchAnnouncementsWithKeywords() {
 
     // Check each announcement against each keyword
     for (const announcement of recentAnnouncements) {
-      const announcementText = `${announcement.title} ${announcement.description}`.toLowerCase();
+      // Normalize announcement text for better matching
+      const announcementText = normalizeArabicText(
+        `${announcement.title} ${announcement.description}`
+      ).toLowerCase();
 
       for (const keyword of keywords) {
-        const term = keyword.term.toLowerCase();
+        // Normalize keyword term for consistent matching
+        const term = normalizeArabicText(keyword.term).toLowerCase();
         
-        if (announcementText.includes(term)) {
+        // Split term into words for more precise matching
+        const terms = term.split(/\s+/).filter(t => t.length > 0);
+        
+        // Check if all terms are present in the announcement
+        const isMatch = terms.every(t => announcementText.includes(t));
+
+        if (isMatch) {
           // Check if this match already exists
           const existingMatch = await db.match.findFirst({
             where: {
@@ -51,6 +63,11 @@ export async function matchAnnouncementsWithKeywords() {
           }
         }
       }
+    }
+
+    // Send notifications for new matches
+    if (matches.length > 0) {
+      await sendMatchNotifications(matches);
     }
 
     return matches;

@@ -8,18 +8,24 @@ export async function GET() {
   try {
     const session = await getServerSession(authOptions);
 
-    if (!session) {
+    if (!session?.user?.email) {
+      console.error("[KEYWORDS_GET] No session or user email found");
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
     // Get user from session
     const user = await prisma.user.findUnique({
       where: {
-        email: session.user?.email || "",
+        email: session.user.email,
+      },
+      select: {
+        id: true,
+        email: true,
       },
     });
 
     if (!user) {
+      console.error("[KEYWORDS_GET] User not found for email:", session.user.email);
       return new NextResponse("User not found", { status: 404 });
     }
 
@@ -45,7 +51,8 @@ export async function POST(req: Request) {
   try {
     const session = await getServerSession(authOptions);
 
-    if (!session) {
+    if (!session?.user?.email) {
+      console.error("[KEYWORDS_POST] No session or user email found");
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
@@ -59,11 +66,16 @@ export async function POST(req: Request) {
     // Get user from session
     const user = await prisma.user.findUnique({
       where: {
-        email: session.user?.email || "",
+        email: session.user.email,
+      },
+      select: {
+        id: true,
+        email: true,
       },
     });
 
     if (!user) {
+      console.error("[KEYWORDS_POST] User not found for email:", session.user.email);
       return new NextResponse("User not found", { status: 404 });
     }
 
