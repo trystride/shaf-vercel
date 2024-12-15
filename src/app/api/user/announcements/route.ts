@@ -42,10 +42,26 @@ export async function GET() {
     });
 
     const announcements = matches.map(match => ({
-      id: match.announcement.id,
-      title: match.announcement.title,
-      description: match.announcement.description,
-      publishDate: match.announcement.publishDate,
+      Id: match.announcement.id,
+      AnnId: match.announcement.id,
+      ActionType: match.announcement.actionType || "",
+      ActionTypeID: match.announcement.actionTypeId || 0,
+      ActionTypeEn: match.announcement.actionTypeEn || "",
+      CourtType: match.announcement.courtType || "",
+      AnnouncementType: match.announcement.type || "",
+      Status: match.announcement.status,
+      RequestId: match.announcement.id,
+      StatusId: match.announcement.statusId || 0,
+      Header: match.announcement.title,
+      Comment: match.announcement.description,
+      Body: match.announcement.body,
+      PublishDate: match.announcement.publishDate,
+      debtorName: match.announcement.debtorName || "",
+      ActionDate: match.announcement.actionDate,
+      url: match.announcement.id,
+      AnnCreatedDate: match.announcement.createdAt?.toISOString() || null,
+      PageItems: null,
+      debtorIdentifier: match.announcement.debtorIdentifier || "",
       matchedKeyword: match.keyword.term
     }));
 
