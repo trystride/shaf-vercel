@@ -1,28 +1,26 @@
-import Home from "@/components/Home";
+import Home from "@/components/landing/Home";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-	title: `Full-Stack SaaS Boilerplate for Next.js - SaaSBold Demo`,
-	description: `A full-stack SaaS boilerplate and starter kit comes with all essential integrations, pages, components, user/admin dashboards, landing page, design source and everything you need to turn your feature-rich SaaS startup idea into reality in a day!`,
+	title: `Business Intelligence Monitoring - Stay Ahead with Real-Time Updates`,
+	description: `Transform the way you track important business announcements across Saudi Arabia's trusted sources. Get real-time updates on bankruptcy notices, media updates, and market movements that matter to your business.`,
 	openGraph: {
 		type: "website",
-		title: `Full-Stack SaaS Boilerplate for Next.js - SaaSBold Demo`,
-		description: `A full-stack SaaS boilerplate and starter kit comes with all essential integrations, pages, components, user/admin dashboards, landing page, design source and everything you need to turn your feature-rich SaaS startup idea into reality in a day!`,
-		images:
-			"https://ucarecdn.com/4b0ffd0e-90b0-4a59-b63c-f5ecee0ae575/saasbold.jpg",
+		title: `Business Intelligence Monitoring - Stay Ahead with Real-Time Updates`,
+		description: `Transform the way you track important business announcements across Saudi Arabia's trusted sources. Get real-time updates on bankruptcy notices, media updates, and market movements that matter to your business.`,
+		locale: 'en_US',
+		siteName: 'Business Intelligence Monitor',
 	},
 	twitter: {
 		card: "summary_large_image",
-		title: `Full-Stack SaaS Boilerplate for Next.js - SaaSBold Demo`,
-		description: `A full-stack SaaS boilerplate and starter kit comes with all essential integrations, pages, components, user/admin dashboards, landing page, design source and everything you need to turn your feature-rich SaaS startup idea into reality in a day!`,
-		images:
-			"https://ucarecdn.com/4b0ffd0e-90b0-4a59-b63c-f5ecee0ae575/saasbold.jpg",
+		title: `Business Intelligence Monitoring - Stay Ahead with Real-Time Updates`,
+		description: `Transform the way you track important business announcements across Saudi Arabia's trusted sources. Get real-time updates on bankruptcy notices, media updates, and market movements that matter to your business.`,
 	},
 };
 
 export default function HomePage() {
 	return (
-		<main>
+		<main className="flex min-h-screen flex-col">
 			<Home />
 		</main>
 	);
