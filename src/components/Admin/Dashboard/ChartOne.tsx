@@ -148,13 +148,14 @@ const ChartOne: React.FC = () => {
 	handleReset;
 
 	return (
-		<div id='chartOne' className='-ml-5'>
+		<div id='chartOne' className='-ml-5 w-full'>
 			<ReactApexChart
 				options={options}
 				series={state.series}
 				type='area'
 				height={300}
-				width='100%'
+				width="100%"
+				className="w-full"
 			/>
 		</div>
 	);

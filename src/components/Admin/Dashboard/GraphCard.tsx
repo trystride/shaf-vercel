@@ -7,7 +7,7 @@ export default function GraphCard({ data }: { data: OverviewData }) {
 	const { isIncrease } = data;
 
 	return (
-		<div className='rounded-10 bg-white p-7.5 shadow-1 dark:bg-gray-dark'>
+		<div className='rounded-10 bg-gray-50/50 p-7.5 shadow-sm ring-1 ring-gray-100 dark:bg-gray-dark dark:ring-gray-700/50'>
 			<div className='flex items-center justify-between'>
 				<div>
 					<p className='mb-1.5 font-satoshi text-sm font-medium tracking-[-.1px] text-body dark:text-gray-4'>

@@ -1,7 +1,6 @@
 const arrowIcon = (
 	<svg
-		width='26'
-		height='26'
+		className='h-6 w-6'
 		viewBox='0 0 16 16'
 		fill='none'
 		xmlns='http://www.w3.org/2000/svg'
@@ -15,42 +14,46 @@ const arrowIcon = (
 	</svg>
 );
 
-export default function InputSelect(props: any) {
-	const { name, label, options, onChange, value, required } = props;
-	return (
-		<div>
-			<label
-				htmlFor={name}
-				className='mb-2.5 block font-satoshi text-base font-medium text-dark dark:text-white'
-			>
-				{label}
-			</label>
-			<div className='relative'>
-				<select
-					name={name}
-					id='select'
-					value={value}
-					onChange={onChange}
-					required={required}
-					className='relative z-20 h-[52px] w-full appearance-none rounded-lg border border-gray-3 bg-transparent py-3 pl-5.5 text-dark outline-none ring-offset-1 duration-300 focus:shadow-input  focus:ring-primary/20 dark:border-stroke-dark dark:text-white dark:focus:border-transparent'
-				>
-					<option value='Select Option' className='dark:bg-dark'>
-						Select option
-					</option>
-					{options?.map((option: any) => (
-						<option
-							key={option?.value}
-							value={option?.value}
-							className='dark:bg-dark'
-						>
-							{option?.label}
-						</option>
-					))}
-				</select>
-				<span className='absolute right-5.5 top-1/2 z-10 -translate-y-1/2'>
-					{arrowIcon}
-				</span>
-			</div>
-		</div>
-	);
+export default function InputSelect(props: {
+  name: string;
+  label: string;
+  options: { value: string; label: string }[];
+  onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  value: string;
+  required?: boolean;
+  placeholder?: string;
+}) {
+  const { name, label, options, onChange, value, required, placeholder } = props;
+  return (
+    <div>
+      <label
+        htmlFor={name}
+        className='mb-2.5 block font-satoshi text-base font-medium text-dark dark:text-white'
+      >
+        {label}
+      </label>
+      <div className='relative'>
+        <select
+          name={name}
+          id={name}
+          value={value || ""}
+          onChange={onChange}
+          required={required}
+          className='relative z-20 h-[52px] w-full appearance-none rounded-lg border border-gray-3 bg-white py-3 pl-5.5 pr-12 text-dark outline-none ring-offset-1 duration-300 focus:shadow-input focus:ring-primary/20 dark:border-stroke-dark dark:bg-dark dark:text-white dark:focus:border-transparent'
+        >
+          <option value="" disabled>
+            {placeholder || "Select option"}
+          </option>
+          {options?.map((option) => (
+            <option key={option.value} value={option.value} className='bg-white dark:bg-dark'>
+              {option.label}
+            </option>
+          ))}
+        </select>
+        <span className='absolute right-4 top-1/2 z-30 -translate-y-1/2 pointer-events-none text-gray-500 dark:text-gray-400'>
+          {arrowIcon}
+        </span>
+      </div>
+    </div>
+  );
 }

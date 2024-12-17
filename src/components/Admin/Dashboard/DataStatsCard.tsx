@@ -5,7 +5,7 @@ export default function DataStatsCard({ data }: { data: DataStats }) {
 	const { icon, value, content, color, isIncrease, percents } = data;
 
 	return (
-		<div className='rounded-10 bg-white p-6 shadow-1 dark:bg-gray-dark'>
+		<div className='rounded-10 bg-gray-50/50 p-6 shadow-sm ring-1 ring-gray-100 dark:bg-gray-dark dark:ring-gray-700/50'>
 			<div
 				className='mb-6 flex aspect-square w-[58px] items-center justify-center rounded-full text-white'
 				style={{ background: color }}

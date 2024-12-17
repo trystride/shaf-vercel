@@ -11,7 +11,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
 	const [openSidebar, setOpenSidebar] = useState(false);
 	return (
 		<>
-			<main className='min-h-screen bg-gray-2 dark:bg-[#151F34]'>
+			<main className='min-h-screen bg-white dark:bg-[#151F34]'>
 				<aside
 					className={`fixed left-0 top-0 z-[999] h-screen w-[290px] overflow-y-auto bg-white duration-300 dark:bg-gray-dark ${
 						openSidebar ? "translate-x-0" : "-translate-x-full lg:translate-x-0"

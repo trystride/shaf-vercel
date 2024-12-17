@@ -56,20 +56,20 @@ export default function InviteUserModal(props: any) {
 		<>
 			{showModal && (
 				<div
-					className={`py-7.6 fixed left-0 top-0 z-99999 flex h-screen w-full items-center justify-center bg-black/90 px-4 dark:bg-dark/70 sm:px-8 `}
+					className={`fixed left-0 top-0 z-50 flex h-screen w-full items-center justify-center bg-black/50 px-4 backdrop-blur-sm dark:bg-dark/50 sm:px-6`}
 				>
 					<div
 						ref={divRef}
-						className='shadow-7 relative h-auto max-h-[calc(100vh-60px)] w-full max-w-[600px] scale-100 transform overflow-y-auto rounded-[25px] bg-white transition-all dark:bg-black'
+						className='shadow-lg relative w-full max-w-[480px] scale-100 transform overflow-hidden rounded-xl bg-white transition-all dark:bg-black'
 					>
 						<ModalCloseButton closeModal={setShowModal} />
 
-						<div className='flex flex-wrap gap-5.5 border-b border-stroke p-4 dark:border-stroke-dark sm:p-7.5 xl:p-10'>
-							<h3 className='mb-1.5 font-satoshi text-custom-2xl font-bold tracking-[-.5px] text-dark dark:text-white'>
+						<div className='p-6 sm:p-8'>
+							<h3 className='mb-6 font-satoshi text-2xl font-bold tracking-tight text-dark dark:text-white'>
 								Add New User
 							</h3>
 
-							<form className='w-full space-y-4' onSubmit={handleSubmit}>
+							<form className='flex flex-col gap-6' onSubmit={handleSubmit}>
 								<InputGroup
 									label='User Email'
 									type='email'

@@ -1,0 +1,1225 @@
+# Getting Started
+
+Welcome to the Paylink Integration Guide! This guide provides step-by-step instructions for integrating the Paylink payment system into your application. Follow these steps to ensure a seamless setup and payment processing experience.
+
+
+
+## Setup & Authentication
+
+### 1. Environment Configuration 🔗
+
+-   **Set Up Environments Correctly**
+    -   Each environment requires its own `BASE URL`, `API ID`, and `Secret Key`.
+
+### 2. Authorization Token 🔗
+
+-   **Obtain Authorization Token**
+    -   To call any endpoint, you must use an authorization token.
+    -   Obtain this token from the authentication endpoint.
+
+----------
+
+## Generate Invoice
+
+### 1. Create Invoice 🔗
+
+-   **Send Invoice Details**
+    -   Send the invoice details to the `/api/addInvoice` endpoint to generate a new invoice.
+-   **Response**
+    -   The response will include the transaction number of the created invoice, which will be used in subsequent steps.
+
+----------
+
+## Payment Processing
+
+### 1. Retrieve Invoice Details 🔗
+
+-   **Fetch Invoice Details**
+    -   Retrieve the invoice details by sending the transaction number to the `/api/getInvoice` endpoint.
+-   **Payment URL**
+    -   The invoice details will include the payment URL, which will be used to process the payment.
+
+### 2. Redirect to Payment 🔗
+
+-   **Redirect Customer**
+    -   Redirect your customer to the provided payment URL.
+
+### 3. Post-Payment Redirection 🔗
+
+-   **Handle Callback**
+    -   After the user completes the payment, their browser will be redirected back to the `callBackUrl` specified during the invoice generation process.
+
+----------
+
+## Check Payment Status
+
+### 1. Verify Payment 🔗
+
+-   **Check Payment Status and Amount**
+    -   Use the `/api/getInvoice` endpoint to check the payment `status` and `paid amount`.
+    -   Process the client's order in your system based on the payment status.
+
+### 2. Handle Payment Errors 🔗
+
+-   **Check for Payment Errors**
+    -   Check for any payment `errors` that may have occurred during the payment process using the provided payment error codes.
+
+----------
+
+## Additional Features
+
+### 1. Cancel Invoice 🔗
+
+#### Endpoint
+
+-   **HTTP Method:** `POST`
+-   **URL:** `/api/cancelInvoice`
+
+#### Request Headers
+
+Header
+
+Required
+
+Description
+
+Authorization
+
+Yes
+
+Bearer token provided by Authentication Endpoint
+
+Accept
+
+Yes
+
+Must be set to `application/json`
+
+Content-Type
+
+Yes
+
+Must be set to `application/json`
+
+```json
+{
+  "Authorization": "Bearer [id_token]",
+  "Accept": "application/json",
+  "Content-Type": "application/json"
+}
+
+```
+
+#### Request Body Parameters
+
+Parameter
+
+Type
+
+Required
+
+Description
+
+transactionNo
+
+string
+
+Yes
+
+The unique transaction number to cancel
+
+**Example Request:**
+
+```json
+{
+  "transactionNo": "1707943132122"
+}
+
+```
+
+#### Response Body
+
+Parameter
+
+Type
+
+Description
+
+success
+
+Boolean
+
+Indicates whether the operation was successful
+
+**Example Response:**
+
+```json
+{
+  "success": true
+}
+
+```
+
+**Important Note:**
+
+> The Merchant's application must execute this endpoint on the **server-side** and then forward the resulting response to the **client-side**. If executed on the client-side, verify the response using the `Get Invoice` endpoint from the server-side to confirm the `orderStatus` and `paid amount`.
+
+----------
+
+### 2. Payment Webhook 🔗
+
+Paylink provides a webhook service that notifies merchants when an order is paid. This section outlines the setup, structure, and usage of the webhook service.
+
+#### Prerequisites
+
+-   The merchant must be registered with Paylink to use this webhook service.
+
+#### Request Type
+
+-   **Method:** `POST`
+
+#### Version Information
+
+-   Supports **Version 1** and **Version 2** of the Payment Webhook API.
+-   Select the desired version (v1 or v2) when setting up the webhook URL in the **My Paylink Portal**.
+
+#### Partner Account Setup
+
+-   Partners managing multiple sub-merchants can set the payment webhook in their partner account to receive payment notifications for all sub-merchants through a single webhook endpoint.
+
+#### Endpoint Setup
+
+-   Set up the webhook endpoint in the **My Paylink Portal** on the settings page.
+-   Select the API version (v1 or v2).
+
+#### Headers
+
+-   Include any special headers required for the webhook request.
+
+**Example:**
+
+```json
+{
+  "Authorization": "Bearer [token]"
+}
+
+```
+
+#### Request Body
+
+-   The webhook sends a JSON object containing information about the paid order. The structure differs between **Version 1** and **Version 2**.
+
+##### Version 1 Request Body
+
+Parameter
+
+Type
+
+Description
+
+amount
+
+float
+
+The total amount of the order
+
+merchantEmail
+
+string
+
+The email address of the merchant
+
+transactionNo
+
+string
+
+The transaction number generated by Paylink
+
+merchantOrderNumber
+
+string
+
+The merchant's assigned order number
+
+orderStatus
+
+string
+
+The status of the order (e.g., "Paid")
+
+**Example:**
+
+```json
+{
+  "amount": 150.0,
+  "merchantEmail": "example@example.com",
+  "transactionNo": "167845623412",
+  "merchantOrderNumber": "ORD789012",
+  "orderStatus": "Paid"
+}
+
+```
+
+##### Version 2 Request Body
+
+Includes additional fields for more comprehensive transaction details.
+
+Parameter
+
+Type
+
+Description
+
+amount
+
+float
+
+The total amount of the order
+
+merchantEmail
+
+string
+
+The email address of the merchant
+
+merchantMobile
+
+string
+
+The mobile number of the merchant
+
+merchantAccountNo
+
+string
+
+The account number of the merchant
+
+merchantLicenseType
+
+string
+
+The type of license the merchant holds
+
+merchantLicenseNo
+
+string
+
+The license number of the merchant
+
+transactionNo
+
+string
+
+The transaction number generated by Paylink
+
+merchantOrderNumber
+
+string
+
+The merchant's assigned order number
+
+orderStatus
+
+string
+
+The status of the order (e.g., "Paid")
+
+paymentType
+
+string
+
+The payment method used for the order
+
+apiVersion
+
+string
+
+The API version being used (e.g., "v2")
+
+**Example:**
+
+```json
+{
+  "amount": 150.0,
+  "merchantEmail": "example@example.com",
+  "merchantMobile": "966555123456",
+  "merchantAccountNo": "ACC123456789",
+  "merchantLicenseType": "Commercial",
+  "merchantLicenseNo": "LIC987654321",
+  "transactionNo": "167845623412",
+  "merchantOrderNumber": "ORD789012",
+  "orderStatus": "Paid",
+  "paymentType": "mada",
+  "apiVersion": "v2"
+}
+
+```
+
+#### Supported `paymentType` Values
+
+Value
+
+Description
+
+mada
+
+Mada card
+
+visaMastercard
+
+Visa or MasterCard
+
+stcpay
+
+STC Pay
+
+tabby
+
+Tabby
+
+tamara
+
+Tamara
+
+urpay
+
+UrPay
+
+a2a
+
+Account-to-Account transfer (ANB)
+
+amex
+
+American Express (Amex)
+
+sadad
+
+Sadad payment
+
+#### Expected Response
+
+-   **HTTP Status Code:** `200`
+    -   Indicates successful receipt of the webhook.
+
+#### Error Handling
+
+-   If the webhook is not acknowledged with a `200` HTTP status code, Paylink will retry sending the webhook up to ten times at intervals.
+
+----------
+
+### 3. Direct Payment 🔗
+
+#### Overview
+
+The `payInvoice` endpoint within the Paylink API framework allows merchants to create invoices and accept online payments directly through the Paylink gateway. This integration facilitates the collection of card information from customers and processes payments on your webpage, providing immediate results regarding the payment status without the need for webpage redirections.
+
+#### Important Note
+
+To request activation of the Direct Payment feature, compliance with the [Payment Card Industry Data Security Standards (PCI DSS)](https://www.pcisecuritystandards.org/) is mandatory, and obtaining PCI DSS certification is essential. Non-compliance endangers customer data and may result in substantial penalties.
+
+**Activation Steps:**
+
+1.  Ensure PCI DSS compliance and obtain certification.
+2.  Contact your account manager or sales representative to enable the Direct Payment feature.
+
+#### Available Payment Methods for Direct Integration
+
+Not all payment methods support the Direct Payment feature. For detailed information, consult your account manager.
+
+#### Environment
+
+Paylink supports two environments:
+
+-   **Testing Environment**
+    -   **Base URL:** `https://restpilot.paylink.sa`
+-   **Production Environment**
+    -   **Base URL:** `https://restapi.paylink.sa`
+
+#### Authentication
+
+-   **Method:** Bearer token provided by RestPilot Paylink.
+-   **Header:** Include the token in the `Authorization` header of the request.
+
+#### Endpoint
+
+-   **HTTP Method:** `POST`
+-   **URL:** `/api/payInvoice`
+
+#### Request Headers
+
+Header
+
+Required
+
+Description
+
+Authorization
+
+Yes
+
+Bearer token provided by Authentication Endpoint
+
+Accept
+
+Yes
+
+Must be set to `application/json`
+
+Content-Type
+
+Yes
+
+Must be set to `application/json`
+
+```json
+{
+  "Authorization": "Bearer [id_token]",
+  "Accept": "application/json",
+  "Content-Type": "application/json"
+}
+
+```
+
+#### Request Body Parameters
+
+Parameter
+
+Type
+
+Required
+
+Description
+
+amount
+
+float
+
+Yes
+
+The total amount of the invoice. **Note:** Buyer will pay this amount regardless of the total amounts of the products' prices.
+
+callBackUrl
+
+string
+
+No
+
+The URL to be called when the payment is complete or canceled.
+
+clientEmail
+
+string
+
+No
+
+The email address of the client.
+
+clientMobile
+
+string
+
+Yes
+
+The mobile number of the client.
+
+currency
+
+string
+
+No
+
+The currency code of the invoice. Default is `SAR`. Examples: `USD`, `EUR`, `GBP`.
+
+clientName
+
+string
+
+Yes
+
+The name of the client.
+
+note
+
+string
+
+No
+
+A note for the invoice.
+
+orderNumber
+
+string
+
+Yes
+
+A unique identifier for the invoice.
+
+products
+
+array
+
+Yes
+
+An array of product objects to be included in the invoice. [Product Object Details](https://chatgpt.com/c/6760e2a2-e624-800f-8daa-655ba3731220#product-object-details)
+
+smsMessage
+
+string
+
+No
+
+Enables sending the invoice to the client's mobile with dynamic placeholders. [Placeholders List](https://chatgpt.com/c/6760e2a2-e624-800f-8daa-655ba3731220#sms-message-placeholders)
+
+supportedCardBrands
+
+array
+
+No
+
+List of supported card brands. Optional. Values: `[mada, visaMastercard, amex, tabby, tamara, stcpay, urpay]`
+
+displayPending
+
+boolean
+
+No
+
+If `true`, displays the invoice in `my.paylink.sa`.
+
+card
+
+object
+
+Yes
+
+Contains credit/debit card information. [Card Object Details](https://chatgpt.com/c/6760e2a2-e624-800f-8daa-655ba3731220#card-object-details)
+
+#### Product Object Details
+
+Parameter
+
+Type
+
+Required
+
+Description
+
+title
+
+string
+
+Yes
+
+The title of the product.
+
+price
+
+float
+
+Yes
+
+The price of the product.
+
+qty
+
+integer
+
+Yes
+
+The quantity of the product.
+
+description
+
+string
+
+No
+
+A description of the product.
+
+isDigital
+
+boolean
+
+No
+
+Set to `true` if the product is digital.
+
+imageSrc
+
+string
+
+No
+
+A URL to an image of the product.
+
+specificVat
+
+float
+
+No
+
+The VAT rate for the product. Overrides default VAT.
+
+productCost
+
+float
+
+No
+
+The cost of the product. Used to calculate profit margin.
+
+#### SMS Message Placeholders
+
+Placeholder
+
+Description
+
+`[CLIENT_NAME]`
+
+Name of the client.
+
+`[TRANSACTION_NO]`
+
+Transaction number from Paylink of the invoice.
+
+`[ORDER_NUMBER]`
+
+The order number of the invoice.
+
+`[QR_URL]`
+
+The URL that displays QR code of the invoice.
+
+`[MOB_URL]`
+
+The URL of the simple invoice format for mobile devices.
+
+`[SHORT_URL]`
+
+The short URL of the invoice.
+
+`[AMOUNT]`
+
+The amount of the invoice.
+
+`[WEB_URL]`
+
+The full URL of the invoice. **Note:** Requires additional agreement with Paylink sales.
+
+#### Example Request
+
+```json
+{
+  "amount": 5,
+  "callBackUrl": "https://www.example.com",
+  "clientEmail": "myclient@email.com",
+  "clientMobile": "0509200900",
+  "clientName": "Zaid Matooq",
+  "note": "This invoice is for VIP client.",
+  "orderNumber": "MERCHANT-ANY-UNIQUE-ORDER-NUMBER-123123123",
+  "card": {
+    "expiry": {
+      "month": "04",
+      "year": "28"
+    },
+    "number": "4111111111111111",
+    "securityCode": "446"
+  },
+  "products": [
+    {
+      "description": "Brown Hand bag leather for ladies",
+      "imageSrc": "http://merchantwebsite.com/img/img1.jpg",
+      "isDigital": true,
+      "price": 150,
+      "qty": 1,
+      "title": "Hand bag"
+    }
+  ]
+}
+
+```
+
+#### Success Response
+
+Parameter
+
+Type
+
+Description
+
+gatewayOrderRequest
+
+object
+
+The invoice details sent to the gateway. [Details Below](https://chatgpt.com/c/6760e2a2-e624-800f-8daa-655ba3731220#gatewayorderrequest-object)
+
+amount
+
+float
+
+The total amount of the invoice.
+
+transactionNo
+
+string
+
+The gateway-assigned transaction number.
+
+orderStatus
+
+string
+
+The status of the invoice.
+
+paymentErrors
+
+string
+
+Any payment errors that occurred.
+
+url
+
+string
+
+The URL to the 3DS page.
+
+success
+
+boolean
+
+Indicates whether the operation was successful. **Note:** Not the payment or order status.
+
+digitalOrder
+
+boolean
+
+Indicates whether the order contains digital products.
+
+foreignCurrencyRate
+
+float
+
+The foreign currency rate used in the transaction, if applicable. Includes SAR exchange rate.
+
+#### Failure Response
+
+Parameter
+
+Type
+
+Description
+
+detail
+
+string
+
+A detailed error message explaining the reason for failure.
+
+title
+
+string
+
+A short title summarizing the reason for failure.
+
+type
+
+string
+
+A URL identifying the type of error.
+
+status
+
+string
+
+The HTTP status code for the response.
+
+**Important Notes:**
+
+-   **Invoice Minimum Amount:** The minimum invoice amount in the Paylink system is **SAR 5.00**.
+-   **Server-Side Verification:** The merchant's application must perform the `Get Invoice` endpoint on the **server-side** and then send the resulting response to the client-side. If used on the client-side, verify the result using the `Get Invoice` endpoint from the server-side to confirm the `orderStatus` and `paid amount`.
+
+**Try the Endpoint:** [Click here](https://chatgpt.com/c/6760e2a2-e624-800f-8daa-655ba3731220#) for more details about the endpoint and to try it out.
+
+----------
+
+## Payment Error Codes
+
+This section lists error codes associated with payment processing. These codes are returned in the `paymentErrors` array within the invoice details in case of payment failure.
+
+Code
+
+Title
+
+Description
+
+01
+
+Refer To Card Issuer
+
+The issuer refuses the transaction.
+
+03
+
+Invalid Merchant Number
+
+Incorrect details or non-functional merchant facility.
+
+04
+
+Pick Up Card
+
+The issuing bank requests to retain the card as it may be lost or stolen.
+
+05
+
+Do Not Honour
+
+The issuing bank is unwilling to accept the transaction.
+
+06
+
+Error
+
+General error.
+
+12
+
+Invalid Transaction
+
+An error occurred while processing the card.
+
+13
+
+Invalid Amount
+
+The amount specified is invalid.
+
+14
+
+Invalid Card Number
+
+The card number is incorrect or does not exist.
+
+15
+
+No Issuer
+
+The customer's card issuer does not exist.
+
+22
+
+Suspected Malfunction
+
+The issuing bank is not responding during the transaction.
+
+30
+
+Format Error
+
+There is a format error in the request.
+
+31
+
+Bank Not Supported By Switch
+
+The customer's bank does not allow using the card for mail/telephone, fax, email, or internet orders.
+
+34
+
+Suspected Fraud, Retain Card
+
+The issuing bank suspects fraud and requests to retain the card.
+
+37
+
+Contact Acquirer Security Department
+
+The card issuer has declined the transaction and requested to retain the card.
+
+41
+
+Lost Card
+
+The card is reported as lost or stolen.
+
+42
+
+No Universal Account
+
+The account type is not valid for this card number.
+
+43
+
+Stolen Card
+
+The card is reported as stolen.
+
+49
+
+The Card Was Declined
+
+The card is not enabled for online transactions.
+
+51
+
+Insufficient Funds
+
+There are not enough funds or the transaction exceeds the credit limit.
+
+54
+
+Expired Card
+
+The card is expired and no longer valid.
+
+56
+
+No Card Record
+
+The card number does not exist.
+
+57
+
+Function Not Permitted To Cardholder
+
+The card cannot be used for this type of transaction.
+
+58
+
+Function Not Permitted To Terminal
+
+The card cannot be used for this transaction type or the merchant account is misconfigured.
+
+59
+
+Suspected Fraud
+
+The issuer suspects the transaction is fraudulent.
+
+61
+
+Withdrawal Limit Exceeded
+
+The transaction exceeds the customer's card limit.
+
+62
+
+Restricted Card
+
+The card is invalid in a specific region or does not support online payments.
+
+67
+
+Capture Card
+
+The issuing bank suspects the card is counterfeit.
+
+91
+
+Card Issuer Unavailable
+
+Problem contacting the issuing bank to authorize the transaction.
+
+92
+
+Unable To Route Transaction
+
+The card can't be found for routing, often used for test card numbers.
+
+**Note:** For a complete list of possible error codes and their meanings, refer to our [Payment Errors Codes documentation](https://chatgpt.com/c/6760e2a2-e624-800f-8daa-655ba3731220#).
+
+Understanding these error codes is crucial for diagnosing payment failures, enabling prompt resolution, and ensuring smoother transaction processes.
+
+----------
+
+## Environment Configuration
+
+Before integrating the payment system, set up your environment correctly. Paylink API supports two primary environments: **Testing Environment** and **Production Environment**.
+
+### API Server Base (API Link)
+
+#### Testing Environment
+
+-   **URL:** `https://restpilot.paylink.sa`
+
+#### Production Environment
+
+-   **URL:** `https://restapi.paylink.sa`
+
+### API Credentials
+
+#### Testing Environment
+
+Credential
+
+Value
+
+API ID
+
+`APP_ID_1123453311`
+
+Secret Key
+
+`0662abb5-13c7-38ab-cd12-236e58f43766`
+
+#### Production Environment
+
+Credential
+
+Value
+
+API ID
+
+Obtained from [my.paylink.sa](https://my.paylink.sa/)
+
+Secret Key
+
+Obtained from [my.paylink.sa](https://my.paylink.sa/)
+
+### How to Obtain Production Keys from [my.paylink.sa](https://my.paylink.sa/):
+
+#### 📘 Paylink Subscription
+
+-   **Subscribe:** To obtain the `API ID` & `Secret Key`, subscribe to a Paylink package that supports API access.
+
+#### ❗️ Double Check
+
+-   **Environment-Specific Credentials:** Ensure you use the correct credentials and API Base Link based on whether you are testing or deploying your payment integration to avoid any issues during the process.
+
+#### ❗️ Important Note
+
+-   **Security:** Your API keys carry significant privileges. Keep them **secret** and **accessible only to authorized personnel**.
+
+----------
+
+## Authentication
+
+This endpoint is used to authenticate a user or application, providing the necessary access tokens for further interactions with the Paylink API.
+
+### Endpoint
+
+-   **HTTP Method:** `POST`
+-   **URL:** `/api/auth`
+
+#### ❗️ Important Note
+
+-   **Correct Credentials:** Ensure that you use the correct credentials to avoid any issues during the process, depending on whether you are testing or deploying your payment integration.
+
+### Request Body Parameters
+
+Field Name
+
+Type
+
+Description
+
+apiId
+
+String
+
+Provided by Paylink, based on your environment.
+
+secretKey
+
+String
+
+Provided by Paylink, based on your environment.
+
+persistToken
+
+Boolean
+
+- `true`: The returned token will be valid for **30 hours**.- `false`: The returned token will be valid for **30 minutes**.
+
+**Example Request:**
+
+```json
+{
+    "apiId": "APP_ID_1123453311",
+    "secretKey": "0662abb5-13c7-38ab-cd12-236e58f43766",
+    "persistToken": false
+}
+
+```
+
+#### ❗️ Important Note
+
+-   **Secure Storage:** `API ID` & `Secret Key` must be stored securely and should never be exposed outside the server-side environment of your system.
+
+### Success Response
+
+If the API keys are correct and the authentication request is successful, the response contains the following details:
+
+Field Name
+
+Type
+
+Description
+
+id_token
+
+string
+
+The token value. Its validation period is either 30 minutes or 30 hours.
+
+**Example Response:**
+
+```json
+{
+  "id_token": "eyJhbGciOiJIUzUxMiJ9***********"
+}
+
+```
+
+### Use of the Token
+
+When your application receives a token, include this token in the request header when accessing other secured endpoints.
+
+**Header Format:**
+
+```
+Authorization: Bearer [TOKEN]
+
+```
+
+**Example Request Header:**
+
+```json
+{
+  "Authorization": "Bearer [id_token]",
+  "Accept": "application/json",
+  "Content-Type": "application/json"
+}
+
+```
+
+----------
+
+## API Server Base (API Link)
+
+### Testing Environment
+
+-   **URL:** `https://restpilot.paylink.sa`
+
+### Production Environment
+
+-   **URL:** `https://restapi.paylink.sa`
+
+----------
+
+## Example Sections
+
+The guide includes detailed instructions for each step of the integration process, complete with example requests and responses to help you implement Paylink's payment system effectively.
+
+For further assistance, refer to each section's detailed descriptions and examples.
+
+----------
+
+# Conclusion
+
+Integrating Paylink's payment system into your application is straightforward with this comprehensive guide. Ensure you follow each step carefully, maintain the security of your API credentials, and handle payment statuses and errors appropriately. For any further assistance, feel free to reach out to Paylink support or consult the [Payment Errors Codes documentation](https://chatgpt.com/c/6760e2a2-e624-800f-8daa-655ba3731220#).
+
+----------
+
+_This documentation is continuously updated to reflect the latest features and best practices. Stay tuned for updates to ensure optimal integration and performance._
