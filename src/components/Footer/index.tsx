@@ -3,266 +3,148 @@ import Image from "next/image";
 import Link from "next/link";
 
 const Footer = () => {
-	return (
-		<footer className='relative z-1 mt-auto overflow-hidden bg-black py-17.5 lg:py-22.5 xl:py-27.5'>
-			<div className='mx-auto max-w-[1170px] px-4 sm:px-8 xl:px-0'>
-				{/* <!-- footer menu start --> */}
-				<div className='flex flex-wrap gap-10 lg:justify-between xl:flex-nowrap xl:gap-20'>
-					<div className='w-full max-w-[275px]'>
-						<Link href='/'>
-							<Image
-								src='/images/logo/logo-light.svg'
-								alt='Logo'
-								width={214}
-								height={40}
-							/>
-						</Link>
-						<p className='mt-5 text-gray-5'>
-							© Your SaaS - Demo SaaS website created using SaaSBold
-						</p>
+  const currentYear = new Date().getFullYear();
+  
+  return (
+    <footer className="relative z-10 mt-auto border-t border-gray-200 bg-white pt-16 pb-12 dark:border-gray-800 dark:bg-gray-900">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-4">
+          {/* Company Info */}
+          <div className="flex flex-col gap-6">
+            <Link href="/" className="inline-block">
+              <Image
+                src="/images/logo/logo-light.svg"
+                alt="Shaf Logo"
+                width={140}
+                height={32}
+                className="hidden dark:block"
+              />
+              <Image
+                src="/images/logo/logo.svg"
+                alt="Shaf Logo"
+                width={140}
+                height={32}
+                className="block dark:hidden"
+              />
+            </Link>
+            <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+              Empowering businesses with AI-driven solutions for enhanced productivity and innovation.
+            </p>
+            <div className="flex items-center gap-4">
+              <a
+                href="https://twitter.com/ShafAI"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-lg p-2 text-gray-500 transition-colors hover:bg-gray-100 hover:text-primary dark:text-gray-400 dark:hover:bg-gray-800"
+                aria-label="Follow us on Twitter"
+              >
+                <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
+                </svg>
+              </a>
+              <a
+                href="https://linkedin.com/company/shaf-ai"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-lg p-2 text-gray-500 transition-colors hover:bg-gray-100 hover:text-primary dark:text-gray-400 dark:hover:bg-gray-800"
+                aria-label="Follow us on LinkedIn"
+              >
+                <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                </svg>
+              </a>
+            </div>
+          </div>
 
-						<ul className='mt-11 flex items-center gap-2'>
-							<li>
-								<a
-									href='#'
-									aria-label='Twitter Social Link'
-									className='flex duration-200 ease-out hover:text-white'
-								>
-									<svg
-										className='fill-current'
-										width='32'
-										height='32'
-										viewBox='0 0 32 32'
-										fill='none'
-										xmlns='http://www.w3.org/2000/svg'
-									>
-										<path d='M13.063 9L16.558 13.475L20.601 9H23.055L17.696 14.931L24 23H19.062L15.196 18.107L10.771 23H8.316L14.051 16.658L8 9H13.063ZM12.323 10.347H10.866L19.741 21.579H21.101L12.323 10.347Z' />
-									</svg>
-								</a>
-							</li>
+          {/* Product */}
+          <div className="flex flex-col gap-4">
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-900 dark:text-white">Product</h3>
+            <div className="flex flex-col gap-3">
+              <Link href="/features" className="text-sm text-gray-600 transition-colors hover:text-primary dark:text-gray-400">
+                Features
+              </Link>
+              <Link href="/pricing" className="text-sm text-gray-600 transition-colors hover:text-primary dark:text-gray-400">
+                Pricing
+              </Link>
+              <Link href="/integrations" className="text-sm text-gray-600 transition-colors hover:text-primary dark:text-gray-400">
+                Integrations
+              </Link>
+              <Link href="/changelog" className="text-sm text-gray-600 transition-colors hover:text-primary dark:text-gray-400">
+                Changelog
+              </Link>
+              <Link href="/docs" className="text-sm text-gray-600 transition-colors hover:text-primary dark:text-gray-400">
+                Documentation
+              </Link>
+            </div>
+          </div>
 
-							<li>
-								<a
-									href='#'
-									aria-label='Dev Social Link'
-									className='flex duration-200 ease-out hover:text-white'
-								>
-									<svg
-										className='fill-current'
-										width='32'
-										height='32'
-										viewBox='0 0 32 32'
-										fill='none'
-										xmlns='http://www.w3.org/2000/svg'
-									>
-										<path d='M12.29 14.3C12.1722 14.2039 12.026 14.1494 11.874 14.145H11.251V17.872H11.874C12.0261 17.8674 12.1724 17.8125 12.29 17.716C12.3606 17.6615 12.4166 17.5905 12.4533 17.5093C12.4899 17.428 12.5059 17.3389 12.5 17.25V14.762C12.5049 14.6738 12.4884 14.5856 12.4518 14.5052C12.4152 14.4247 12.3597 14.3543 12.29 14.3ZM22.432 8H9.568C8.704 8 8.002 8.7 8 9.564V22.436C8.00106 22.8512 8.16673 23.249 8.46067 23.5422C8.75461 23.8354 9.15283 24 9.568 24H22.432C23.296 24 23.998 23.3 24 22.436V9.564C23.9989 9.14883 23.8333 8.75103 23.5393 8.45784C23.2454 8.16465 22.8472 8 22.432 8ZM13.507 17.257C13.5152 17.4842 13.4758 17.7106 13.3914 17.9216C13.307 18.1327 13.1794 18.3238 13.0168 18.4826C12.8542 18.6415 12.6601 18.7646 12.4471 18.844C12.2342 18.9235 12.0069 18.9575 11.78 18.944H10.123V13.035H11.815C12.0392 13.0265 12.2628 13.0643 12.4718 13.1461C12.6807 13.2279 12.8705 13.352 13.0293 13.5105C13.1882 13.669 13.3125 13.8586 13.3947 14.0674C13.4769 14.2762 13.5151 14.4998 13.507 14.724V17.257ZM17.1 14.09H15.2V15.462H16.363V16.519H15.2V17.89H17.1V18.946H14.883C14.7884 18.9487 14.6943 18.9327 14.6059 18.8989C14.5175 18.8652 14.4367 18.8144 14.3679 18.7493C14.2992 18.6843 14.244 18.6064 14.2054 18.5201C14.1668 18.4337 14.1456 18.3406 14.143 18.246V13.775C14.1382 13.5843 14.2091 13.3994 14.3403 13.2609C14.4715 13.1224 14.6523 13.0415 14.843 13.036H17.1V14.09ZM20.8 18.208C20.329 19.308 19.484 19.088 19.106 18.208L17.734 13.036H18.9L19.958 17.1L21.014 13.038H22.178L20.8 18.208Z' />
-									</svg>
-								</a>
-							</li>
+          {/* Company */}
+          <div className="flex flex-col gap-4">
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-900 dark:text-white">Company</h3>
+            <div className="flex flex-col gap-3">
+              <Link href="/about" className="text-sm text-gray-600 transition-colors hover:text-primary dark:text-gray-400">
+                About Us
+              </Link>
+              <Link href="/careers" className="text-sm text-gray-600 transition-colors hover:text-primary dark:text-gray-400">
+                Careers
+              </Link>
+              <Link href="/blog" className="text-sm text-gray-600 transition-colors hover:text-primary dark:text-gray-400">
+                Blog
+              </Link>
+              <Link href="/contact" className="text-sm text-gray-600 transition-colors hover:text-primary dark:text-gray-400">
+                Contact
+              </Link>
+              <Link href="/press" className="text-sm text-gray-600 transition-colors hover:text-primary dark:text-gray-400">
+                Press Kit
+              </Link>
+            </div>
+          </div>
 
-							<li>
-								<a
-									href='#'
-									aria-label='Github Social Link'
-									className='flex duration-200 ease-out hover:text-white'
-								>
-									<svg
-										className='fill-current'
-										width='32'
-										height='32'
-										viewBox='0 0 32 32'
-										fill='none'
-										xmlns='http://www.w3.org/2000/svg'
-									>
-										<path d='M16 8.19995C11.6 8.19995 8 11.8 8 16.2C8 19.7 10.3 22.7 13.5 23.8C13.9 23.9 14 23.6 14 23.4V22C11.8 22.5 11.3 21 11.3 21C10.9 20.1 10.4 19.8 10.4 19.8C9.7 19.3 10.5 19.3 10.5 19.3C11.3 19.4 11.7 20.1 11.7 20.1C12.4 21.4 13.6 21 14 20.8C14.1 20.3 14.3 19.9 14.5 19.7C12.7 19.5 10.9 18.8 10.9 15.7C10.9 14.8 11.2 14.1 11.7 13.6C11.6 13.4 11.3 12.6 11.8 11.5C11.8 11.5 12.5 11.3 14 12.3C14.6 12.1 15.3 12 16 12C16.7 12 17.4 12.1 18 12.3C19.5 11.3 20.2 11.5 20.2 11.5C20.6 12.6 20.4 13.4 20.3 13.6C20.8 14.2 21.1 14.9 21.1 15.7C21.1 18.8 19.2 19.4 17.4 19.6C17.7 20 18 20.5 18 21.2V23.4C18 23.6 18.1 23.9 18.6 23.8C21.8 22.7 24.1 19.7 24.1 16.2C24 11.8 20.4 8.19995 16 8.19995Z' />
-									</svg>
-								</a>
-							</li>
-						</ul>
-					</div>
+          {/* Legal & Support */}
+          <div className="flex flex-col gap-4">
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-900 dark:text-white">Legal & Support</h3>
+            <div className="flex flex-col gap-3">
+              <Link href="/privacy" className="text-sm text-gray-600 transition-colors hover:text-primary dark:text-gray-400">
+                Privacy Policy
+              </Link>
+              <Link href="/terms" className="text-sm text-gray-600 transition-colors hover:text-primary dark:text-gray-400">
+                Terms of Service
+              </Link>
+              <Link href="/security" className="text-sm text-gray-600 transition-colors hover:text-primary dark:text-gray-400">
+                Security
+              </Link>
+              <Link href="/help" className="text-sm text-gray-600 transition-colors hover:text-primary dark:text-gray-400">
+                Help Center
+              </Link>
+              <Link href="/status" className="text-sm text-gray-600 transition-colors hover:text-primary dark:text-gray-400">
+                System Status
+              </Link>
+            </div>
+          </div>
+        </div>
 
-					<div className='flex w-full flex-col justify-between gap-10 sm:w-auto sm:flex-row xl:gap-20'>
-						<div className='w-full sm:w-auto'>
-							<h2 className='mb-5 font-satoshi text-lg font-bold -tracking-[0.2px] text-white'>
-								Products
-							</h2>
-
-							<ul className='flex flex-col gap-3'>
-								<li>
-									<a
-										className='text-gray-5 duration-200 ease-out hover:text-white'
-										href='#'
-									>
-										Features
-									</a>
-								</li>
-								<li>
-									<a
-										className='text-gray-5 duration-200 ease-out hover:text-white'
-										href='#'
-									>
-										Integrations
-									</a>
-								</li>
-								<li>
-									<a
-										className='text-gray-5 duration-200 ease-out hover:text-white'
-										href='#'
-									>
-										Pricing & Plans
-									</a>
-								</li>
-								<li>
-									<a
-										className='text-gray-5 duration-200 ease-out hover:text-white'
-										href='#'
-									>
-										Changelog
-									</a>
-								</li>
-							</ul>
-						</div>
-
-						<div className='w-full sm:w-auto'>
-							<h2 className='mb-5 font-satoshi text-lg font-bold -tracking-[0.2px] text-white'>
-								Resources
-							</h2>
-
-							<ul className='flex flex-col gap-3'>
-								<li>
-									<a
-										className='text-gray-5 duration-200 ease-out hover:text-white'
-										href='#'
-									>
-										Our Blog
-									</a>
-								</li>
-								<li>
-									<a
-										className='text-gray-5 duration-200 ease-out hover:text-white'
-										href='#'
-									>
-										Heatmaps
-									</a>
-								</li>
-								<li>
-									<a
-										className='text-gray-5 duration-200 ease-out hover:text-white'
-										href='#'
-									>
-										Affiliate Program
-									</a>
-								</li>
-								<li>
-									<a
-										className='text-gray-5 duration-200 ease-out hover:text-white'
-										href='#'
-									>
-										Integrations
-									</a>
-								</li>
-							</ul>
-						</div>
-
-						<div className='w-full sm:w-auto'>
-							<h2 className='mb-5 font-satoshi text-lg font-bold -tracking-[0.2px] text-white'>
-								Products
-							</h2>
-
-							<ul className='flex flex-col gap-3'>
-								<li>
-									<a
-										className='text-gray-5 duration-200 ease-out hover:text-white'
-										href='#'
-									>
-										Features
-									</a>
-								</li>
-								<li>
-									<a
-										className='text-gray-5 duration-200 ease-out hover:text-white'
-										href='#'
-									>
-										Integrations
-									</a>
-								</li>
-								<li>
-									<a
-										className='text-gray-5 duration-200 ease-out hover:text-white'
-										href='#'
-									>
-										Pricing & Plans
-									</a>
-								</li>
-								<li>
-									<a
-										className='text-gray-5 duration-200 ease-out hover:text-white'
-										href='#'
-									>
-										Changelog
-									</a>
-								</li>
-							</ul>
-						</div>
-
-						<div className='w-full sm:w-auto'>
-							<h2 className='mb-5 font-satoshi text-lg font-bold -tracking-[0.2px] text-white'>
-								Company
-							</h2>
-
-							<ul className='flex flex-col gap-3'>
-								<li>
-									<a
-										className='text-gray-5 duration-200 ease-out hover:text-white'
-										href='#'
-									>
-										About Us
-									</a>
-								</li>
-								<li>
-									<a
-										className='text-gray-5 duration-200 ease-out hover:text-white'
-										href='#'
-									>
-										Our Story
-									</a>
-								</li>
-								<li>
-									<a
-										className='text-gray-5 duration-200 ease-out hover:text-white'
-										href='#'
-									>
-										Work With Us
-									</a>
-								</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-				{/* <!-- footer menu end --> */}
-			</div>
-
-			{/* <!-- bg shapes --> */}
-			<div className='hidden sm:block'>
-				<div className='absolute bottom-0 left-0 -z-1'>
-					<Image
-						src='/images/footer/footer-grid-01.svg'
-						alt='grid'
-						width={305}
-						height={305}
-					/>
-				</div>
-				<div className='absolute right-0 top-0 -z-1'>
-					<Image
-						src='/images/footer/footer-grid-02.svg'
-						alt='grid'
-						width={305}
-						height={305}
-					/>
-				</div>
-			</div>
-		</footer>
-	);
+        {/* Bottom Bar */}
+        <div className="mt-12 border-t border-gray-200 pt-8 dark:border-gray-800">
+          <div className="flex flex-col items-center justify-between gap-4 text-sm text-gray-500 dark:text-gray-400 md:flex-row">
+            <p>&copy; {currentYear} Shaf. All rights reserved.</p>
+            <div className="flex items-center gap-4">
+              <Link href="/accessibility" className="hover:text-primary">
+                Accessibility
+              </Link>
+              <span>·</span>
+              <Link href="/cookies" className="hover:text-primary">
+                Cookie Settings
+              </Link>
+              <span>·</span>
+              <Link href="/sitemap" className="hover:text-primary">
+                Sitemap
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
 };
 
 export default Footer;

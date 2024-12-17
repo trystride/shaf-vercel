@@ -44,8 +44,8 @@ export default function Sidebar({
 										href={`${item?.path}`}
 										className={`flex w-full items-center gap-3 rounded-lg px-3.5 py-3 font-satoshi font-medium duration-300 ${
 											pathname === `${item.path}`
-												? "bg-primary bg-opacity-10 text-primary dark:bg-white dark:bg-opacity-10 dark:text-white"
-												: "text-dark hover:bg-primary hover:bg-opacity-10 hover:text-primary dark:text-gray-5 dark:hover:bg-white dark:hover:bg-opacity-10 dark:hover:text-white"
+												? "bg-primary/10 text-primary dark:bg-white/10 dark:text-white"
+												: "text-gray-700 hover:bg-primary/5 hover:text-primary dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-white"
 										}`}
 									>
 										<span className='h-[24px] w-[24px]'>{item?.icon}</span>
@@ -80,8 +80,8 @@ export default function Sidebar({
 										href={`${item?.path}`}
 										className={`flex w-full items-center gap-3 rounded-lg px-3.5 py-3 font-satoshi font-medium duration-300 ${
 											pathname === `${item.path}`
-												? "bg-primary bg-opacity-10 text-primary dark:bg-white dark:bg-opacity-10 dark:text-white"
-												: "text-dark hover:bg-primary hover:bg-opacity-10 hover:text-primary dark:text-gray-5 dark:hover:bg-white dark:hover:bg-opacity-10 dark:hover:text-white"
+												? "bg-primary/10 text-primary dark:bg-white/10 dark:text-white"
+												: "text-gray-700 hover:bg-primary/5 hover:text-primary dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-white"
 										}`}
 									>
 										<span>{item?.icon}</span>

@@ -16,7 +16,7 @@ const Dropdown = ({
 	const pathname = usePathname();
 
 	return (
-		<div className='group relative'>
+		<div className='relative'>
 			<button
 				onClick={() => setDropdown(!dropdown)}
 				className='flex w-full items-center justify-between gap-1.5 rounded-full px-[14px] py-[3px] font-satoshi font-medium text-dark group-hover:bg-primary/5 group-hover:text-primary dark:text-gray-5 dark:group-hover:bg-white/5 dark:group-hover:text-white'
@@ -40,32 +40,32 @@ const Dropdown = ({
 			</button>
 
 			{/* <!-- Dropdown Start --> */}
-			<ul
-				className={`dropdown space-y-1.5 ${
-					stickyMenu ? "mt-2 lg:-mt-3" : "mt-2 lg:mt-0"
-				} ${dropdown && "flex"}`}
-			>
-				{item?.submenu &&
-					item?.submenu.map((item, i) => (
-						<li key={i}>
-							<Link
-								onClick={() => {
-									setDropdown(false);
-									setNavbarOpen(false);
-								}}
-								href={item?.path}
-								className={`flex rounded-[5px] px-4.5 py-[11px] text-dark duration-300 hover:bg-primary hover:text-white dark:text-gray-5 dark:hover:text-white ${
-									pathname === item?.path
-										? "bg-primary text-white dark:text-white"
-										: ""
-								}`}
-							>
-								{item?.title}
-							</Link>
-						</li>
-					))}
-			</ul>
-			{/* //   <!-- Dropdown End --> */}
+			<div className={`absolute left-0 top-[120%] z-50 w-[200px] rounded-lg bg-white p-2 shadow-lg dark:bg-gray-dark ${
+				dropdown ? 'block' : 'hidden'
+			}`}>
+				<ul className='flex flex-col gap-2'>
+					{item?.submenu &&
+						item?.submenu.map((item, i) => (
+							<li key={i}>
+								<Link
+									onClick={() => {
+										setDropdown(false);
+										setNavbarOpen(false);
+									}}
+									href={item?.path}
+									className={`block w-full rounded-[5px] px-4 py-2 text-dark transition-colors duration-200 hover:bg-primary hover:text-white dark:text-gray-5 dark:hover:text-white ${
+										pathname === item?.path
+											? "bg-primary text-white dark:text-white"
+											: ""
+									}`}
+								>
+									{item?.title}
+								</Link>
+							</li>
+						))}
+				</ul>
+			</div>
+			{/* <!-- Dropdown End --> */}
 		</div>
 	);
 };

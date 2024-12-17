@@ -30,36 +30,6 @@ const config: Config = {
 			...defaultTheme.screens,
 		},
 		extend: {
-			// colors: {
-			// 	current: "currentColor",
-			// 	transparent: "transparent",
-			// 	white: "#FFFFFF",
-			// 	black: "#0E172B",
-			// 	body: "#64748B",
-			// 	stroke: "#E8E8E8",
-			// 	primary: {
-			// 		DEFAULT: "#573CFF",
-			// 		dark: "#3E22E9",
-			// 	},
-			// 	dark: {
-			// 		DEFAULT: "#1C274C",
-			// 		2: "#495270",
-			// 		3: "#606882",
-			// 		4: "#8D93A5",
-			// 		5: "#BBBEC9",
-			// 	},
-			// 	gray: {
-			// 		DEFAULT: "#F3F5F6",
-			// 		1: "#F9FAFB",
-			// 		2: "#F3F4F6",
-			// 		3: "#E5E7EB",
-			// 		4: "#D1D5DB",
-			// 		5: "#9CA3AF",
-			// 		6: "#6B7280",
-			// 		7: "#374151",
-			// 	},
-			// },
-
 			colors: {
 				current: "currentColor",
 				transparent: "transparent",
@@ -102,6 +72,15 @@ const config: Config = {
 				green: {
 					...colors.green,
 					DEFAULT: "#00BC55",
+				},
+				border: "hsl(var(--border))",
+				input: "hsl(var(--input))",
+				ring: "hsl(var(--ring))",
+				background: "hsl(var(--background))",
+				foreground: "hsl(var(--foreground))",
+				card: {
+					DEFAULT: "hsl(var(--card))",
+					foreground: "hsl(var(--card-foreground))",
 				},
 			},
 			fontSize: {
@@ -217,6 +196,9 @@ const config: Config = {
 			},
 			borderRadius: {
 				10: "10px",
+				lg: "var(--radius)",
+				md: "calc(var(--radius) - 2px)",
+				sm: "calc(var(--radius) - 4px)",
 			},
 			zIndex: {
 				999999: "999999",

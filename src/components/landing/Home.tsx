@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import Header from "@/components/Header";
 import { 
   Bell, 
   Shield, 
@@ -14,7 +15,11 @@ import {
   Search,
   Bell as BellIcon,
   Sparkles,
-  ChevronDown
+  ChevronDown,
+  Scale,
+  LineChart,
+  Building2,
+  Briefcase
 } from "lucide-react";
 import Link from "next/link";
 import {
@@ -50,36 +55,53 @@ const features = [
 
 const sources = [
   {
-    logo: "/images/logos/Al-Jazirah-01.svg",
+    logo: "/images/network/Al-Jazirah-01.svg",
+    name: "Al-Jazirah"
   },
   {
-    logo: "/images/logos/Alwatan-01.svg",
+    logo: "/images/network/373394.svg",
+    name: "Ministry of Justice"
   },
   {
-    logo: "/images/logos/Alyawm-01.svg",
+    logo: "/images/network/Alyawm-01.svg",
+    name: "Alyawm"
   },
   {
-    logo: "/images/logos/شعار جريدة الرياض.svg",
+    logo: "/images/network/374031.svg",
+    name: "Al Riyadh"
   },
   {
-    logo: "/images/logos/شعار صحيفة مكة – SVG.svg",
+    logo: "/images/network/Makkah-Almujarramah-01.svg",
+    name: "Makkah"
   },
   {
-    logo: "/images/logos/شعار وزارة التجارة SVG.svg",
+    logo: "/images/network/moj.svg",
+    name: "Ministry of Commerce"
   },
   {
-    logo: "/images/logos/شعار لجنة الإفلاس – إيسار – الجديد بدقة عالية png – SVG.svg",
+    logo: "/images/network/390238.svg",
+    name: "Eisar"
   },
   {
-    logo: "/images/logos/ajel-sa.svg",
+    logo: "/images/network/bankruptcy.svg",
+    name: "Ajel"
   }
 ];
 
-const stats = [
-  { id: 1, name: 'Active Users', value: '500+' },
-  { id: 2, name: 'Daily Alerts', value: '10K+' },
-  { id: 3, name: 'Success Rate', value: '99.9%' },
-  { id: 4, name: 'Sources Monitored', value: '15+' },
+const securityFeatures = [
+  { title: "Secure Authentication", description: "Enterprise-grade user authentication and authorization" },
+  { title: "Data Encryption", description: "End-to-end encryption for all sensitive data" },
+  { title: "Privacy-First", description: "Built with privacy by design principles" },
+  { title: "Regulatory Compliance", description: "Compliant with local Saudi Arabian regulations" },
+];
+
+const targetAudience = [
+  { title: "Legal Professionals", icon: Scale },
+  { title: "Business Intelligence Teams", icon: LineChart },
+  { title: "Risk Management Departments", icon: Shield },
+  { title: "Financial Institutions", icon: Building2 },
+  { title: "Business Owners", icon: Briefcase },
+  { title: "Market Researchers", icon: Search },
 ];
 
 const steps = [
@@ -122,6 +144,7 @@ const faqs = [
 export default function Home() {
   return (
     <>
+      <Header />
       {/* Hero Section */}
       <section className="relative isolate pt-14">
         <div className="py-24 sm:py-32">
@@ -138,7 +161,7 @@ export default function Home() {
                 Transform the way you track important business announcements across Saudi Arabia's most trusted sources.
               </p>
               <div className="mt-10 flex items-center justify-center gap-x-6">
-                <Link href="/auth/sign-up">
+                <Link href="/auth/signup">
                   <Button
                     size="lg"
                     className="bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-6 text-lg rounded-full font-medium transition-all duration-200 shadow-lg hover:shadow-xl"
@@ -147,73 +170,135 @@ export default function Home() {
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </Link>
-                <Link href="/contact">
-                  <Button
-                    variant="outline"
-                    size="lg"
-                    className="px-8 py-6 text-lg rounded-full border-2 hover:bg-gray-50 dark:hover:bg-gray-800"
-                  >
-                    Request Demo
-                  </Button>
-                </Link>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Logo Cloud */}
-      <section className="py-12 sm:py-16 bg-gray-50 dark:bg-gray-800">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+      {/* Logo Cloud / Network Section */}
+      <section id="network" className="relative py-16 sm:py-24 bg-gradient-to-b from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] dark:bg-[url('/grid-dark.svg')] opacity-10"></div>
+        
+        <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-lg font-semibold leading-8 text-gray-900 dark:text-white">
+            <h2 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent sm:text-4xl">
               Our Growing Network
             </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400 mb-16">
+            <p className="mt-4 text-lg leading-8 text-gray-600 dark:text-gray-400">
               Trusted sources across Saudi Arabia's media landscape
             </p>
           </div>
-          <div className="mx-auto mt-10 grid max-w-lg grid-cols-4 items-center gap-x-8 gap-y-10 sm:max-w-xl sm:grid-cols-6 sm:gap-x-10 lg:mx-0 lg:max-w-none lg:grid-cols-4">
-            {sources.map((source, index) => (
-              <div
-                key={index}
-                className="relative h-16 w-full flex items-center justify-center"
-              >
-                <img
-                  src={source.logo}
-                  alt="Source logo"
-                  className="max-h-12 w-full object-contain filter dark:invert"
-                />
-              </div>
-            ))}
+          
+          <div className="relative mx-auto mt-16 bg-white dark:bg-gray-800 h-24 overflow-hidden w-full max-w-5xl rounded-xl">
+            <div className="absolute left-0 top-0 w-32 h-full bg-gradient-to-r from-white dark:from-gray-800 to-transparent z-10"></div>
+            <div className="absolute right-0 top-0 w-32 h-full bg-gradient-to-l from-white dark:from-gray-800 to-transparent z-10"></div>
+            <div className="flex animate-scroll">
+              {/* First set of logos */}
+              {sources.map((source, index) => (
+                <div
+                  key={`first-${index}`}
+                  className="flex-none w-48 h-24 flex items-center justify-center mx-8 group"
+                >
+                  <div className="relative flex items-center justify-center w-full h-full grayscale hover:grayscale-0 transition-all duration-300">
+                    <img
+                      src={source.logo}
+                      alt={`${source.name} logo`}
+                      className="w-auto h-auto max-h-12 max-w-[120px] object-contain filter dark:invert"
+                    />
+                    <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-gray-900 px-3 py-1 text-sm text-white opacity-0 transition-opacity group-hover:opacity-100 dark:bg-white dark:text-gray-900">
+                      {source.name}
+                    </div>
+                  </div>
+                </div>
+              ))}
+              {/* Duplicate set of logos for seamless loop */}
+              {sources.map((source, index) => (
+                <div
+                  key={`second-${index}`}
+                  className="flex-none w-48 h-24 flex items-center justify-center mx-8 group"
+                >
+                  <div className="relative flex items-center justify-center w-full h-full grayscale hover:grayscale-0 transition-all duration-300">
+                    <img
+                      src={source.logo}
+                      alt={`${source.name} logo`}
+                      className="w-auto h-auto max-h-12 max-w-[120px] object-contain filter dark:invert"
+                    />
+                    <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-gray-900 px-3 py-1 text-sm text-white opacity-0 transition-opacity group-hover:opacity-100 dark:bg-white dark:text-gray-900">
+                      {source.name}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Stats */}
-      <div className="py-24 bg-white dark:bg-gray-900">
+      {/* Security Features Section */}
+      <section id="security" className="py-24 bg-white dark:bg-gray-900">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl lg:text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
-              Trusted by Businesses Across Saudi Arabia
-            </h2>
-            <p className="mt-4 text-lg leading-8 text-gray-600 dark:text-gray-400">
-              Join hundreds of businesses that rely on our platform for critical updates
+            <h2 className="text-base font-semibold leading-7 text-indigo-600 dark:text-indigo-400">ENTERPRISE-GRADE SECURITY</h2>
+            <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
+              Your Data, Our Priority
+            </p>
+            <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-400">
+              Built with security and privacy at its core, ensuring your sensitive business data remains protected
             </p>
           </div>
-          <dl className="mt-16 grid grid-cols-1 gap-0.5 overflow-hidden rounded-2xl text-center sm:grid-cols-2 lg:grid-cols-4">
-            {stats.map((stat) => (
-              <div key={stat.id} className="flex flex-col bg-gray-50/80 dark:bg-gray-800/80 p-8">
-                <dt className="text-sm font-semibold leading-6 text-gray-600 dark:text-gray-400">{stat.name}</dt>
-                <dd className="order-first text-3xl font-semibold tracking-tight text-gray-900 dark:text-white">{stat.value}</dd>
-              </div>
-            ))}
-          </dl>
+          <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
+            <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-10 lg:max-w-none lg:grid-cols-4">
+              {securityFeatures.map((feature, index) => (
+                <div key={index} className="relative pl-16">
+                  <dt className="text-base font-semibold leading-7 text-gray-900 dark:text-white">
+                    <div className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-600">
+                      <Shield className="h-6 w-6 text-white" aria-hidden="true" />
+                    </div>
+                    {feature.title}
+                  </dt>
+                  <dd className="mt-2 text-base leading-7 text-gray-600 dark:text-gray-400">{feature.description}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
         </div>
-      </div>
+      </section>
+
+      {/* Perfect For Section */}
+      <section id="target-audience" className="py-24 bg-gray-50 dark:bg-gray-800">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <div className="mx-auto max-w-2xl lg:text-center">
+            <h2 className="text-base font-semibold leading-7 text-indigo-600 dark:text-indigo-400">PERFECT FOR</h2>
+            <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
+              Tailored for Your Industry
+            </p>
+            <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-400">
+              Designed to meet the specific needs of various business professionals and organizations
+            </p>
+          </div>
+          <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
+            <dl className="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:grid-cols-6">
+              {targetAudience.map((audience, index) => (
+                <div key={index} className="group relative rounded-2xl bg-white dark:bg-gray-900 p-8 text-center shadow-sm ring-1 ring-gray-200 dark:ring-gray-800 hover:bg-indigo-50 dark:hover:bg-gray-800 transition-all duration-200">
+                  <dt>
+                    <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-indigo-100 dark:bg-indigo-900 group-hover:bg-indigo-200 dark:group-hover:bg-indigo-800 transition-colors duration-200">
+                      <audience.icon className="h-8 w-8 text-indigo-600 dark:text-indigo-400" aria-hidden="true" />
+                    </div>
+                    <p className="mt-6 text-sm font-semibold leading-6 text-gray-900 dark:text-white">
+                      {audience.title}
+                    </p>
+                  </dt>
+                </div>
+              ))}
+            </dl>
+          </div>
+        </div>
+      </section>
 
       {/* Features Section */}
-      <section className="py-24 sm:py-32 bg-white dark:bg-gray-900">
+      <section id="features" className="py-24 sm:py-32 bg-white dark:bg-gray-900">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-4xl font-medium tracking-tight text-slate-900 dark:text-white sm:text-5xl">
@@ -225,7 +310,7 @@ export default function Home() {
               {features.map((feature, index) => (
                 <Card 
                   key={index} 
-                  className="relative overflow-hidden rounded-3xl p-8 shadow-sm transition-all duration-200 hover:shadow-lg dark:bg-gray-800/50"
+                  className="relative overflow-hidden rounded-3xl p-8 transition-all duration-200 hover:shadow-lg dark:bg-gray-800/50"
                 >
                   <div className="relative z-10">
                     <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-indigo-500/10 dark:bg-indigo-500/20">
@@ -246,7 +331,7 @@ export default function Home() {
       </section>
 
       {/* How it Works Section */}
-      <section className="py-24 bg-gray-50 dark:bg-gray-800">
+      <section id="how-it-works" className="py-24 bg-gray-50 dark:bg-gray-800">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl lg:text-center">
             <h2 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-6xl">
@@ -277,7 +362,7 @@ export default function Home() {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-24 bg-white dark:bg-gray-900">
+      <section id="faq" className="py-24 bg-white dark:bg-gray-900">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-4xl divide-y divide-gray-900/10 dark:divide-gray-100/10">
             <h2 className="text-2xl font-bold leading-10 tracking-tight text-gray-900 dark:text-white text-center mb-16">
@@ -310,22 +395,13 @@ export default function Home() {
               Don't miss critical business announcements. Sign up now and stay ahead of market movements.
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
-              <Link href="/auth/sign-up">
+              <Link href="/auth/signup">
                 <Button
                   size="lg"
                   className="bg-white text-indigo-600 hover:bg-indigo-50 px-8 py-6 text-lg rounded-full font-medium"
                 >
                   Get Started
                   <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-              </Link>
-              <Link href="/contact">
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="text-white border-white hover:bg-white/10 px-8 py-6 text-lg rounded-full"
-                >
-                  Request Demo
                 </Button>
               </Link>
             </div>

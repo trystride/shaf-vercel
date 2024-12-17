@@ -1,225 +1,184 @@
 "use client";
-import logoLight from "@/../public/images/logo/logo-light.svg";
-import logo from "@/../public/images/logo/logo.svg";
-import { Menu } from "@/types/menu";
+
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import Dropdown from "./Dropdown";
-import ThemeSwitcher from "./ThemeSwitcher";
-import { menuData } from "./menuData";
-import GlobalSearchModal from "../GlobalSearch";
-import Account from "./Account";
 import { useSession } from "next-auth/react";
-import { onScroll } from "@/libs/scrollActive";
+import { Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
+import logoLight from "@/../public/images/logo/logo-light.svg";
+import logo from "@/../public/images/logo/logo.svg";
+import { menuData } from "./menuData";
+import ThemeSwitcher from "./ThemeSwitcher";
+import Account from "./Account";
 
-const Header = () => {
-	const [stickyMenu, setStickyMenu] = useState(false);
-	const [searchModalOpen, setSearchModalOpen] = useState(false);
-	const { data: session } = useSession();
+const Navbar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const { data: session } = useSession();
+  const pathname = usePathname();
 
-	const pathUrl = usePathname();
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
-	const handleStickyMenu = () => {
-		if (window.scrollY > 0) {
-			setStickyMenu(true);
-		} else {
-			setStickyMenu(false);
-		}
-	};
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, path: string) => {
+    if (path?.startsWith("#")) {
+      e.preventDefault();
+      const element = document.querySelector(path);
+      if (element) {
+        const offsetTop = element.getBoundingClientRect().top + window.pageYOffset - 80;
+        window.scrollTo({
+          top: offsetTop,
+          behavior: "smooth",
+        });
+      }
+      setIsOpen(false);
+    }
+  };
 
-	// Navbar toggle
-	const [navbarOpen, setNavbarOpen] = useState(false);
-	const navbarToggleHandler = () => {
-		setNavbarOpen(!navbarOpen);
-	};
+  return (
+    <nav
+      className={`fixed top-0 z-50 w-full transition-all duration-300 ${
+        isScrolled
+          ? "bg-white/80 backdrop-blur-lg shadow-sm dark:bg-gray-900/80"
+          : "bg-transparent"
+      }`}
+    >
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex h-20 items-center justify-between">
+          {/* Logo */}
+          <div className="flex-shrink-0">
+            <Link href="/" className="flex items-center">
+              <Image
+                src={logo}
+                alt="Logo"
+                className="block h-10 w-auto dark:hidden"
+                width={180}
+                height={40}
+                priority
+              />
+              <Image
+                src={logoLight}
+                alt="Logo"
+                className="hidden h-10 w-auto dark:block"
+                width={180}
+                height={40}
+                priority
+              />
+            </Link>
+          </div>
 
-	useEffect(() => {
-		if (window.location.pathname === "/") {
-			window.addEventListener("scroll", onScroll);
-		}
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex md:items-center md:space-x-6">
+            {menuData.map((item) => (
+              <Link
+                key={item.id}
+                href={item.path}
+                onClick={(e) => handleLinkClick(e, item.path)}
+                className={`relative text-sm font-medium transition-colors hover:text-primary ${
+                  pathname === item.path
+                    ? "text-primary dark:text-white after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-full after:bg-primary after:content-['']"
+                    : "text-gray-700 dark:text-gray-200"
+                }`}
+              >
+                {item.title}
+              </Link>
+            ))}
+          </div>
 
-		return () => {
-			window.removeEventListener("scroll", onScroll);
-		};
-	}, []);
+          {/* Right side items */}
+          <div className="hidden md:flex md:items-center md:space-x-4">
+            <ThemeSwitcher />
+            {session?.user ? (
+              <Account user={session.user} />
+            ) : (
+              <div className="flex items-center space-x-4">
+                <Link
+                  href="/auth/signin"
+                  className="text-sm font-medium text-gray-700 transition-colors hover:text-primary dark:text-gray-200"
+                >
+                  Sign in
+                </Link>
+                <Link
+                  href="/auth/signup"
+                  className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition-all hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/25"
+                >
+                  Get Started
+                </Link>
+              </div>
+            )}
+          </div>
 
-	useEffect(() => {
-		window.addEventListener("scroll", handleStickyMenu);
-	});
+          {/* Mobile menu button */}
+          <div className="flex md:hidden">
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="inline-flex items-center justify-center rounded-lg p-2 text-gray-700 transition-colors hover:bg-gray-100 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:text-gray-200 dark:hover:bg-gray-800"
+            >
+              <span className="sr-only">Open main menu</span>
+              {isOpen ? (
+                <X className="block h-5 w-5" aria-hidden="true" />
+              ) : (
+                <Menu className="block h-5 w-5" aria-hidden="true" />
+              )}
+            </button>
+          </div>
+        </div>
+      </div>
 
-	return (
-		<>
-			<header
-				className={`fixed left-0 top-0 z-999 w-full transition-all duration-300 ease-in-out  ${
-					stickyMenu
-						? "bg-white py-4 shadow dark:bg-dark xl:py-0"
-						: "bg-transparent py-7 xl:py-0"
-				}`}
-			>
-				<div className='relative mx-auto max-w-[1170px] items-center justify-between px-4 sm:px-8 xl:flex xl:px-0'>
-					<div className='flex w-full items-center justify-between xl:w-4/12'>
-						<Link href='/'>
-							<Image
-								src={logoLight}
-								alt='Logo'
-								className='hidden w-full dark:block'
-							/>
-							<Image src={logo} alt='Logo' className='w-full dark:hidden' />
-						</Link>
-
-						{/* <!-- Hamburger Toggle BTN --> */}
-						<button
-							onClick={navbarToggleHandler}
-							aria-label='button for menu toggle'
-							className='block xl:hidden'
-						>
-							<span className='relative block h-5.5 w-5.5 cursor-pointer'>
-								<span className='du-block absolute right-0 h-full w-full'>
-									<span
-										className={`relative left-0 top-0 my-1 block h-0.5 w-0 rounded-sm bg-black delay-[0] duration-200 ease-in-out dark:bg-white ${
-											!navbarOpen && "!w-full delay-300"
-										}`}
-									></span>
-									<span
-										className={`relative left-0 top-0 my-1 block h-0.5 w-0 rounded-sm bg-black delay-150 duration-200 ease-in-out dark:bg-white ${
-											!navbarOpen && "delay-400 !w-full"
-										}`}
-									></span>
-									<span
-										className={`relative left-0 top-0 my-1 block h-0.5 w-0 rounded-sm bg-black delay-200 duration-200 ease-in-out dark:bg-white ${
-											!navbarOpen && "!w-full delay-500"
-										}`}
-									></span>
-								</span>
-								<span className='du-block absolute right-0 h-full w-full rotate-45'>
-									<span
-										className={`absolute left-2.5 top-0 block h-full w-0.5 rounded-sm bg-black delay-300 duration-200 ease-in-out dark:bg-white ${
-											!navbarOpen && "!h-0 delay-[0]"
-										}`}
-									></span>
-									<span
-										className={`delay-400 absolute left-0 top-2.5 block h-0.5 w-full rounded-sm bg-black duration-200 ease-in-out dark:bg-white ${
-											!navbarOpen && "dealy-200 !h-0"
-										}`}
-									></span>
-								</span>
-							</span>
-						</button>
-					</div>
-
-					<div
-						className={`invisible h-0 w-full items-center justify-between xl:visible xl:flex xl:h-auto xl:w-8/12 ${
-							navbarOpen &&
-							"!visible relative mt-4 !h-auto max-h-[400px] overflow-y-scroll rounded-md bg-white p-7.5 shadow-lg dark:bg-gray-dark"
-						}`}
-					>
-						<nav>
-							<ul className='flex flex-col gap-5 xl:flex-row xl:items-center xl:gap-2.5'>
-								{menuData?.map((item: Menu, key) =>
-									!item?.path && item?.submenu ? (
-										<Dropdown
-											stickyMenu={stickyMenu}
-											item={item}
-											key={key}
-											setNavbarOpen={setNavbarOpen}
-										/>
-									) : (
-										<li
-											key={key}
-											className={`${
-												item?.submenu ? "group relative" : "nav__menu"
-											} ${stickyMenu ? "xl:py-4" : "xl:py-6"}`}
-										>
-											<Link
-												onClick={() => setNavbarOpen(false)}
-												href={
-													item?.path
-														? item?.path.includes("#") && !item?.newTab
-															? `/${item?.path}`
-															: item?.path
-														: ""
-												}
-												target={item?.newTab ? "_blank" : ""}
-												rel={item?.newTab ? "noopener noreferrer" : ""}
-												className={`flex rounded-full px-[14px] py-[3px] font-satoshi font-medium ${
-													pathUrl === item?.path
-														? "bg-primary/5 text-primary dark:bg-white/5 dark:text-white"
-														: "text-black hover:bg-primary/5 hover:text-primary dark:text-gray-5 dark:hover:bg-white/5 dark:hover:text-white"
-												} ${item?.path?.startsWith("#") ? "menu-scroll" : ""}`}
-											>
-												{item?.title}
-											</Link>
-										</li>
-									)
-								)}
-							</ul>
-						</nav>
-
-						<div className='mt-7 flex flex-wrap items-center lg:mt-0'>
-							<button
-								onClick={() => setSearchModalOpen(true)}
-								className='text-waterloo hidden h-[38px] w-[38px] items-center justify-center rounded-full  sm:flex'
-							>
-								<svg
-									width='20'
-									height='20'
-									viewBox='0 0 18 18'
-									fill='currentColor'
-									xmlns='http://www.w3.org/2000/svg'
-								>
-									<g clipPath='url(#clip0_369_1884)'>
-										<path
-											d='M16.9347 15.3963L12.4816 11.7799C14.3168 9.26991 14.1279 5.68042 11.8338 3.41337C10.6194 2.19889 9.00003 1.52417 7.27276 1.52417C5.54549 1.52417 3.92617 2.19889 2.71168 3.41337C0.201738 5.92332 0.201738 10.0256 2.71168 12.5355C3.92617 13.75 5.54549 14.4247 7.27276 14.4247C8.91907 14.4247 10.4574 13.804 11.6719 12.6975L16.179 16.3409C16.287 16.4219 16.4219 16.4759 16.5569 16.4759C16.7458 16.4759 16.9077 16.3949 17.0157 16.26C17.2316 15.9901 17.2046 15.6122 16.9347 15.3963ZM7.27276 13.2102C5.86935 13.2102 4.5739 12.6705 3.57532 11.6719C1.52418 9.62076 1.52418 6.30116 3.57532 4.27701C4.5739 3.27843 5.86935 2.73866 7.27276 2.73866C8.67617 2.73866 9.97162 3.27843 10.9702 4.27701C13.0213 6.32815 13.0213 9.64775 10.9702 11.6719C9.99861 12.6705 8.67617 13.2102 7.27276 13.2102Z'
-											fill='currentColor'
-										/>
-									</g>
-									<defs>
-										<clipPath id='clip0_369_1884'>
-											<rect
-												width='17.2727'
-												height='17.2727'
-												fill='white'
-												transform='translate(0.363647 0.363647)'
-											/>
-										</clipPath>
-									</defs>
-								</svg>
-							</button>
-
-							<ThemeSwitcher />
-
-							{session?.user ? (
-								<Account navbarOpen={navbarOpen} />
-							) : (
-								<>
-									<Link
-										href='/auth/signin'
-										className='px-5 py-2 font-satoshi font-medium text-black dark:text-white'
-									>
-										Sign In
-									</Link>
-									<Link
-										href='/auth/signup'
-										className='rounded-full bg-primary px-5 py-2 font-satoshi font-medium text-white hover:bg-primary-dark'
-									>
-										Sign Up
-									</Link>
-								</>
-							)}
-						</div>
-						{/* <!--=== Nav Right End ===--> */}
-					</div>
-				</div>
-			</header>
-
-			<GlobalSearchModal
-				searchModalOpen={searchModalOpen}
-				setSearchModalOpen={setSearchModalOpen}
-			/>
-		</>
-	);
+      {/* Mobile menu */}
+      <div
+        className={`transform overflow-hidden transition-all duration-300 ease-in-out md:hidden ${
+          isOpen
+            ? "max-h-[400px] opacity-100"
+            : "max-h-0 opacity-0"
+        }`}
+      >
+        <div className="space-y-1 bg-white px-4 pb-3 pt-2 shadow-lg dark:bg-gray-900">
+          {menuData.map((item) => (
+            <Link
+              key={item.id}
+              href={item.path}
+              onClick={(e) => {
+                handleLinkClick(e, item.path);
+                setIsOpen(false);
+              }}
+              className={`block rounded-lg px-3 py-2 text-base font-medium transition-colors hover:bg-gray-50 hover:text-primary dark:hover:bg-gray-800 ${
+                pathname === item.path
+                  ? "text-primary dark:text-white"
+                  : "text-gray-700 dark:text-gray-200"
+              }`}
+            >
+              {item.title}
+            </Link>
+          ))}
+          {!session?.user && (
+            <div className="mt-4 space-y-2 border-t border-gray-200 pt-4 dark:border-gray-700">
+              <Link
+                href="/auth/signin"
+                className="block rounded-lg px-3 py-2 text-base font-medium text-gray-700 transition-colors hover:bg-gray-50 hover:text-primary dark:text-gray-200 dark:hover:bg-gray-800"
+                onClick={() => setIsOpen(false)}
+              >
+                Sign in
+              </Link>
+              <Link
+                href="/auth/signup"
+                className="block rounded-lg bg-primary px-3 py-2 text-base font-medium text-white transition-all hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/25"
+                onClick={() => setIsOpen(false)}
+              >
+                Get Started
+              </Link>
+            </div>
+          )}
+        </div>
+      </div>
+    </nav>
+  );
 };
 
-export default Header;
+export default Navbar;

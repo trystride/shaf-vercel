@@ -5,27 +5,80 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 243.4 75.36% 58.63%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 48%;
+  }
+
   html {
     @apply scroll-smooth;
     font-family: 'Inter', sans-serif;
   }
 
   body {
-    @apply relative z-1 font-inter text-base font-normal -tracking-[0.16px] text-gray-2;
+    @apply relative z-1 bg-gray-50 font-inter text-base font-normal text-gray-900 dark:bg-gray-900 dark:text-gray-100;
   }
 }
 
 @layer components {
+  .form-input {
+    @apply w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-base font-medium outline-none transition focus:border-primary focus:shadow-input dark:border-gray-500 dark:bg-gray-700 dark:text-white;
+  }
+
+  .form-container {
+    @apply rounded-lg bg-white p-6 shadow-sm dark:bg-gray-800;
+  }
+
   .dropdown {
-    @apply left-0 hidden min-w-max flex-col gap-0 rounded-lg bg-white p-2.5 shadow-md duration-200 ease-in dark:bg-gray-dark xl:invisible
-    xl:absolute xl:flex xl:w-[220px] xl:translate-y-10 xl:opacity-0
-    xl:group-hover:visible xl:group-hover:translate-y-7 xl:group-hover:opacity-100;
+    @apply left-0 hidden min-w-max flex-col gap-0 rounded-lg bg-white p-2.5 shadow-md duration-200 ease-in dark:bg-gray-dark 
+    absolute flex w-[220px] translate-y-2 opacity-0 invisible
+    group-hover:visible group-hover:translate-y-1 group-hover:opacity-100;
   }
 
   .account-dropdown {
-    @apply left-0 hidden min-w-max flex-col gap-0 rounded-lg bg-white p-2.5 shadow-md duration-200 ease-in dark:bg-gray-dark lg:invisible
-    lg:absolute lg:flex lg:translate-y-4 lg:opacity-0 lg:group-hover:visible
-    lg:group-hover:translate-y-2 lg:group-hover:opacity-100 xl:w-[220px];
+    @apply right-0 hidden min-w-max flex-col gap-0 rounded-lg bg-white p-2.5 shadow-md duration-200 ease-in dark:bg-gray-dark 
+    absolute flex w-[220px] translate-y-2 opacity-0 invisible z-50
+    group-hover:visible group-hover:translate-y-1 group-hover:opacity-100;
   }
 }
 

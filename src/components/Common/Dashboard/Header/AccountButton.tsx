@@ -37,7 +37,7 @@ export default function AccountButton({ user }: any) {
 				</svg>
 			</div>
 
-			<div className='shadow-3 border-[.5px]border-stroke invisible absolute right-0 top-15 z-999 w-[280px] rounded-lg bg-white pb-2.5 pt-3.5 opacity-0 shadow-md duration-500 group-hover:visible group-hover:translate-y-2 group-hover:opacity-100 dark:bg-gray-dark'>
+			<div className='invisible absolute right-0 top-[60px] z-50 w-[280px] rounded-lg bg-white pb-2.5 pt-3.5 opacity-0 shadow-lg transition-all duration-300 ease-in-out group-hover:visible group-hover:translate-y-2 group-hover:opacity-100 dark:bg-gray-dark border border-gray-100 dark:border-gray-800'>
 				<AccountMenu user={user} />
 			</div>
 		</div>

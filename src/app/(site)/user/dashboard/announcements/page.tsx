@@ -272,9 +272,9 @@ export default function AnnouncementsPage() {
         </div>
       ) : (
         <div className="grid gap-4">
-          {paginatedAnnouncements.map((announcement) => (
+          {paginatedAnnouncements.map((announcement, index) => (
             <Card 
-              key={announcement.Id} 
+              key={`${announcement.Id}-${announcement.AnnId}-${index}`} 
               className="bg-white hover:shadow-md transition-shadow border border-gray-100"
             >
               <CardContent className="p-6">
