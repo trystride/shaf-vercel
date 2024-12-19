@@ -5,16 +5,21 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import { Switch } from "@headlessui/react";
 import { ClockIcon, CalendarDaysIcon } from "@heroicons/react/24/outline";
-import { EmailFrequency, NotificationPreference as PrismaNotificationPreference } from "@prisma/client";
 
-type NotificationPreference = Omit<PrismaNotificationPreference, 'id' | 'userId' | 'createdAt' | 'updatedAt'> & {
+export type EmailFrequency = "IMMEDIATE" | "DAILY" | "WEEKLY";
+
+export type NotificationPreference = {
   id?: string;
   userId?: string;
+  emailEnabled: boolean;
+  emailFrequency: EmailFrequency;
+  emailDigestDay: string | null;
+  emailDigestTime: string | null;
   createdAt?: Date;
   updatedAt?: Date;
 };
 
-interface NotificationSettingsFormProps {
+export interface NotificationSettingsFormProps {
   preferences: NotificationPreference | null;
 }
 
@@ -57,15 +62,17 @@ export default function NotificationSettingsForm({
         body: JSON.stringify(formData),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        throw new Error("Failed to save preferences");
+        throw new Error(data.message || "Failed to save preferences");
       }
 
       toast.success("Notification preferences saved successfully");
       router.refresh();
     } catch (error) {
       console.error("Error saving preferences:", error);
-      toast.error("Failed to save preferences");
+      toast.error(error instanceof Error ? error.message : "Failed to save preferences");
     } finally {
       setLoading(false);
     }
@@ -109,14 +116,15 @@ export default function NotificationSettingsForm({
         <div className="space-y-8">
           {/* Frequency Selection */}
           <div className="bg-white dark:bg-gray-800/30 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
-            <label className="block">
+            <label htmlFor="frequency" className="block">
               <div className="flex items-center space-x-2 mb-4">
-                <ClockIcon className="h-5 w-5 text-gray-400" />
+                <ClockIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
                 <span className="text-base font-medium text-gray-900 dark:text-white">
                   Notification Frequency
                 </span>
               </div>
               <select
+                id="frequency"
                 value={formData.emailFrequency}
                 onChange={(e) =>
                   setFormData({
@@ -145,7 +153,7 @@ export default function NotificationSettingsForm({
           {formData.emailFrequency !== "IMMEDIATE" && (
             <div className="bg-white dark:bg-gray-800/30 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
               <div className="flex items-center space-x-2 mb-6">
-                <CalendarDaysIcon className="h-5 w-5 text-gray-400" />
+                <CalendarDaysIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
                 <span className="text-base font-medium text-gray-900 dark:text-white">
                   Digest Settings
                 </span>
@@ -154,10 +162,11 @@ export default function NotificationSettingsForm({
               <div className="space-y-6">
                 {formData.emailFrequency === "WEEKLY" && (
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    <label htmlFor="dayOfWeek" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Day of Week
                     </label>
                     <select
+                      id="dayOfWeek"
                       value={formData.emailDigestDay || "MONDAY"}
                       onChange={(e) =>
                         setFormData({
@@ -177,10 +186,11 @@ export default function NotificationSettingsForm({
                 )}
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label htmlFor="timeOfDay" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Time of Day
                   </label>
                   <input
+                    id="timeOfDay"
                     type="time"
                     value={formData.emailDigestTime || "09:00"}
                     onChange={(e) =>
@@ -203,34 +213,38 @@ export default function NotificationSettingsForm({
         <button
           type="submit"
           disabled={loading}
-          className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+          className={`
+            flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white
+            ${loading ? 'bg-primary/70' : 'bg-primary hover:bg-primary/90'}
+            focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary
+            transition-colors duration-200
+            min-w-[100px]
+          `}
         >
           {loading ? (
-            <>
-              <svg
-                className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                ></circle>
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                ></path>
-              </svg>
-              Saving Changes...
-            </>
+            <svg
+              className="animate-spin h-5 w-5 text-white"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              />
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              />
+            </svg>
           ) : (
-            "Save Changes"
+            'Save Changes'
           )}
         </button>
       </div>

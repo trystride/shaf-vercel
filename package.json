@@ -16,7 +16,11 @@
 		"fix-lint": "eslint --fix .",
 		"fix-style": "npm run fix-format && npm run fix-lint",
 		"test-build": "npm run check-style && npm run build",
-		"test:notifications": "NODE_OPTIONS='--loader ts-node/esm' ts-node -r tsconfig-paths/register src/scripts/test-notifications.ts"
+		"test:notifications": "NODE_OPTIONS='--loader ts-node/esm' ts-node -r tsconfig-paths/register src/scripts/test-notifications.ts",
+		"seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+	},
+	"prisma": {
+		"seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
 	},
 	"dependencies": {
 		"@aws-sdk/client-s3": "^3.515.0",

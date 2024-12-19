@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/libs/prismaDb";
 import NotificationSettingsForm from "@/components/User/NotificationSettings/NotificationSettingsForm";
 import { BellIcon } from "@heroicons/react/24/outline";
+import type { EmailFrequency } from "@/components/User/NotificationSettings/NotificationSettingsForm";
 
 export const metadata: Metadata = {
   title: "Notification Settings - Bankruptcy Monitor",
@@ -31,6 +32,12 @@ export default async function NotificationSettingsPage() {
     redirect("/auth/signin");
   }
 
+  // Convert emailFrequency to the correct type
+  const preferences = user.notificationPreference ? {
+    ...user.notificationPreference,
+    emailFrequency: user.notificationPreference.emailFrequency as EmailFrequency
+  } : null;
+
   return (
     <div className="max-w-3xl mx-auto">
       <div className="bg-white dark:bg-boxdark rounded-lg shadow-sm overflow-hidden">
@@ -55,7 +62,7 @@ export default async function NotificationSettingsPage() {
         <div className="p-8">
           <div className="max-w-2xl">
             <NotificationSettingsForm
-              preferences={user.notificationPreference}
+              preferences={preferences}
             />
           </div>
         </div>

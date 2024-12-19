@@ -2,9 +2,23 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/libs/prismaDb";
 import { sendEmail } from "@/libs/email";
 import { headers } from "next/headers";
+import { DigestQueue, Match, Announcement, EmailFrequency } from "@prisma/client";
 
 // Vercel cron authentication
 const CRON_SECRET = process.env.CRON_SECRET;
+
+type MatchWithKeywordAndAnnouncement = Match & {
+  keyword: { term: string };
+  announcement: Announcement;
+};
+
+type DigestWithMatches = DigestQueue & {
+  matches: MatchWithKeywordAndAnnouncement[];
+};
+
+type GroupedAnnouncements = {
+  [keyword: string]: Announcement[];
+};
 
 export async function GET(req: Request) {
   try {
@@ -40,7 +54,7 @@ export async function GET(req: Request) {
       if (!digest.user.email) continue;
 
       // Generate and send digest email
-      const emailContent = generateDigestEmailContent(digest);
+      const emailContent = generateDigestEmailContent(digest as DigestWithMatches);
       await sendEmail({
         to: digest.user.email,
         subject: `Your ${digest.frequency.toLowerCase()} Bankruptcy Announcements Digest`,
@@ -64,8 +78,8 @@ export async function GET(req: Request) {
   }
 }
 
-function generateDigestEmailContent(digest: any): string {
-  const groupedAnnouncements = digest.matches.reduce((acc: any, match: any) => {
+function generateDigestEmailContent(digest: DigestWithMatches): string {
+  const groupedAnnouncements = digest.matches.reduce((acc: GroupedAnnouncements, match: MatchWithKeywordAndAnnouncement) => {
     const keyword = match.keyword.term;
     if (!acc[keyword]) {
       acc[keyword] = [];
@@ -79,7 +93,7 @@ function generateDigestEmailContent(digest: any): string {
     <p>Here are the bankruptcy announcements that match your keywords:</p>
     ${Object.entries(groupedAnnouncements)
       .map(
-        ([keyword, announcements]: [string, any[]]) => `
+        ([keyword, announcements]: [string, Announcement[]]) => `
           <div style="margin-bottom: 30px;">
             <h2>Matches for keyword: ${keyword}</h2>
             ${announcements
@@ -88,10 +102,10 @@ function generateDigestEmailContent(digest: any): string {
                   <div style="margin-bottom: 20px; padding: 10px; border: 1px solid #eee;">
                     <h3>${announcement.title}</h3>
                     <p>${announcement.description}</p>
-                    <p>Date: ${new Date(announcement.date).toLocaleDateString()}</p>
+                    <p>Date: ${new Date(announcement.publishDate).toLocaleDateString()}</p>
                     ${
-                      announcement.url
-                        ? `<p><a href="${announcement.url}">View Full Announcement</a></p>`
+                      announcement.announcementUrl
+                        ? `<p><a href="${announcement.announcementUrl}">View Full Announcement</a></p>`
                         : ""
                     }
                   </div>

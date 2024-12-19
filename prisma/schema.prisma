@@ -1,11 +1,31 @@
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
 datasource db {
   provider          = "postgresql"
   url               = env("DATABASE_URL")
-  shadowDatabaseUrl = env("SHADOW_DATABASE_URL") // Only needed when using a cloud provider that doesn't support the creation of new databases, like Heroku. Learn more: https://pris.ly/d/migrate-shadow
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
+enum EmailFrequency {
+  IMMEDIATE
+  DAILY
+  WEEKLY
+}
+
+enum SubscriptionStatus {
+  active
+  cancelled
+  expired
+  trial
+}
+
+enum BillingCycle {
+  monthly
+  yearly
+  trial
 }
 
 model Account {
@@ -53,7 +73,7 @@ model Invitation {
   expiresAt DateTime
   accepted  Boolean  @default(false)
   userId    String?
-  user      User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model User {
@@ -80,7 +100,6 @@ model User {
   notificationPreference NotificationPreference?
   digestQueues          DigestQueue[]
   notificationHistory   NotificationHistory[]
-
 }
 
 model Keyword {
@@ -111,91 +130,62 @@ model Match {
 }
 
 model Announcement {
-  id              String    @id @default(cuid())
-  annId           String    @unique  // Original ID from the API
-  title           String    @db.Text
-  description     String    @db.Text
-  announcementUrl String    @db.Text
-  publishDate     DateTime
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-  matches         Match[]
+  id               String     @id @default(cuid())
+  annId            String     @unique
+  title            String     @db.Text
+  description      String     @db.Text
+  announcementUrl  String     @db.Text
+  publishDate      DateTime
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+  matches          Match[]
 
   @@index([publishDate])
 }
 
-model VerificationToken {
-  id         String   @id @default(cuid())
-  identifier String
-  token      String   @unique
-  expires    DateTime
-
-  @@unique([identifier, token])
-}
-
-enum SubscriptionStatus {
-  active
-  cancelled
-  expired
-  trial
-}
-
-enum BillingCycle {
-  monthly
-  yearly
-  trial
-}
-
-enum EmailFrequency {
-  IMMEDIATE
-  DAILY
-  WEEKLY
-}
-
 model Subscription {
-  id              String       @id @default(cuid())
-  userId          String
-  user            User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  planId          String
-  status          SubscriptionStatus @default(trial)
-  billingCycle    BillingCycle
-  startDate       DateTime     @default(now())
-  endDate         DateTime?
-  trialEndsAt     DateTime?
-  cancelledAt     DateTime?
-  features        SubscriptionFeature[]
-  transactions    Transaction[]
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
+  id           String                @id @default(cuid())
+  userId       String                @unique
+  planId       String
+  status       SubscriptionStatus    @default(trial)
+  billingCycle BillingCycle
+  startDate    DateTime              @default(now())
+  endDate      DateTime?
+  trialEndsAt  DateTime?
+  cancelledAt  DateTime?
+  createdAt    DateTime              @default(now())
+  updatedAt    DateTime              @updatedAt
+  user         User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  features     SubscriptionFeature[]
+  transactions Transaction[]
 
-  @@unique([userId])
   @@index([userId, status])
 }
 
 model SubscriptionFeature {
-  id              String       @id @default(cuid())
-  subscriptionId  String
-  subscription    Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
-  name            String
-  enabled         Boolean      @default(true)
-  limit           Int?
-  used            Int          @default(0)
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
+  id             String       @id @default(cuid())
+  subscriptionId String
+  name           String
+  enabled        Boolean      @default(true)
+  limit          Int?
+  used           Int          @default(0)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  subscription   Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
 
   @@index([subscriptionId])
 }
 
 model Transaction {
-  id                  String       @id @default(cuid())
-  subscriptionId      String
-  subscription        Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
-  amount              Decimal
-  currency            String       @default("USD")
-  status              String       // success, failed, cancelled
+  id                   String       @id @default(cuid())
+  subscriptionId       String
+  amount               Decimal
+  currency             String       @default("USD")
+  status               String
   paylinkTransactionId String?
-  createdAt           DateTime     @default(now())
-  updatedAt           DateTime     @updatedAt
+  createdAt            DateTime     @default(now())
+  updatedAt            DateTime     @updatedAt
+  subscription         Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
 
   @@index([subscriptionId])
 }

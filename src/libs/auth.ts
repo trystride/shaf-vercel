@@ -6,7 +6,7 @@ import GitHubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import EmailProvider from "next-auth/providers/email";
 import { getServerSession } from "next-auth";
-import bcrypt from "bcrypt";
+import bcryptjs from "bcryptjs";
 import { User as PrismaUser } from "@prisma/client";
 
 declare module "next-auth" {
@@ -67,7 +67,7 @@ export const authOptions: NextAuthOptions = {
 				}
 
 				// check to see if passwords match
-				const passwordMatch = await bcrypt.compare(
+				const passwordMatch = await bcryptjs.compare(
 					credentials.password,
 					user.password
 				);
