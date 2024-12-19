@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/libs/auth";
 import { redirect } from "next/navigation";
-import prisma from "@/libs/prisma";
+import { prisma } from "@/libs/prismaDb";
 import NotificationHistoryTable from "@/components/User/NotificationHistory/NotificationHistoryTable";
 
 export const metadata: Metadata = {

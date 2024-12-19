@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/libs/auth";
 import { redirect } from "next/navigation";
-import prisma from "@/libs/prisma";
+import { prisma } from "@/libs/prismaDb";
 import NotificationSettingsForm from "@/components/User/NotificationSettings/NotificationSettingsForm";
 import { BellIcon } from "@heroicons/react/24/outline";
 

@@ -7,6 +7,11 @@ export default withAuth(
 		const isAdmin = req.nextauth.token?.role === "ADMIN";
 		const isUser = req.nextauth.token?.role === "USER";
 
+		// Redirect /user to /user/dashboard/keywords
+		if (pathname === "/user") {
+			return NextResponse.redirect(new URL("/user/dashboard/keywords", req.url));
+		}
+
 		if (pathname.includes("/admin") && !isAdmin) {
 			return NextResponse.redirect(new URL("/user", req.url));
 		}
@@ -21,9 +26,9 @@ export default withAuth(
 	{
 		secret: process.env.SECRET,
 		callbacks: {
-			authorized: (params) => {
-				const { token } = params;
-				return !!token;
+			authorized({ req, token }) {
+				if (!token) return false;
+				return true;
 			},
 		},
 	}
