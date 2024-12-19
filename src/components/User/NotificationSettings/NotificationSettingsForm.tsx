@@ -5,14 +5,11 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import { Switch } from "@headlessui/react";
 import { ClockIcon, CalendarDaysIcon } from "@heroicons/react/24/outline";
+import { EmailFrequency, NotificationPreference as PrismaNotificationPreference } from "@prisma/client";
 
-type NotificationPreference = {
+type NotificationPreference = Omit<PrismaNotificationPreference, 'id' | 'userId' | 'createdAt' | 'updatedAt'> & {
   id?: string;
   userId?: string;
-  emailEnabled: boolean;
-  emailFrequency: "IMMEDIATE" | "DAILY" | "WEEKLY";
-  emailDigestDay: string | null;
-  emailDigestTime: string | null;
   createdAt?: Date;
   updatedAt?: Date;
 };
@@ -124,7 +121,7 @@ export default function NotificationSettingsForm({
                 onChange={(e) =>
                   setFormData({
                     ...formData,
-                    emailFrequency: e.target.value as "IMMEDIATE" | "DAILY" | "WEEKLY",
+                    emailFrequency: e.target.value as EmailFrequency,
                     emailDigestDay:
                       e.target.value === "WEEKLY"
                         ? formData.emailDigestDay || "MONDAY"

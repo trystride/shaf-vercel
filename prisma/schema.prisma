@@ -146,6 +146,12 @@ enum BillingCycle {
   trial
 }
 
+enum EmailFrequency {
+  IMMEDIATE
+  DAILY
+  WEEKLY
+}
+
 model Subscription {
   id              String       @id @default(cuid())
   userId          String
@@ -195,27 +201,27 @@ model Transaction {
 }
 
 model NotificationPreference {
-  id                    String    @id @default(cuid())
-  userId                String    @unique
-  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  emailEnabled          Boolean   @default(true)
-  emailFrequency        String    @default("IMMEDIATE")  // IMMEDIATE, DAILY, WEEKLY
-  emailDigestDay        String?   // For WEEKLY: MONDAY, TUESDAY, etc.
-  emailDigestTime       String?   // HH:mm format
-  createdAt             DateTime  @default(now())
-  updatedAt             DateTime  @updatedAt
+  id                    String         @id @default(cuid())
+  userId                String         @unique
+  user                  User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  emailEnabled          Boolean        @default(true)
+  emailFrequency        EmailFrequency @default(IMMEDIATE)
+  emailDigestDay        String?        // For WEEKLY: MONDAY, TUESDAY, etc.
+  emailDigestTime       String?        // HH:mm format
+  createdAt             DateTime       @default(now())
+  updatedAt             DateTime       @updatedAt
 }
 
 model DigestQueue {
-  id           String   @id @default(cuid())
+  id           String         @id @default(cuid())
   userId       String
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  matches      Match[]  @relation("DigestQueueToMatch")
-  frequency    String   // DAILY or WEEKLY
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  matches      Match[]       @relation("DigestQueueToMatch")
+  frequency    EmailFrequency // DAILY or WEEKLY
   scheduledFor DateTime
-  sent         Boolean  @default(false)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  sent         Boolean       @default(false)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
 
   @@index([userId])
   @@index([scheduledFor])
