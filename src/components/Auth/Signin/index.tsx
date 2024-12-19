@@ -5,7 +5,6 @@ import GoogleSigninButton from "../GoogleSigninButton";
 import GithubSigninButton from "../GithubSigninButton";
 import SigninWithMagicLink from "../SigninWithMagicLink";
 import SigninWithPassword from "../SigninWithPassword";
-import DemoSignin from "./DemoSignin";
 
 export default function Signin() {
 	const [signinOption, setSigninOption] = useState("magic-link");
@@ -65,8 +64,6 @@ export default function Signin() {
 				</p>
 
 				<span className='my-10 block h-px w-full bg-stroke dark:bg-stroke-dark '></span>
-
-				<DemoSignin />
 			</div>
 		</>
 	);

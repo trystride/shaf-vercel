@@ -17,6 +17,21 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { ShareIcon, CalendarIcon, DownloadIcon } from "lucide-react";
+import toast, { Toaster } from "react-hot-toast";
+import DOMPurify from "isomorphic-dompurify";
+
+// Safe HTML rendering component
+const SafeHTML: React.FC<{ html: string; className?: string }> = ({ html, className }) => {
+  // biome-ignore lint/security/noDangerouslySetInnerHtml: Content is sanitized by DOMPurify
+  return <div className={className} dangerouslySetInnerHTML={{ __html: sanitizeHtml(html) }} />;
+};
+
+const sanitizeHtml = (html: string): string => {
+  return DOMPurify.sanitize(html, {
+    ALLOWED_TAGS: ['b', 'i', 'em', 'strong', 'p', 'br', 'ul', 'ol', 'li', 'a'],
+    ALLOWED_ATTR: ['href', 'target', 'class']
+  });
+};
 
 interface Announcement {
   Id: string;
@@ -37,7 +52,7 @@ interface Announcement {
   ActionDate: string | null;
   url: string;
   AnnCreatedDate: string | null;
-  PageItems: any | null;
+  PageItems: unknown;
   debtorIdentifier: string;
   matchedKeyword: string;
 }
@@ -72,21 +87,25 @@ export default function AnnouncementsPage() {
       
       setLoading(true);
       try {
-        const headers = {
-          'Authorization': `Bearer ${session.user.accessToken}`,
-          'Content-Type': 'application/json',
-        };
-
         const [announcementsRes, keywordsRes] = await Promise.all([
-          fetch("/api/user/announcements", { headers }),
-          fetch("/api/user/keywords", { headers })
+          fetch("/api/user/announcements", { 
+            cache: 'no-store'
+          }),
+          fetch("/api/user/keywords", { 
+            cache: 'no-store'
+          })
         ]);
 
         if (!announcementsRes.ok || !keywordsRes.ok) {
+          const announcementsError = !announcementsRes.ok ? await announcementsRes.json() : null;
+          const keywordsError = !keywordsRes.ok ? await keywordsRes.json() : null;
+          
           console.error("Error fetching data:", {
-            announcements: announcementsRes.statusText,
-            keywords: keywordsRes.statusText
+            announcements: announcementsError || announcementsRes.statusText,
+            keywords: keywordsError || keywordsRes.statusText
           });
+          
+          toast.error(announcementsError?.error || "Failed to load announcements. Please try again later.");
           return;
         }
 
@@ -95,21 +114,22 @@ export default function AnnouncementsPage() {
           keywordsRes.json()
         ]);
 
-        console.log('Announcements data:', announcementsData);
-
         if (Array.isArray(announcementsData)) {
           setAnnouncements(announcementsData);
         } else {
-          console.error("Unexpected announcements data format:", announcementsData);
+          console.error("Invalid announcements data format:", announcementsData);
+          toast.error("Received invalid data format from server");
         }
 
         if (Array.isArray(keywordsData)) {
-          setKeywords(keywordsData.map((k: any) => k.term));
+          setKeywords(keywordsData.map(k => k.term));
         } else {
-          console.error("Unexpected keywords data format:", keywordsData);
+          console.error("Invalid keywords data format:", keywordsData);
+          toast.error("Failed to load keywords");
         }
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error in fetchData:", error);
+        toast.error("An error occurred while fetching data");
       } finally {
         setLoading(false);
       }
@@ -188,182 +208,193 @@ export default function AnnouncementsPage() {
   };
 
   return (
-    <div className="container mx-auto py-6 space-y-6">
-      <div className="flex justify-between items-center mb-8">
-        <div className="flex items-center gap-4">
-          <h1 className="text-2xl font-semibold text-gray-700">Matched Announcements</h1>
-          {announcements.length > 0 && (
-            <Button
-              variant="outline"
-              size="sm"
-              className="text-[#00A7B1] border-[#00A7B1] hover:bg-[#00A7B1] hover:text-white"
-              onClick={exportToCSV}
-            >
-              <DownloadIcon className="h-4 w-4 mr-2" />
-              Export CSV
-            </Button>
-          )}
-        </div>
-        <div className="w-[200px]">
-          <Select
-            value={selectedKeyword}
-            onValueChange={(value) => {
-              setSelectedKeyword(value);
-              setCurrentPage(1);
-            }}
-          >
-            <SelectTrigger className="w-full border-gray-200 bg-white focus:ring-[#00A7B1] focus:ring-offset-0">
-              <div className="flex items-center gap-2">
-                <span className="text-gray-600">Filter by:</span>
-                <span className="font-medium text-gray-900">
-                  {selectedKeyword === "all" ? "All Keywords" : selectedKeyword}
-                </span>
-              </div>
-            </SelectTrigger>
-            <SelectContent 
-              align="end" 
-              className="w-[200px] bg-white border border-gray-200 shadow-lg"
-            >
-              <SelectItem 
-                value="all" 
-                className="py-2 px-3 text-gray-900 hover:bg-[#00A7B1]/5 focus:bg-[#00A7B1]/5"
+    <>
+      <Toaster position="top-center" />
+      <div className="container mx-auto py-6 space-y-6">
+        <div className="flex justify-between items-center mb-8">
+          <div className="flex items-center gap-4">
+            <h1 className="text-2xl font-semibold text-gray-700">Matched Announcements</h1>
+            {announcements.length > 0 && (
+              <Button
+                variant="outline"
+                size="sm"
+                className="text-[#00A7B1] border-[#00A7B1] hover:bg-[#00A7B1] hover:text-white"
+                onClick={exportToCSV}
               >
+                <DownloadIcon className="h-4 w-4 mr-2" />
+                Export CSV
+              </Button>
+            )}
+          </div>
+          <div className="w-[200px]">
+            <Select
+              value={selectedKeyword}
+              onValueChange={(value) => {
+                setSelectedKeyword(value);
+                setCurrentPage(1);
+              }}
+            >
+              <SelectTrigger className="w-full border-gray-200 bg-white focus:ring-[#00A7B1] focus:ring-offset-0">
                 <div className="flex items-center gap-2">
-                  <span className="font-medium">All Keywords</span>
+                  <span className="text-gray-600">Filter by:</span>
+                  <span className="font-medium text-gray-900">
+                    {selectedKeyword === "all" ? "All Keywords" : selectedKeyword}
+                  </span>
                 </div>
-              </SelectItem>
-              <div className="max-h-[200px] overflow-auto">
-                {keywords.map((keyword) => (
-                  <SelectItem 
-                    key={keyword} 
-                    value={keyword}
-                    className="py-2 px-3 text-gray-900 hover:bg-[#00A7B1]/5 focus:bg-[#00A7B1]/5"
-                  >
-                    <div className="flex items-center gap-2">
-                      <Badge 
-                        variant="secondary" 
-                        className="bg-[#00A7B1]/10 text-[#00A7B1] hover:bg-[#00A7B1]/20"
-                      >
-                        {keyword}
+              </SelectTrigger>
+              <SelectContent 
+                align="end" 
+                className="w-[200px] bg-white border border-gray-200 shadow-lg"
+              >
+                <SelectItem 
+                  value="all" 
+                  className="py-2 px-3 text-gray-900 hover:bg-[#00A7B1]/5 focus:bg-[#00A7B1]/5"
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium">All Keywords</span>
+                  </div>
+                </SelectItem>
+                <div className="max-h-[200px] overflow-auto">
+                  {keywords.map((keyword) => (
+                    <SelectItem 
+                      key={keyword} 
+                      value={keyword}
+                      className="py-2 px-3 text-gray-900 hover:bg-[#00A7B1]/5 focus:bg-[#00A7B1]/5"
+                    >
+                      <div className="flex items-center gap-2">
+                        <Badge 
+                          variant="secondary" 
+                          className="bg-[#00A7B1]/10 text-[#00A7B1] hover:bg-[#00A7B1]/20"
+                        >
+                          {keyword}
+                        </Badge>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </div>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
+        {loading ? (
+          <div className="grid gap-4">
+            {[...Array(3)].map((_, i) => (
+              // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+              <Card key={i} className="bg-white">
+                <CardContent className="p-6">
+                  <div className="flex justify-between items-center mb-4">
+                    <Skeleton className="h-4 w-32" />
+                    <Skeleton className="h-4 w-48" />
+                  </div>
+                  <Skeleton className="h-6 w-2/3 mb-4" />
+                  <Skeleton className="h-20 w-full" />
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        ) : (
+          <div className="grid gap-4">
+            {paginatedAnnouncements.map((announcement, index) => (
+              <Card 
+                key={announcement.Id} 
+                className="bg-white hover:shadow-md transition-shadow border border-gray-100 mb-4"
+              >
+                <CardContent className="p-6">
+                  <div className="text-right">
+                    <div className="flex justify-end mb-3">
+                      <Badge variant="secondary" className="bg-[#00A7B1]/10 text-[#00A7B1] hover:bg-[#00A7B1]/20">
+                        {announcement.matchedKeyword}
                       </Badge>
                     </div>
-                  </SelectItem>
-                ))}
-              </div>
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-
-      {loading ? (
-        <div className="grid gap-4">
-          {[...Array(3)].map((_, i) => (
-            <Card key={i} className="bg-white">
-              <CardContent className="p-6">
-                <div className="flex justify-between items-center mb-4">
-                  <Skeleton className="h-4 w-32" />
-                  <Skeleton className="h-4 w-48" />
-                </div>
-                <Skeleton className="h-6 w-2/3 mb-4" />
-                <Skeleton className="h-20 w-full" />
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      ) : (
-        <div className="grid gap-4">
-          {paginatedAnnouncements.map((announcement, index) => (
-            <Card 
-              key={`${announcement.Id}-${announcement.AnnId}-${index}`} 
-              className="bg-white hover:shadow-md transition-shadow border border-gray-100"
-            >
-              <CardContent className="p-6">
-                <div className="text-right">
-                  <div className="flex justify-end mb-3">
-                    <Badge variant="secondary" className="bg-[#00A7B1]/10 text-[#00A7B1] hover:bg-[#00A7B1]/20">
-                      {announcement.matchedKeyword}
-                    </Badge>
-                  </div>
-                  <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
-                    <div className="flex items-center">
-                      <button 
-                        onClick={() => handleShare(announcement)}
-                        className="flex items-center gap-2 hover:text-[#00A7B1] transition-colors"
-                      >
-                        <ShareIcon className="h-4 w-4" />
-                      </button>
+                    <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
+                      <div className="flex items-center">
+                        <Button
+                          type="button"
+                          onClick={() => handleShare(announcement)}
+                          className="text-gray-600 hover:text-gray-800"
+                        >
+                          <ShareIcon className="h-4 w-4" />
+                        </Button>
+                      </div>
+                      <div className="flex items-center gap-2 text-right">
+                        <CalendarIcon className="h-4 w-4" />
+                        <span className="text-gray-600" dir="rtl">
+                          {formatDate(announcement.PublishDate)}
+                        </span>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2 text-right">
-                      <CalendarIcon className="h-4 w-4" />
-                      <span className="text-gray-600" dir="rtl">
-                        {formatDate(announcement.PublishDate)}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="text-gray-600 mb-2 text-sm">{announcement.ActionType}</div>
-                  <h3 className="text-xl font-semibold text-[#00A7B1] mb-4 hover:text-[#008288] cursor-pointer">
-                    {announcement.Header}
-                  </h3>
-                  {announcement.Comment && (
-                    <div className="relative">
-                      <div 
-                        className="text-gray-600 text-sm leading-relaxed mb-2" 
-                        dangerouslySetInnerHTML={{ 
-                          __html: announcement.Comment + ' ' + 
-                          `<a href="https://bankruptcy.gov.sa/ar/Announcements/Pages/announcementDetails.aspx?AdID=${announcement.url}" 
+                    <div className="text-gray-600 mb-2 text-sm">{announcement.ActionType}</div>
+                    <h3 className="text-xl font-semibold text-[#00A7B1] mb-4 hover:text-[#008288] cursor-pointer">
+                      {announcement.Header}
+                    </h3>
+                    {announcement.Comment && (
+                      <div className="relative">
+                        <SafeHTML
+                          className="text-gray-600 text-sm leading-relaxed mb-2"
+                          html={`${announcement.Comment} <a href="https://bankruptcy.gov.sa/ar/Announcements/Pages/announcementDetails.aspx?AdID=${announcement.url}" 
                               class="text-[#00A7B1] hover:text-[#008288]">
                             المزيد...
-                          </a>`
-                        }} 
+                          </a>`}
+                        />
+                      </div>
+                    )}
+                    {announcement.Body && (
+                      <SafeHTML
+                        className="mt-4 text-gray-700"
+                        html={announcement.Body}
                       />
-                    </div>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      )}
-
-      {!loading && paginatedAnnouncements.length > 0 && (
-        <div className="flex justify-center gap-2 mt-6">
-          <Button
-            variant="outline"
-            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-            disabled={currentPage === 1}
-            className="text-[#00A7B1] border-[#00A7B1] hover:bg-[#00A7B1] hover:text-white"
-          >
-            Previous
-          </Button>
-          <div className="flex items-center mx-4 text-sm text-gray-600">
-            Page {currentPage} of {Math.ceil(filteredAnnouncements.length / itemsPerPage)}
+                    )}
+                    <p className="text-sm text-gray-500 mt-2">
+                      {`Matched keyword: ${announcement.matchedKeyword}`}
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
           </div>
-          <Button
-            variant="outline"
-            onClick={() =>
-              setCurrentPage((p) =>
-                Math.min(
-                  Math.ceil(filteredAnnouncements.length / itemsPerPage),
-                  p + 1
-                )
-              )
-            }
-            disabled={
-              currentPage ===
-              Math.ceil(filteredAnnouncements.length / itemsPerPage)
-            }
-            className="text-[#00A7B1] border-[#00A7B1] hover:bg-[#00A7B1] hover:text-white"
-          >
-            Next
-          </Button>
-        </div>
-      )}
+        )}
 
-      {!loading && filteredAnnouncements.length === 0 && (
-        <div className="text-center py-12">
-          <p className="text-gray-500">No announcements found</p>
-        </div>
-      )}
-    </div>
+        {!loading && paginatedAnnouncements.length > 0 && (
+          <div className="flex justify-center gap-2 mt-6">
+            <Button
+              variant="outline"
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+              className="text-[#00A7B1] border-[#00A7B1] hover:bg-[#00A7B1] hover:text-white"
+            >
+              Previous
+            </Button>
+            <div className="flex items-center mx-4 text-sm text-gray-600">
+              Page {currentPage} of {Math.ceil(filteredAnnouncements.length / itemsPerPage)}
+            </div>
+            <Button
+              variant="outline"
+              onClick={() =>
+                setCurrentPage((p) =>
+                  Math.min(
+                    Math.ceil(filteredAnnouncements.length / itemsPerPage),
+                    p + 1
+                  )
+                )
+              }
+              disabled={
+                currentPage ===
+                Math.ceil(filteredAnnouncements.length / itemsPerPage)
+              }
+              className="text-[#00A7B1] border-[#00A7B1] hover:bg-[#00A7B1] hover:text-white"
+            >
+              Next
+            </Button>
+          </div>
+        )}
+
+        {!loading && filteredAnnouncements.length === 0 && (
+          <div className="text-center py-12">
+            <p className="text-gray-500">No announcements found</p>
+          </div>
+        )}
+      </div>
+    </>
   );
 }

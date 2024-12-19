@@ -7,11 +7,22 @@ import GoogleProvider from "next-auth/providers/google";
 import EmailProvider from "next-auth/providers/email";
 import { getServerSession } from "next-auth";
 import bcrypt from "bcrypt";
-import { User } from "@prisma/client";
+import { User as PrismaUser } from "@prisma/client";
 
 declare module "next-auth" {
 	interface Session extends DefaultSession {
-		user: User & DefaultSession["user"];
+		user: User & DefaultSession["user"] & {
+			accessToken?: string;
+		};
+	}
+	
+	interface User {
+		id: string;
+		role?: string;
+		priceId?: string;
+		currentPeriodEnd?: Date;
+		subscriptionId?: string;
+		customerId?: string;
 	}
 }
 
@@ -38,7 +49,7 @@ export const authOptions: NextAuthOptions = {
 			},
 
 			async authorize(credentials) {
-				// check to see if eamil and password is there
+				// check to see if email and password is there
 				if (!credentials?.email || !credentials?.password) {
 					throw new Error("Please enter an email or password");
 				}
@@ -65,7 +76,18 @@ export const authOptions: NextAuthOptions = {
 					throw new Error("Incorrect password");
 				}
 
-				return user;
+				// Convert null values to undefined for NextAuth compatibility
+				return {
+					id: user.id,
+					name: user.name ?? undefined,
+					email: user.email ?? undefined,
+					image: user.image ?? undefined,
+					role: user.role ?? undefined,
+					priceId: user.priceId ?? undefined,
+					currentPeriodEnd: user.currentPeriodEnd ?? undefined,
+					subscriptionId: user.subscriptionId ?? undefined,
+					customerId: user.customerId ?? undefined
+				};
 			},
 		}),
 
@@ -86,32 +108,44 @@ export const authOptions: NextAuthOptions = {
 			},
 
 			async authorize(credentials) {
-				// check to see if eamil and password is there
+				// check to see if adminEmail and userEmail are there
 				if (!credentials?.adminEmail || !credentials?.userEmail) {
-					throw new Error("User email or Admin email is missing");
+					throw new Error("Please enter admin and user emails");
 				}
 
+				// check if admin exists and has admin role
 				const admin = await prisma.user.findUnique({
 					where: {
-						email: credentials.adminEmail.toLocaleLowerCase(),
-					},
-				});
-
-				const user = await prisma.user.findUnique({
-					where: {
-						email: credentials.userEmail.toLocaleLowerCase(),
+						email: credentials.adminEmail,
 					},
 				});
 
 				if (!admin || admin.role !== "ADMIN") {
-					throw new Error("Access denied");
+					throw new Error("Not authorized");
 				}
 
-				// if user was not found
+				// check if user exists
+				const user = await prisma.user.findUnique({
+					where: {
+						email: credentials.userEmail,
+					},
+				});
+
 				if (!user) {
-					throw new Error("No user found");
+					throw new Error("User not found");
 				}
-				return user;
+
+				return {
+					id: user.id,
+					name: user.name ?? undefined,
+					email: user.email ?? undefined,
+					image: user.image ?? undefined,
+					role: user.role ?? undefined,
+					priceId: user.priceId ?? undefined,
+					currentPeriodEnd: user.currentPeriodEnd ?? undefined,
+					subscriptionId: user.subscriptionId ?? undefined,
+					customerId: user.customerId ?? undefined
+				};
 			},
 		}),
 		CredentialsProvider({
@@ -126,22 +160,31 @@ export const authOptions: NextAuthOptions = {
 			},
 
 			async authorize(credentials) {
-				// check to see if eamil and password is there
 				if (!credentials?.email) {
-					throw new Error("User email is missing");
+					throw new Error("Email is required");
 				}
 
 				const user = await prisma.user.findUnique({
 					where: {
-						email: credentials.email.toLocaleLowerCase(),
+						email: credentials.email,
 					},
 				});
 
-				// if user was not found
 				if (!user) {
 					throw new Error("No user found");
 				}
-				return user;
+
+				return {
+					id: user.id,
+					name: user.name ?? undefined,
+					email: user.email ?? undefined,
+					image: user.image ?? undefined,
+					role: user.role ?? undefined,
+					priceId: user.priceId ?? undefined,
+					currentPeriodEnd: user.currentPeriodEnd ?? undefined,
+					subscriptionId: user.subscriptionId ?? undefined,
+					customerId: user.customerId ?? undefined
+				};
 			},
 		}),
 
@@ -177,8 +220,8 @@ export const authOptions: NextAuthOptions = {
 				token.priceId = user.priceId;
 				token.currentPeriodEnd = user.currentPeriodEnd;
 				token.subscriptionId = user.subscriptionId;
-				token.picture = user.image;
 				token.image = user.image;
+				token.accessToken = user.id; // Using user.id as the access token
 			}
 			return token;
 		},
@@ -186,12 +229,13 @@ export const authOptions: NextAuthOptions = {
 		async session({ session, token }) {
 			if (session?.user) {
 				session.user.id = token.id as string;
-				session.user.email = token.email;
-				session.user.role = token.role;
-				session.user.priceId = token.priceId;
-				session.user.currentPeriodEnd = token.currentPeriodEnd;
-				session.user.subscriptionId = token.subscriptionId;
-				session.user.image = token.picture;
+				session.user.email = token.email as string | undefined;
+				session.user.role = token.role as string | undefined;
+				session.user.priceId = token.priceId as string | undefined;
+				session.user.currentPeriodEnd = token.currentPeriodEnd as Date | undefined;
+				session.user.subscriptionId = token.subscriptionId as string | undefined;
+				session.user.image = token.image as string | undefined;
+				session.user.accessToken = token.accessToken as string;
 			}
 			return session;
 		},

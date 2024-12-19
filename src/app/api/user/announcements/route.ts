@@ -8,18 +8,27 @@ export async function GET() {
     const session = await getServerSession(authOptions);
     
     if (!session?.user?.email) {
+      console.error("Unauthorized access attempt");
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     // Get user's keywords first
     const user = await db.user.findUnique({
       where: { email: session.user.email },
-      include: {
-        keywords: true
+      select: {
+        id: true,
+        keywords: {
+          where: { enabled: true },
+          select: {
+            id: true,
+            term: true
+          }
+        }
       }
     });
 
     if (!user) {
+      console.error("User not found:", session.user.email);
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
@@ -27,49 +36,65 @@ export async function GET() {
     const matches = await db.match.findMany({
       where: {
         keyword: {
-          userId: user.id
+          userId: user.id,
+          enabled: true
         }
       },
-      include: {
-        announcement: true,
-        keyword: true
-      },
-      orderBy: {
+      select: {
         announcement: {
-          publishDate: 'desc'
+          select: {
+            id: true,
+            annId: true,
+            title: true,
+            description: true,
+            publishDate: true,
+            announcementUrl: true,
+            createdAt: true
+          }
+        },
+        keyword: {
+          select: {
+            term: true
+          }
         }
-      }
+      },
+      orderBy: [{
+        announcement: {
+          createdAt: 'desc'
+        }
+      }]
     });
 
     const announcements = matches.map(match => ({
       Id: match.announcement.id,
-      AnnId: match.announcement.id,
-      ActionType: match.announcement.actionType || "",
-      ActionTypeID: match.announcement.actionTypeId || 0,
-      ActionTypeEn: match.announcement.actionTypeEn || "",
-      CourtType: match.announcement.courtType || "",
-      AnnouncementType: match.announcement.type || "",
-      Status: match.announcement.status,
-      RequestId: match.announcement.id,
-      StatusId: match.announcement.statusId || 0,
+      AnnId: match.announcement.annId,
       Header: match.announcement.title,
       Comment: match.announcement.description,
-      Body: match.announcement.body,
-      PublishDate: match.announcement.publishDate,
-      debtorName: match.announcement.debtorName || "",
-      ActionDate: match.announcement.actionDate,
-      url: match.announcement.id,
+      Body: match.announcement.description,
+      PublishDate: match.announcement.publishDate.toISOString(),
+      url: match.announcement.announcementUrl,
       AnnCreatedDate: match.announcement.createdAt?.toISOString() || null,
+      matchedKeyword: match.keyword.term,
+      // Set default values for missing fields
+      ActionType: "",
+      ActionTypeID: 0,
+      ActionTypeEn: "",
+      CourtType: "",
+      AnnouncementType: "",
+      Status: null,
+      RequestId: match.announcement.id,
+      StatusId: 0,
+      debtorName: "",
+      ActionDate: null,
       PageItems: null,
-      debtorIdentifier: match.announcement.debtorIdentifier || "",
-      matchedKeyword: match.keyword.term
+      debtorIdentifier: ""
     }));
 
     return NextResponse.json(announcements);
   } catch (error) {
-    console.error("Error fetching announcements:", error);
+    console.error("API Error:", error);
     return NextResponse.json(
-      { error: "Internal server error", details: error.message },
+      { error: error instanceof Error ? error.message : "Internal server error" },
       { status: 500 }
     );
   }

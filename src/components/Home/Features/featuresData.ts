@@ -75,14 +75,14 @@ const featuresData: FeatureItem[] = [
 		id: 5,
 		title: "Fully Customizable",
 		description:
-			"SaaSBold provides the flexibility to customize your software's design and functionality to meet your specific business requirements and branding. Everything is highly customizable and modular.",
+			"Shaf provides the flexibility to customize your software's design and functionality to meet your specific business requirements and branding. Everything is highly customizable and modular.",
 		icon: "/images/features/features-icon-05.svg",
 	},
 	{
 		id: 6,
 		title: "Rich Docs and Email Support",
 		description:
-			"Docs includes detailed, step-by-step guide for every part of SaaSBold. If you need further assistance, simply open a support ticket and we will respond promptly.",
+			"Docs includes detailed, step-by-step guide for every part of Shaf. If you need further assistance, simply open a support ticket and we will respond promptly.",
 		icon: "/images/features/features-icon-06.svg",
 	},
 ];

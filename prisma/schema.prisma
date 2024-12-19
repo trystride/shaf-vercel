@@ -57,25 +57,30 @@ model Invitation {
 }
 
 model User {
-  id                    String       @id @default(cuid())
+  id                    String                 @id @default(cuid())
   name                  String?
-  email                 String?      @unique
+  email                 String?                @unique
   emailVerified         DateTime?
   image                 String?
   password              String?
-  passwordResetToken    String?      @unique
+  passwordResetToken    String?                @unique
   passwordResetTokenExp DateTime?
-  role                  String?      @default("USER")
-  customerId            String?      @unique @map(name: "customer_id")
-  subscriptionId        String?      @unique @map(name: "subscription_id")
-  priceId               String?      @map(name: "price_id")
-  currentPeriodEnd      DateTime?    @map(name: "current_period_end")
-  createdAt             DateTime     @default(now())
+  role                  String?                @default("USER")
+  customerId            String?                @unique @map(name: "customer_id")
+  subscriptionId        String?                @unique @map(name: "subscription_id")
+  priceId               String?                @map(name: "price_id")
+  currentPeriodEnd      DateTime?              @map(name: "current_period_end")
+  createdAt             DateTime               @default(now())
   accounts              Account[]
   sessions              Session[]
   apiKeys               ApiKey[]
   invitation            Invitation[]
   keywords              Keyword[]
+  subscriptions         Subscription[]
+  notificationPreference NotificationPreference?
+  digestQueues          DigestQueue[]
+  notificationHistory   NotificationHistory[]
+
 }
 
 model Keyword {
@@ -98,6 +103,8 @@ model Match {
   announcementId String
   announcement   Announcement @relation(fields: [announcementId], references: [id], onDelete: Cascade)
   createdAt      DateTime     @default(now())
+  digestQueues   DigestQueue[] @relation("DigestQueueToMatch")
+  notifications  NotificationHistory[] @relation("NotificationHistoryToMatch")
 
   @@index([keywordId])
   @@index([announcementId])
@@ -124,4 +131,108 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+enum SubscriptionStatus {
+  active
+  cancelled
+  expired
+  trial
+}
+
+enum BillingCycle {
+  monthly
+  yearly
+  trial
+}
+
+model Subscription {
+  id              String       @id @default(cuid())
+  userId          String
+  user            User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  planId          String
+  status          SubscriptionStatus @default(trial)
+  billingCycle    BillingCycle
+  startDate       DateTime     @default(now())
+  endDate         DateTime?
+  trialEndsAt     DateTime?
+  cancelledAt     DateTime?
+  features        SubscriptionFeature[]
+  transactions    Transaction[]
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  @@unique([userId])
+  @@index([userId, status])
+}
+
+model SubscriptionFeature {
+  id              String       @id @default(cuid())
+  subscriptionId  String
+  subscription    Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+  name            String
+  enabled         Boolean      @default(true)
+  limit           Int?
+  used            Int          @default(0)
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  @@index([subscriptionId])
+}
+
+model Transaction {
+  id                  String       @id @default(cuid())
+  subscriptionId      String
+  subscription        Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+  amount              Decimal
+  currency            String       @default("USD")
+  status              String       // success, failed, cancelled
+  paylinkTransactionId String?
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+
+  @@index([subscriptionId])
+}
+
+model NotificationPreference {
+  id                    String    @id @default(cuid())
+  userId                String    @unique
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  emailEnabled          Boolean   @default(true)
+  emailFrequency        String    @default("IMMEDIATE")  // IMMEDIATE, DAILY, WEEKLY
+  emailDigestDay        String?   // For WEEKLY: MONDAY, TUESDAY, etc.
+  emailDigestTime       String?   // HH:mm format
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+}
+
+model DigestQueue {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  matches      Match[]  @relation("DigestQueueToMatch")
+  frequency    String   // DAILY or WEEKLY
+  scheduledFor DateTime
+  sent         Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([userId])
+  @@index([scheduledFor])
+}
+
+model NotificationHistory {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type            String   // EMAIL, EMAIL_DIGEST
+  status          String   // SENT, FAILED
+  subject         String
+  content         String   @db.Text
+  sentAt          DateTime @default(now())
+  error           String?
+  matches         Match[]  @relation("NotificationHistoryToMatch")
+
+  @@index([userId])
+  @@index([sentAt])
 }

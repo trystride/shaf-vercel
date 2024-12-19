@@ -60,19 +60,19 @@ const Footer = () => {
           <div className="flex flex-col gap-4">
             <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-900 dark:text-white">Product</h3>
             <div className="flex flex-col gap-3">
-              <Link href="/features" className="text-sm text-gray-600 transition-colors hover:text-primary dark:text-gray-400">
+              <Link href="#" className="text-sm text-gray-600 transition-colors hover:text-primary dark:text-gray-400">
                 Features
               </Link>
-              <Link href="/pricing" className="text-sm text-gray-600 transition-colors hover:text-primary dark:text-gray-400">
+              <Link href="#" className="text-sm text-gray-600 transition-colors hover:text-primary dark:text-gray-400">
                 Pricing
               </Link>
-              <Link href="/integrations" className="text-sm text-gray-600 transition-colors hover:text-primary dark:text-gray-400">
+              <Link href="#" className="text-sm text-gray-600 transition-colors hover:text-primary dark:text-gray-400">
                 Integrations
               </Link>
-              <Link href="/changelog" className="text-sm text-gray-600 transition-colors hover:text-primary dark:text-gray-400">
+              <Link href="#" className="text-sm text-gray-600 transition-colors hover:text-primary dark:text-gray-400">
                 Changelog
               </Link>
-              <Link href="/docs" className="text-sm text-gray-600 transition-colors hover:text-primary dark:text-gray-400">
+              <Link href="#" className="text-sm text-gray-600 transition-colors hover:text-primary dark:text-gray-400">
                 Documentation
               </Link>
             </div>
@@ -82,19 +82,19 @@ const Footer = () => {
           <div className="flex flex-col gap-4">
             <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-900 dark:text-white">Company</h3>
             <div className="flex flex-col gap-3">
-              <Link href="/about" className="text-sm text-gray-600 transition-colors hover:text-primary dark:text-gray-400">
+              <Link href="#" className="text-sm text-gray-600 transition-colors hover:text-primary dark:text-gray-400">
                 About Us
               </Link>
-              <Link href="/careers" className="text-sm text-gray-600 transition-colors hover:text-primary dark:text-gray-400">
+              <Link href="#" className="text-sm text-gray-600 transition-colors hover:text-primary dark:text-gray-400">
                 Careers
               </Link>
-              <Link href="/blog" className="text-sm text-gray-600 transition-colors hover:text-primary dark:text-gray-400">
+              <Link href="#" className="text-sm text-gray-600 transition-colors hover:text-primary dark:text-gray-400">
                 Blog
               </Link>
-              <Link href="/contact" className="text-sm text-gray-600 transition-colors hover:text-primary dark:text-gray-400">
+              <Link href="#" className="text-sm text-gray-600 transition-colors hover:text-primary dark:text-gray-400">
                 Contact
               </Link>
-              <Link href="/press" className="text-sm text-gray-600 transition-colors hover:text-primary dark:text-gray-400">
+              <Link href="#" className="text-sm text-gray-600 transition-colors hover:text-primary dark:text-gray-400">
                 Press Kit
               </Link>
             </div>
@@ -104,19 +104,19 @@ const Footer = () => {
           <div className="flex flex-col gap-4">
             <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-900 dark:text-white">Legal & Support</h3>
             <div className="flex flex-col gap-3">
-              <Link href="/privacy" className="text-sm text-gray-600 transition-colors hover:text-primary dark:text-gray-400">
+              <Link href="#" className="text-sm text-gray-600 transition-colors hover:text-primary dark:text-gray-400">
                 Privacy Policy
               </Link>
-              <Link href="/terms" className="text-sm text-gray-600 transition-colors hover:text-primary dark:text-gray-400">
+              <Link href="#" className="text-sm text-gray-600 transition-colors hover:text-primary dark:text-gray-400">
                 Terms of Service
               </Link>
-              <Link href="/security" className="text-sm text-gray-600 transition-colors hover:text-primary dark:text-gray-400">
+              <Link href="#" className="text-sm text-gray-600 transition-colors hover:text-primary dark:text-gray-400">
                 Security
               </Link>
-              <Link href="/help" className="text-sm text-gray-600 transition-colors hover:text-primary dark:text-gray-400">
+              <Link href="#" className="text-sm text-gray-600 transition-colors hover:text-primary dark:text-gray-400">
                 Help Center
               </Link>
-              <Link href="/status" className="text-sm text-gray-600 transition-colors hover:text-primary dark:text-gray-400">
+              <Link href="#" className="text-sm text-gray-600 transition-colors hover:text-primary dark:text-gray-400">
                 System Status
               </Link>
             </div>

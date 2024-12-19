@@ -1,64 +1,104 @@
-Thanks for choosing SaaSBold 🙌
+# Shaf - Keywords Monitoring System
 
-A full-stack SaaS boilerplate and starter kit comes with all essential integrations, pages, components, user/admin dashboards, landing page, design source and everything you need to turn your feature-rich SaaS startup idea into reality.
+Internal development documentation
 
-## [🚀 Documentation](https://docs.saasbold.com)
+## 🔧 Local Development Setup
 
-## [⚡ Homepage](https://saasbold.com)
+1. Clone the repo
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Set up your `.env` file:
+   ```env
+   DATABASE_URL="your-db-connection-string"
+   NEXTAUTH_SECRET="your-auth-secret"
+   BANKRUPTCY_API_URL="https://bankruptcy.gov.sa/eservices/api/AnnouncementNewDataAPI/"
+   ```
+4. Run database migrations:
+   ```bash
+   npx prisma migrate dev
+   ```
+5. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
-## [💜 Support](https://saasbold.com/support)
+## 🏗 Project Structure
 
-## [💬 Community](https://discord.gg/vc997X3xTP)
+```
+src/
+├── app/                    # Next.js 13 App Router
+│   ├── (site)/            # Main site routes
+│   │   ├── user/          # User dashboard routes
+│   │   └── admin/         # Admin panel routes
+│   └── api/               # API endpoints
+├── components/            # Reusable components
+├── lib/                   # Shared libraries
+└── utils/                # Helper functions
+```
 
-## Update Logs
+## 🔄 Core Services
 
-📆 27 October 2024
+### Bankruptcy Monitoring
+- Fetches announcements every 2 hours via Vercel Cron
+- Endpoint: `/api/announcements/fetch`
+- Matches announcements against user keywords
+- Sends email notifications for matches
 
-- Updated sanity integration enable/disable
-- Removed lock file to prevent unexpected errors
-- Updated package.json file
+### User Management
+- Authentication via NextAuth.js
+- User roles: admin, user
+- Subscription handling through paylink
 
-📆 11 September 2024
+### Database
+- Prisma ORM
+- Key models: User, Keyword, Announcement, Notification
 
-- Added integrations enable/disable features
+## 🛠 Development Guidelines
 
-📆 13 June 2024
+1. **Branches**
+   - `main`: production
+   - `dev`: development
+   - Feature branches: `feature/description`
 
-- Added Paddle Integration
-- Added Cancel Subscription API on LemonSqueezy integration
-- Separted Stripe, LemonSqueezy and Paddle Billing pages
-- Added/Updated files and folders
-  **Update Guide**
+2. **API Routes**
+   - User routes: `/api/user/*`
+   - Admin routes: `/api/admin/*`
+   - Announcement routes: `/api/announcements/*` 
+   - 
 
-1. api -> lemon-squeezy (all the apis updated)
-2. libs -> auth.ts
-3. Stripe -> StripeBilling, Paddle -> PaddleBilling, LemonSqueezy -> LsBilling
+3. **Components**
+   - Use TypeScript strictly
+   - Follow existing component structure
+   - Reuse UI components from `/components/ui`
 
-📆 26 May 2024
+4. **Testing**
+   - Run tests: `npm test`
+   - Add tests for new features
 
-- Added User Impersonation
-- Added Invitation from admin dashboard
-- Added/Updated files and folders
-  **Update Guide**
+## 🔍 Monitoring & Debugging
 
-1. prisma → schema.prisma
+- Check announcement fetch logs: `/admin/logs`
+- Monitor API health: `/api/health`
+- Debug email notifications: `/admin/notifications`
 
-2. src → app → user → invite
+## 📞 Team Contacts
 
-3. components → Auth → InvitedSignin
+- Backend: [Contact Name]
+- Frontend: [Contact Name]
+- DevOps: [Contact Name]
 
-4. components → Admin → Users → UsersActions.tsx and UserTopbar.tsx
+## 🚨 Common Issues
 
-5. libs → auth.ts
+1. **SSL Certificate Issues**
+   - The bankruptcy.gov.sa API might require SSL verification bypass
+   - Use the provided utility in `utils/api-helpers.ts`
 
-📆 15 May 2024
+2. **API Rate Limiting**
+   - Implement exponential backoff for retries
+   - Log failed attempts
 
-- Added LemonSqueezy Integration
-
-📆 07 April 2024
-
-- Fixed mobile nav toggle issue
-- Removed breadcrumb from single blog page
-- Updated Layout (to prevent client rendering):
-  - moved pre-loader logic to PreLoader File
-  - moved header & footer to HeaderWrapper & FooterWrapper
+3. **Database Connections**
+   - Check connection pool settings
+   - Monitor query performance

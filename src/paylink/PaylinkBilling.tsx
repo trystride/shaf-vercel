@@ -1,143 +1,160 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useRouter } from 'next/navigation';
-
-// Helper function
-const getCallbackUrl = (path: string) => {
-  return `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}${path}`;
-};
+import { useState } from 'react';
+import axios from 'axios';
+import { pricingData } from '@/pricing/pricingData';
 
 interface Price {
   priceId: string;
   nickname: string;
   description: string;
-  subtitle: string;
+  subtitle?: string;
   unit_amount: number;
   includes: string[];
-  active: boolean;
+  active?: boolean;
+  icon?: string;
+  icon2?: string;
 }
 
 interface PaylinkBillingProps {
-  isBilling: boolean;
+  isBilling?: boolean;
 }
 
-const PaylinkBilling: React.FC<PaylinkBillingProps> = ({ isBilling }) => {
+const PaylinkBilling: React.FC<PaylinkBillingProps> = ({ isBilling = true }) => {
   const router = useRouter();
-  const [prices, setPrices] = useState<Price[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [prices] = useState<Price[]>(pricingData);
 
-  useEffect(() => {
-    const fetchPrices = async () => {
-      try {
-        const response = await fetch('/api/prices');
-        if (!response.ok) {
-          throw new Error('Failed to fetch prices');
-        }
-        const data = await response.json();
-        setPrices(data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load prices');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPrices();
-  }, []);
-
-  const handlePayment = async (priceId: string, amount: number) => {
+  const handlePayment = async (priceId: string, amount: number, isTrial: boolean = false) => {
     try {
-      const response = await fetch('/api/paylink/payment', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          priceId,
-          amount,
-          callBackUrl: getCallbackUrl(isBilling ? '/user/billing' : '/thank-you'),
-        }),
+      const callbackUrl = `${window.location.origin}/billing/success`;
+      
+      const response = await axios.post('/api/paylink/subscription', {
+        priceId,
+        amount,
+        isTrial,
+        callbackUrl,
       });
 
-      const data = await response.json();
-      console.log('Payment response:', data);
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to create payment');
-      }
-
-      if (data.paymentUrl) {
-        window.location.href = data.paymentUrl;
+      const { paymentUrl } = response.data;
+      
+      if (paymentUrl) {
+        router.push(paymentUrl);
       } else {
         throw new Error('No payment URL received');
       }
     } catch (error) {
-      console.error('Payment error:', error);
-      alert('Failed to create payment. Please try again later.');
+      console.error('Subscription error:', error);
+      alert('Failed to create subscription. Please try again later.');
     }
   };
 
-  if (loading) {
-    return <div className="text-center p-8">Loading pricing plans...</div>;
-  }
-
-  if (error) {
-    return <div className="text-center text-red-600 p-8">{error}</div>;
-  }
-
-  if (!prices.length) {
-    return <div className="text-center p-8">No pricing plans available.</div>;
-  }
-
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8">
-      {prices.map((price) => (
-        <div 
-          key={price.priceId}
-          className="border rounded-lg p-6 shadow-lg hover:shadow-xl transition-shadow"
-        >
-          <div className="flex justify-between items-start mb-4">
-            <div>
-              <h3 className="text-2xl font-bold">{price.nickname}</h3>
-              {price.subtitle && (
-                <span className="inline-block bg-blue-100 text-blue-800 text-sm px-2 py-1 rounded mt-1">
-                  {price.subtitle}
-                </span>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="text-center mb-16">
+        <h2 className="text-4xl font-bold text-gray-900 mb-4">
+          Simple Affordable Pricing
+        </h2>
+        <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          {isBilling 
+            ? 'Start with a 14-day free trial. No credit card required.'
+            : 'Choose the perfect plan for your needs. Start with a 14-day trial.'}
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {prices.map((price, index) => {
+          const isPro = price.nickname.toLowerCase().includes('pro');
+          return (
+            <div
+              key={price.priceId}
+              className={`relative rounded-2xl p-8 ${
+                isPro ? 'bg-blue-600 text-white' : 'bg-white'
+              } shadow-xl transition-all duration-300 hover:scale-105`}
+            >
+              {isPro && (
+                <div className="absolute top-4 right-4">
+                  <span className="px-4 py-1 text-sm font-medium text-blue-600 bg-white rounded-full">
+                    Popular
+                  </span>
+                </div>
               )}
+
+              <div className="flex items-center space-x-4 mb-6">
+                <div className={`p-3 rounded-xl ${isPro ? 'bg-white/20' : 'bg-blue-50'}`}>
+                  {price.icon && (
+                    <img
+                      src={price.icon}
+                      alt={`${price.nickname} icon`}
+                      className="w-8 h-8"
+                    />
+                  )}
+                </div>
+                <div>
+                  <p className={`text-sm ${isPro ? 'text-blue-100' : 'text-blue-600'}`}>
+                    {price.subtitle}
+                  </p>
+                  <h3 className={`text-xl font-bold ${isPro ? 'text-white' : 'text-gray-900'}`}>
+                    {price.nickname}
+                  </h3>
+                </div>
+              </div>
+
+              <p className={`mb-6 ${isPro ? 'text-blue-100' : 'text-gray-600'}`}>
+                {price.description}
+              </p>
+
+              <div className="flex items-baseline mb-8">
+                <span className={`text-5xl font-bold ${isPro ? 'text-white' : 'text-gray-900'}`}>
+                  ${price.unit_amount / 100}
+                </span>
+                <span className={`ml-2 ${isPro ? 'text-blue-100' : 'text-gray-500'}`}>
+                  /monthly
+                </span>
+              </div>
+
+              <div className="mb-8">
+                <h4 className={`font-semibold mb-4 ${isPro ? 'text-white' : 'text-gray-900'}`}>
+                  What's included
+                </h4>
+                <ul className="space-y-4">
+                  {price.includes.map((feature, idx) => (
+                    <li key={idx} className="flex items-center">
+                      <svg
+                        className={`w-5 h-5 mr-3 ${isPro ? 'text-white' : 'text-blue-600'}`}
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                      <span className={isPro ? 'text-blue-100' : 'text-gray-600'}>
+                        {feature}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <button
+                onClick={() => isBilling ? handlePayment(price.priceId, price.unit_amount) : undefined}
+                disabled={!isBilling || !price.active}
+                className={`w-full py-4 px-6 rounded-xl text-center font-semibold transition-colors ${
+                  isPro
+                    ? 'bg-white text-blue-600 hover:bg-blue-50'
+                    : 'bg-blue-600 text-white hover:bg-blue-700'
+                } ${(!isBilling || !price.active) && 'opacity-50 cursor-not-allowed'}`}
+              >
+                {isBilling ? 'Get Started' : 'Available'}
+              </button>
             </div>
-            <span className="text-3xl" role="img" aria-label={price.priceId === 'monthly' ? 'Monthly Plan' : 'Yearly Plan'}>
-              {price.priceId === 'monthly' ? '📅' : '📆'}
-            </span>
-          </div>
-          
-          <p className="text-gray-600 mb-4">{price.description}</p>
-          
-          <div className="mb-6">
-            <span className="text-3xl font-bold">{price.unit_amount} SAR</span>
-            <span className="text-gray-600">
-              {price.priceId === 'monthly' ? '/month' : '/year'}
-            </span>
-          </div>
-
-          <ul className="mb-6 space-y-2">
-            {price.includes.map((feature, index) => (
-              <li key={index} className="flex items-center text-gray-700">
-                <span className="text-green-500 mr-2" role="img" aria-label="check">✓</span>
-                {feature}
-              </li>
-            ))}
-          </ul>
-
-          <button
-            onClick={() => handlePayment(price.priceId, price.unit_amount)}
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            Subscribe Now
-          </button>
-        </div>
-      ))}
+          );
+        })}
+      </div>
     </div>
   );
 };

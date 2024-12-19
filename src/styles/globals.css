@@ -70,15 +70,15 @@
   }
 
   .dropdown {
-    @apply left-0 hidden min-w-max flex-col gap-0 rounded-lg bg-white p-2.5 shadow-md duration-200 ease-in dark:bg-gray-dark 
-    absolute flex w-[220px] translate-y-2 opacity-0 invisible
+    @apply left-0 min-w-max flex-col gap-0 rounded-lg bg-white p-2.5 shadow-md duration-200 ease-in dark:bg-gray-dark 
+    absolute w-[220px] translate-y-2 opacity-0 invisible
     group-hover:visible group-hover:translate-y-1 group-hover:opacity-100;
   }
 
   .account-dropdown {
-    @apply right-0 hidden min-w-max flex-col gap-0 rounded-lg bg-white p-2.5 shadow-md duration-200 ease-in dark:bg-gray-dark 
-    absolute flex w-[220px] translate-y-2 opacity-0 invisible z-50
-    group-hover:visible group-hover:translate-y-1 group-hover:opacity-100;
+    @apply right-0 min-w-max flex-col gap-0 rounded-lg bg-white p-2.5 shadow-md duration-200 ease-in dark:bg-gray-dark 
+    absolute w-[220px] translate-y-2 opacity-0 invisible z-50
+    group-hover:translate-y-1 group-hover:opacity-100;
   }
 }
 

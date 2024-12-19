@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
+import { CsvUpload } from "./components/CsvUpload";
 
 interface Keyword {
   id: string;
@@ -142,17 +143,11 @@ export default function KeywordsPage() {
   };
 
   return (
-    <div>
-      {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Keywords</h1>
-          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-            Manage your bankruptcy announcement monitoring keywords
-          </p>
-        </div>
+    <div className="container mx-auto p-4">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">Keywords</h1>
+        <CsvUpload onUploadComplete={fetchKeywords} />
       </div>
-
       {/* Add Keyword Form */}
       <div className="bg-white dark:bg-gray-dark rounded-xl shadow-sm mb-6 p-6">
         <h2 className="text-lg font-medium text-gray-900 dark:text-white mb-4">
