@@ -86,7 +86,7 @@ export default function FaqItem({
 
 	return (
 		<>
-			<div className='rounded-lg bg-white shadow-1 dark:bg-gray-dark'>
+			<div className='shadow-1 rounded-lg bg-white dark:bg-gray-dark'>
 				<button
 					onClick={() => {
 						handleFaqToggle(id);
@@ -96,7 +96,7 @@ export default function FaqItem({
 					{question}
 
 					<span
-						className={`duration-300 ${activeFaq === id ? "rotate-180" : ""}`}
+						className={`duration-300 ${activeFaq === id ? 'rotate-180' : ''}`}
 					>
 						<svg
 							width='24'
@@ -117,8 +117,8 @@ export default function FaqItem({
 				<div
 					className={`grid`}
 					style={{
-						gridTemplateRows: `${activeFaq === id ? "1fr" : "0fr"}`,
-						transition: "grid-template-rows 300ms",
+						gridTemplateRows: `${activeFaq === id ? '1fr' : '0fr'}`,
+						transition: 'grid-template-rows 300ms',
 					}}
 				>
 					<div className={`overflow-hidden transition-all duration-300`}>

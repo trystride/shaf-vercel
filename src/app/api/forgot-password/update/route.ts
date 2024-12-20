@@ -1,13 +1,13 @@
-import bcrypt from "bcrypt";
-import { prisma } from "@/libs/prismaDb";
-import { NextResponse } from "next/server";
+import bcrypt from 'bcrypt';
+import { prisma } from '@/libs/prismaDb';
+import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
 	const body = await request.json();
 	const { email, password } = body;
 
 	if (!email || !password) {
-		return new NextResponse("Missing Fields", { status: 400 });
+		return new NextResponse('Missing Fields', { status: 400 });
 	}
 
 	const formatedEmail = email.toLowerCase();
@@ -19,7 +19,7 @@ export async function POST(request: Request) {
 	});
 
 	if (!user) {
-		throw new Error("Email does not exists");
+		throw new Error('Email does not exists');
 	}
 
 	const hashedPassword = await bcrypt.hash(password, 10);
@@ -36,8 +36,8 @@ export async function POST(request: Request) {
 			},
 		});
 
-		return NextResponse.json("Password Updated", { status: 200 });
+		return NextResponse.json('Password Updated', { status: 200 });
 	} catch (error) {
-		return new NextResponse("Internal Error", { status: 500 });
+		return new NextResponse('Internal Error', { status: 500 });
 	}
 }

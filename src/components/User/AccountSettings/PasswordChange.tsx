@@ -1,18 +1,18 @@
-"use client";
-import Card from "@/components/Common/Dashboard/Card";
-import FormButton from "@/components/Common/Dashboard/FormButton";
-import InputGroup from "@/components/Common/Dashboard/InputGroup";
-import { useState } from "react";
-import axios from "axios";
-import toast from "react-hot-toast";
-import { useSession } from "next-auth/react";
-import Loader from "@/components/Common/Loader";
+'use client';
+import Card from '@/components/Common/Dashboard/Card';
+import FormButton from '@/components/Common/Dashboard/FormButton';
+import InputGroup from '@/components/Common/Dashboard/InputGroup';
+import { useState } from 'react';
+import axios from 'axios';
+import toast from 'react-hot-toast';
+import { useSession } from 'next-auth/react';
+import Loader from '@/components/Common/Loader';
 
 export default function PasswordChange() {
 	const [data, setData] = useState({
-		currentPassword: "",
-		newPassword: "",
-		reTypeNewPassword: "",
+		currentPassword: '',
+		newPassword: '',
+		reTypeNewPassword: '',
 	});
 	const [loading, setLoading] = useState(false);
 	const { currentPassword, newPassword } = data;
@@ -32,22 +32,22 @@ export default function PasswordChange() {
 		setLoading(true);
 
 		if (!session?.user) {
-			toast.error("Please login first!");
+			toast.error('Please login first!');
 			return;
 		}
 
 		try {
-			await axios.post("/api/user/change-password", {
+			await axios.post('/api/user/change-password', {
 				password: newPassword,
 				currentPassword: currentPassword,
 				email: session?.user?.email,
 			});
 
-			toast.success("Password changed successfully");
+			toast.success('Password changed successfully');
 			setData({
-				currentPassword: "",
-				newPassword: "",
-				reTypeNewPassword: "",
+				currentPassword: '',
+				newPassword: '',
+				reTypeNewPassword: '',
 			});
 			setLoading(false);
 		} catch (error: any) {
@@ -59,7 +59,7 @@ export default function PasswordChange() {
 	return (
 		<div className='w-full max-w-[525px]'>
 			<Card>
-				<h3 className='mb-9 font-satoshi text-custom-2xl font-bold tracking-[-.5px] text-dark dark:text-white'>
+				<h3 className='text-custom-2xl mb-9 font-satoshi font-bold tracking-[-.5px] text-dark dark:text-white'>
 					Password
 				</h3>
 
@@ -100,7 +100,7 @@ export default function PasswordChange() {
 								Changing <Loader style='border-white' />
 							</>
 						) : (
-							"Change Password"
+							'Change Password'
 						)}
 					</FormButton>
 				</form>

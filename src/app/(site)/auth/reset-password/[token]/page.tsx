@@ -1,6 +1,6 @@
-import React from "react";
-import ResetPassword from "@/components/Auth/ResetPassword";
-import { Metadata } from "next";
+import React from 'react';
+import ResetPassword from '@/components/Auth/ResetPassword';
+import { Metadata } from 'next';
 
 export const metadata: Metadata = {
 	title: `Reset Password - ${process.env.SITE_NAME}`,

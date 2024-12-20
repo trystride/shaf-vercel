@@ -1,12 +1,12 @@
-"use client";
-import React, { useState } from "react";
-import EditProfile from "./EditProfile";
-import PasswordChange from "./PasswordChange";
-import DeleteAccount from "./DeleteAccount";
-import axios from "axios";
-import toast from "react-hot-toast";
-import { useSession } from "next-auth/react";
-import DeleteModal from "@/components/Common/Modals/DeleteModal";
+'use client';
+import React, { useState } from 'react';
+import EditProfile from './EditProfile';
+import PasswordChange from './PasswordChange';
+import DeleteAccount from './DeleteAccount';
+import axios from 'axios';
+import toast from 'react-hot-toast';
+import { useSession } from 'next-auth/react';
+import DeleteModal from '@/components/Common/Modals/DeleteModal';
 
 const AccountSettings = () => {
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -16,15 +16,15 @@ const AccountSettings = () => {
 	const handleDelete = async () => {
 		setLoading(true);
 		try {
-			await axios.delete("/api/user/delete", {
+			await axios.delete('/api/user/delete', {
 				data: {
 					email: session?.user?.email,
 				},
 			});
 
-			toast.success("Account deleted successfully");
+			toast.success('Account deleted successfully');
 			setLoading(false);
-			window.location.href = "/";
+			window.location.href = '/';
 		} catch (error: any) {
 			setLoading(false);
 			toast.error(error.response.data);

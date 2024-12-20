@@ -12,7 +12,6 @@
 			"jsx": true
 		},
 		"tsconfigRootDir": "__dirname"
-		// "project": "./tsconfig.json"
 	},
 	"settings": {
 		"react": {
@@ -28,22 +27,58 @@
 		"plugin:react-hooks/recommended",
 		"prettier"
 	],
-	"plugins": ["@typescript-eslint", "prettier"],
+	"plugins": ["@typescript-eslint", "prettier", "react"],
 	"rules": {
-		"prettier/prettier": "error",
-		// Add any additional rules or overrides here
+		"prettier/prettier": [
+			"error",
+			{
+				"useTabs": true,
+				"singleQuote": true
+			}
+		],
+		"@typescript-eslint/no-unused-vars": [
+			"warn",
+			{
+				"argsIgnorePattern": "^_",
+				"varsIgnorePattern": "^_",
+				"caughtErrorsIgnorePattern": "^_"
+			}
+		],
 		"no-console": [
 			"warn",
 			{
 				"allow": ["warn", "error"]
 			}
 		],
+		"react/no-unescaped-entities": [
+			"error",
+			{
+				"forbid": [
+					{
+						"char": "'",
+						"alternatives": ["&apos;"]
+					},
+					{
+						"char": "\"",
+						"alternatives": ["&quot;"]
+					},
+					{
+						"char": ">",
+						"alternatives": ["&gt;"]
+					},
+					{
+						"char": "}",
+						"alternatives": ["&#125;"]
+					}
+				]
+			}
+		],
+		"indent": "off",
 		"no-empty": "warn",
 		"no-cond-assign": ["error", "always"],
-		"indent": ["error", "tab"],
 		"quotes": [
 			"warn",
-			"double",
+			"single",
 			{
 				"avoidEscape": true,
 				"allowTemplateLiterals": true
@@ -51,19 +86,14 @@
 		],
 		"semi": ["warn", "always"],
 		"linebreak-style": ["error", "unix"],
-		"@typescript-eslint/no-unused-vars": [
-			"error",
-			{
-				"argsIgnorePattern": "^_"
-			}
-		],
 		"@typescript-eslint/no-explicit-any": "off",
 		"@typescript-eslint/no-var-requires": "off",
 		"@typescript-eslint/naming-convention": [
-			"error",
+			"warn",
 			{
 				"selector": "variable",
-				"format": ["camelCase", "PascalCase"]
+				"format": ["camelCase", "PascalCase", "UPPER_CASE"],
+				"leadingUnderscore": "allow"
 			},
 			{
 				"selector": "function",
@@ -75,22 +105,20 @@
 			}
 		],
 		"react/react-in-jsx-scope": "off",
-		"react/no-unknown-property": "warn",
 		"react/prop-types": "off"
-	}
-	// "overrides": [
-	// 	{
-	// 		"files": [
-	// 			"bin/*.js",
-	// 			"lib/*.js"
-	// 		],
-	// 		"excludedFiles": "*.test.js",
-	// 		"rules": {
-	// 			"quotes": [
-	// 				"error",
-	// 				"single"
-	// 			]
-	// 		}
-	// 	}
-	// ]
+	},
+	"overrides": [
+		{
+			"files": ["src/app/api/**/*.ts", "src/app/api/**/*.tsx"],
+			"rules": {
+				"no-console": "off"
+			}
+		},
+		{
+			"files": ["src/utils/logger.ts"],
+			"rules": {
+				"no-console": "off"
+			}
+		}
+	]
 }

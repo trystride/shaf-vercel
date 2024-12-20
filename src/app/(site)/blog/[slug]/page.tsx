@@ -1,13 +1,13 @@
-import React from "react";
-import { getPostBySlug, imageBuilder } from "@/sanity/sanity-utils";
-import RenderBodyContent from "@/components/Blog/RenderBodyContent";
-import Link from "next/link";
-import Image from "next/image";
-import { structuredAlgoliaHtmlData } from "@/libs/crawlIndex";
-import CopyToClipboard from "@/components/Common/CopyToClipboard";
-import SocialShare from "@/components/Blog/SocialShare";
-import { integrations, messages } from "../../../../../integrations.config";
-import { Blog } from "@/types/blog";
+import React from 'react';
+import { getPostBySlug, imageBuilder } from '@/sanity/sanity-utils';
+import RenderBodyContent from '@/components/Blog/RenderBodyContent';
+import Link from 'next/link';
+import Image from 'next/image';
+import { structuredAlgoliaHtmlData } from '@/libs/crawlIndex';
+import CopyToClipboard from '@/components/Common/CopyToClipboard';
+import SocialShare from '@/components/Blog/SocialShare';
+import { integrations, messages } from '../../../../../integrations.config';
+import { Blog } from '@/types/blog';
 
 type Props = {
 	params: {
@@ -26,15 +26,15 @@ export async function generateMetadata({ params }: Props) {
 	if (post) {
 		return {
 			title: `${
-				post.title || "Single Post Page"
+				post.title || 'Single Post Page'
 			} | ${authorName} - Next.js SaaS Starter Kit`,
 			description: `${post.metadata?.slice(0, 136)}...`,
 			author: authorName,
 			alternates: {
 				canonical: `${siteURL}/blog/${post?.slug?.current}`,
 				languages: {
-					"en-US": "/en-US",
-					"de-DE": "/de-DE",
+					'en-US': '/en-US',
+					'de-DE': '/de-DE',
 				},
 			},
 
@@ -45,9 +45,9 @@ export async function generateMetadata({ params }: Props) {
 				googleBot: {
 					index: true,
 					follow: false,
-					"max-video-preview": -1,
-					"max-image-preview": "large",
-					"max-snippet": -1,
+					'max-video-preview': -1,
+					'max-image-preview': 'large',
+					'max-snippet': -1,
 				},
 			},
 
@@ -64,12 +64,12 @@ export async function generateMetadata({ params }: Props) {
 						alt: post.title,
 					},
 				],
-				locale: "en_US",
-				type: "article",
+				locale: 'en_US',
+				type: 'article',
 			},
 
 			twitter: {
-				card: "summary_large_image",
+				card: 'summary_large_image',
 				title: `${post.title} | ${authorName}`,
 				description: `${post.metadata?.slice(0, 136)}...`,
 				creator: `@${authorName}`,
@@ -80,8 +80,8 @@ export async function generateMetadata({ params }: Props) {
 		};
 	} else {
 		return {
-			title: "Not Found",
-			description: "No blog article has been found",
+			title: 'Not Found',
+			description: 'No blog article has been found',
 		};
 	}
 }
@@ -95,9 +95,9 @@ const SingleBlog = async ({ params }: Props) => {
 
 	if (post) {
 		await structuredAlgoliaHtmlData({
-			type: "blog",
-			title: post?.title || "",
-			htmlString: post?.metadata || "",
+			type: 'blog',
+			title: post?.title || '',
+			htmlString: post?.metadata || '',
 			pageUrl: `${process.env.SITE_URL}/blog/${post?.slug?.current}`,
 			imageURL: imageBuilder(post?.mainImage).url() as string,
 		});
@@ -106,7 +106,7 @@ const SingleBlog = async ({ params }: Props) => {
 	return (
 		<main>
 			{/* <!-- ===== Blog Details Section Start ===== --> */}
-			<section className='lg:ub-pb-22.5 relative z-1 overflow-hidden pb-17.5 pt-35 xl:pb-27.5'>
+			<section className='lg:ub-pb-22.5 pb-17.5 pt-35 xl:pb-27.5 relative z-1 overflow-hidden'>
 				{/* <!-- bg shapes --> */}
 				<div>
 					<div className='absolute left-0 top-0 -z-1'>
@@ -129,7 +129,7 @@ const SingleBlog = async ({ params }: Props) => {
 
 				{integrations.isSanityEnabled ? (
 					<div className='mx-auto w-full max-w-[1170px] px-4 sm:px-8 xl:px-0'>
-						<div className='mx-auto mb-12.5 w-full max-w-[770px] text-center'>
+						<div className='mb-12.5 mx-auto w-full max-w-[770px] text-center'>
 							<div className='mb-5 flex flex-wrap items-center justify-center gap-6'>
 								<Link
 									href={`/blog/author/${post?.author?.slug?.current}`}
@@ -184,12 +184,12 @@ const SingleBlog = async ({ params }: Props) => {
 									</svg>
 									{new Date(post?.publishedAt as string)
 										.toDateString()
-										.split(" ")
+										.split(' ')
 										.slice(1)
-										.join(" ")}
+										.join(' ')}
 								</Link>
 							</div>
-							<h2 className='mb-5.5 font-satoshi text-3xl font-bold -tracking-[1.6px] text-black dark:text-white lg:text-heading-4 xl:text-heading-3'>
+							<h2 className='mb-5.5 lg:text-heading-4 xl:text-heading-3 font-satoshi text-3xl font-bold -tracking-[1.6px] text-black dark:text-white'>
 								{post.title}
 							</h2>
 
@@ -232,8 +232,8 @@ const SingleBlog = async ({ params }: Props) => {
 											{post?.author?.name}
 										</Link>
 										<span className='block dark:text-gray-5'>
-											{" "}
-											{post?.author?.bio}{" "}
+											{' '}
+											{post?.author?.bio}{' '}
 										</span>
 									</div>
 								</div>

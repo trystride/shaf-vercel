@@ -1,7 +1,7 @@
-"use client";
-import { useState, useEffect, useRef } from "react";
-import Notification from "./NotificationItem";
-import Link from "next/link";
+'use client';
+import { useState, useEffect, useRef } from 'react';
+import Notification from './NotificationItem';
+import Link from 'next/link';
 export default function Notifications({ role }: { role: string }) {
 	const [showNotification, setShowNotification] = useState(false);
 	const [showDot, setShowDot] = useState(true);
@@ -14,34 +14,34 @@ export default function Notifications({ role }: { role: string }) {
 	// ===== click outside of modal =====
 	const divRef = useRef<HTMLDivElement | null>(null);
 	useEffect(() => {
-		if (typeof window !== "undefined") {
+		if (typeof window !== 'undefined') {
 			const handleClickOutside = (event: MouseEvent) => {
 				if (divRef.current && !divRef.current.contains(event.target as Node)) {
 					setShowNotification(false);
 				}
 			};
 
-			document.addEventListener("mousedown", handleClickOutside);
+			document.addEventListener('mousedown', handleClickOutside);
 			return () => {
-				document.removeEventListener("mousedown", handleClickOutside);
+				document.removeEventListener('mousedown', handleClickOutside);
 			};
 		}
 	});
 
 	const count = [1, 2, 3];
 	const link =
-		role === "admin" ? "/admin/notifications" : "/user/notifications";
+		role === 'admin' ? '/admin/notifications' : '/user/notifications';
 
 	return (
 		<div className='relative' ref={divRef}>
 			<button
 				aria-label='Notification'
 				onClick={handleShowNotification}
-				className='relative hidden aspect-square w-12 cursor-pointer items-center justify-center rounded-full border border-stroke bg-gray-2 text-dark hover:bg-gray-3 dark:border-stroke-dark dark:bg-gray-dark dark:text-white xsm:flex'
+				className='xsm:flex relative hidden aspect-square w-12 cursor-pointer items-center justify-center rounded-full border border-stroke bg-gray-2 text-dark hover:bg-gray-3 dark:border-stroke-dark dark:bg-gray-dark dark:text-white'
 			>
 				<span
-					className={`absolute right-[13px] top-3 aspect-square w-2.5 rounded-full border-2 border-gray-2  bg-red-light dark:border-stroke-dark ${
-						!showDot ? "hidden" : ""
+					className={`bg-red-light absolute right-[13px] top-3 aspect-square w-2.5 rounded-full border-2  border-gray-2 dark:border-stroke-dark ${
+						!showDot ? 'hidden' : ''
 					}`}
 				></span>
 				<svg
@@ -50,7 +50,7 @@ export default function Notifications({ role }: { role: string }) {
 					viewBox='0 0 20 20'
 					fill='none'
 					xmlns='http://www.w3.org/2000/svg'
-					className='text-dark dark:text-gray'
+					className='dark:text-gray text-dark'
 				>
 					<path
 						fillRule='evenodd'
@@ -63,8 +63,8 @@ export default function Notifications({ role }: { role: string }) {
 
 			<div
 				className={`${
-					showNotification ? "block" : "hidden"
-				} absolute left-0 right-0 top-12 z-99999 mx-auto w-[250px] rounded-md bg-white px-4 shadow-md dark:bg-gray-dark dark:shadow-[0px_1px_4px_1px_rgba(255,200,255,0.08)] md:left-auto md:top-17.5 md:w-[400px]`}
+					showNotification ? 'block' : 'hidden'
+				} z-99999 md:top-17.5 absolute left-0 right-0 top-12 mx-auto w-[250px] rounded-md bg-white px-4 shadow-md dark:bg-gray-dark dark:shadow-[0px_1px_4px_1px_rgba(255,200,255,0.08)] md:left-auto md:w-[400px]`}
 			>
 				<div className='mb-4'>
 					<h3 className='text-md border-b border-stroke p-4 text-dark dark:border-stroke-dark dark:text-white'>
@@ -80,7 +80,7 @@ export default function Notifications({ role }: { role: string }) {
 					<Link
 						href={link}
 						onClick={() => setShowNotification(false)}
-						className='text-md w-full rounded-md border border-stroke bg-gray py-3  text-dark hover:bg-gray/40 dark:border-stroke-dark dark:bg-slate-700 dark:text-white'
+						className='text-md bg-gray hover:bg-gray/40 w-full rounded-md border border-stroke  py-3 text-dark dark:border-stroke-dark dark:bg-slate-700 dark:text-white'
 					>
 						See All Notifications
 					</Link>

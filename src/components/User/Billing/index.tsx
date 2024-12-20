@@ -1,4 +1,4 @@
-import Pricing from "@/paylink/PaylinkBilling";
+import Pricing from '@/paylink/PaylinkBilling';
 
 const Billing = () => {
 	return (

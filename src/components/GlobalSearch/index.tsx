@@ -1,10 +1,10 @@
-import algoliasearch from "algoliasearch";
-import React, { useEffect } from "react";
-import { Hits, InstantSearch } from "react-instantsearch-dom";
-import CustomHits from "./CustomHits";
-import SearchBox from "./CustomSearchBox";
-import EmptyState from "./EmptyState";
-import { integrations } from "../../../integrations.config";
+import algoliasearch from 'algoliasearch';
+import React, { useEffect } from 'react';
+import { Hits, InstantSearch } from 'react-instantsearch-dom';
+import CustomHits from './CustomHits';
+import SearchBox from './CustomSearchBox';
+import EmptyState from './EmptyState';
+import { integrations } from '../../../integrations.config';
 
 const appID = process.env.NEXT_PUBLIC_ALGOLIA_PROJECT_ID as string;
 const apiKEY = process.env.NEXT_PUBLIC_ALGOLIA_API_KEY as string;
@@ -23,17 +23,17 @@ const GlobalSearchModal = (props: Props) => {
 	useEffect(() => {
 		// closing modal while clicking outside
 		function handleClickOutside(event: any) {
-			if (!event.target.closest(".modal-content")) {
+			if (!event.target.closest('.modal-content')) {
 				setSearchModalOpen(false);
 			}
 		}
 
 		if (searchModalOpen) {
-			document.addEventListener("mousedown", handleClickOutside);
+			document.addEventListener('mousedown', handleClickOutside);
 		}
 
 		return () => {
-			document.removeEventListener("mousedown", handleClickOutside);
+			document.removeEventListener('mousedown', handleClickOutside);
 		};
 	}, [searchModalOpen, setSearchModalOpen]);
 

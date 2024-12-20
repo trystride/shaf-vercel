@@ -18,11 +18,11 @@ export default function SectionTitleH2(props: PropsType) {
 		width,
 		paraWidth,
 		titleWidth,
-		marginBottom = "70px",
+		marginBottom = '70px',
 	} = props;
 	return (
 		<div
-			className={`${center ? "mx-auto text-center" : ""}`}
+			className={`${center ? 'mx-auto text-center' : ''}`}
 			style={{ maxWidth: width, marginBottom: marginBottom }}
 		>
 			<h2
@@ -33,8 +33,8 @@ export default function SectionTitleH2(props: PropsType) {
 			</h2>
 			<p
 				className={`${
-					largePara ? "text-base md:text-lg" : "text-base"
-				} text-body dark:text-gray-4 ${paraWidth && center ? "mx-auto" : ""}`}
+					largePara ? 'text-base md:text-lg' : 'text-base'
+				} text-body dark:text-gray-4 ${paraWidth && center ? 'mx-auto' : ''}`}
 				style={{ maxWidth: paraWidth }}
 			>
 				{paragraph}

@@ -1,72 +1,39 @@
-import type { Metadata } from "next";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/libs/auth";
-import { redirect } from "next/navigation";
-import { prisma } from "@/libs/prismaDb";
-import NotificationSettingsForm from "@/components/User/NotificationSettings/NotificationSettingsForm";
-import { BellIcon } from "@heroicons/react/24/outline";
-import type { EmailFrequency } from "@/components/User/NotificationSettings/NotificationSettingsForm";
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/libs/auth';
+import { prisma } from '@/libs/prismaDb';
+import Card from '@/components/Common/Dashboard/Card';
+import NotificationSettingsForm from '@/components/User/NotificationSettings/NotificationSettingsForm';
+import { BellIcon } from '@heroicons/react/24/outline';
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Notification Settings - Bankruptcy Monitor",
-  description: "Manage your notification preferences",
+	title: 'Notification Settings',
 };
 
 export default async function NotificationSettingsPage() {
-  const session = await getServerSession(authOptions);
+	const session = await getServerSession(authOptions);
 
-  if (!session?.user?.email) {
-    redirect("/auth/signin");
-  }
+	if (!session?.user?.email) {
+		return null;
+	}
 
-  const user = await prisma.user.findUnique({
-    where: { 
-      email: session.user.email 
-    },
-    include: {
-      notificationPreference: true,
-    },
-  });
+	const preferences = await prisma.notificationPreference.findFirst({
+		where: {
+			user: {
+				email: session.user.email,
+			},
+		},
+	});
 
-  if (!user) {
-    redirect("/auth/signin");
-  }
-
-  // Convert emailFrequency to the correct type
-  const preferences = user.notificationPreference ? {
-    ...user.notificationPreference,
-    emailFrequency: user.notificationPreference.emailFrequency as EmailFrequency
-  } : null;
-
-  return (
-    <div className="max-w-3xl mx-auto">
-      <div className="bg-white dark:bg-boxdark rounded-lg shadow-sm overflow-hidden">
-        {/* Header */}
-        <div className="px-8 py-6 border-b border-gray-200 dark:border-gray-700">
-          <div className="flex items-center space-x-4">
-            <div className="p-2 bg-primary/10 rounded-lg">
-              <BellIcon className="h-6 w-6 text-primary" />
-            </div>
-            <div>
-              <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
-                Notification Settings
-              </h1>
-              <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                Customize how and when you receive notifications about bankruptcy announcements
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Form Section */}
-        <div className="p-8">
-          <div className="max-w-2xl">
-            <NotificationSettingsForm
-              preferences={preferences}
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+	return (
+		<div className='space-y-4'>
+			<div className='flex items-center gap-2'>
+				<BellIcon className='h-6 w-6' />
+				<h1 className='text-2xl font-bold'>Notification Settings</h1>
+			</div>
+			<Card>
+				<NotificationSettingsForm preferences={preferences} />
+			</Card>
+		</div>
+	);
 }

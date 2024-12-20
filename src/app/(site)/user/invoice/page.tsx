@@ -1,8 +1,8 @@
-import React from "react";
-import PurchaseHistory from "@/components/User/PurchaseHistory";
-import Breadcrumb from "@/components/Common/Dashboard/Breadcrumb";
+import React from 'react';
+import PurchaseHistory from '@/components/User/PurchaseHistory';
+import Breadcrumb from '@/components/Common/Dashboard/Breadcrumb';
 
-import { Metadata } from "next";
+import { Metadata } from 'next';
 
 export const metadata: Metadata = {
 	title: `Invoice - ${process.env.SITE_NAME}`,

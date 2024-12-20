@@ -1,18 +1,18 @@
-import React from "react";
-import featuresData from "./featuresData";
-import SingleFeature from "./FeatureItem";
-import SectionHeader from "@/components/Common/SectionHeader";
-import Image from "next/image";
-import { FeatureItem } from "@/types/featureItem";
+import React from 'react';
+import featuresData from './featuresData';
+import SingleFeature from './FeatureItem';
+import SectionHeader from '@/components/Common/SectionHeader';
+import Image from 'next/image';
+import { FeatureItem } from '@/types/featureItem';
 const Features = () => {
 	return (
 		<section
 			id='features'
-			className='relative z-1 overflow-hidden bg-gray-1 py-17.5 dark:bg-black dark:text-white lg:py-22.5 xl:py-27.5'
+			className='bg-gray-1 py-17.5 lg:py-22.5 xl:py-27.5 relative z-1 overflow-hidden dark:bg-black dark:text-white'
 		>
 			{/* <!-- section title --> */}
 			<SectionHeader
-				title={"Launch SaaS Startup in Days"}
+				title={'Launch SaaS Startup in Days'}
 				description='Everything you need to build, launch, and scale your SaaS startup.'
 			/>
 

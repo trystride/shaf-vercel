@@ -1,63 +1,58 @@
-import { NextResponse } from "next/server";
-import { db } from "@/libs/db";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/libs/auth";
+import { NextResponse } from 'next/server';
+import { db } from '@/libs/db';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/libs/auth';
 
 export async function GET() {
-  try {
-    const session = await getServerSession(authOptions);
-    
-    if (!session?.user?.email) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+	try {
+		const session = await getServerSession(authOptions);
 
-    const user = await db.user.findUnique({
-      where: { email: session.user.email }
-    });
+		if (!session?.user?.email) {
+			return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+		}
 
-    if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
-    }
+		const user = await db.user.findUnique({
+			where: { email: session.user.email },
+		});
 
-    // Test keywords
-    const testKeywords = [
-      "إفلاس",
-      "تصفية",
-      "دائن",
-      "مدين"
-    ];
+		if (!user) {
+			return NextResponse.json({ error: 'User not found' }, { status: 404 });
+		}
 
-    const createdKeywords = [];
+		// Test keywords
+		const testKeywords = ['إفلاس', 'تصفية', 'دائن', 'مدين'];
 
-    for (const term of testKeywords) {
-      // Check if keyword already exists
-      const existingKeyword = await db.keyword.findFirst({
-        where: {
-          userId: user.id,
-          term
-        }
-      });
+		const createdKeywords = [];
 
-      if (!existingKeyword) {
-        const keyword = await db.keyword.create({
-          data: {
-            term,
-            userId: user.id
-          }
-        });
-        createdKeywords.push(keyword);
-      }
-    }
+		for (const term of testKeywords) {
+			// Check if keyword already exists
+			const existingKeyword = await db.keyword.findFirst({
+				where: {
+					userId: user.id,
+					term,
+				},
+			});
 
-    return NextResponse.json({
-      message: `Created ${createdKeywords.length} new keywords`,
-      keywords: createdKeywords
-    });
-  } catch (error) {
-    console.error("Error creating keywords:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
-  }
+			if (!existingKeyword) {
+				const keyword = await db.keyword.create({
+					data: {
+						term,
+						userId: user.id,
+					},
+				});
+				createdKeywords.push(keyword);
+			}
+		}
+
+		return NextResponse.json({
+			message: `Created ${createdKeywords.length} new keywords`,
+			keywords: createdKeywords,
+		});
+	} catch (error) {
+		console.error('Error creating keywords:', error);
+		return NextResponse.json(
+			{ error: 'Internal server error' },
+			{ status: 500 }
+		);
+	}
 }

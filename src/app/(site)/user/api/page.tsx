@@ -1,8 +1,8 @@
-import Breadcrumb from "@/components/Common/Dashboard/Breadcrumb";
-import CreateToken from "@/components/User/Api/CreateToken";
-import TokenList from "@/components/User/Api/TokenList";
-import { Metadata } from "next";
-import { getApiKeys } from "@/actions/api-key";
+import Breadcrumb from '@/components/Common/Dashboard/Breadcrumb';
+import CreateToken from '@/components/User/Api/CreateToken';
+import TokenList from '@/components/User/Api/TokenList';
+import { Metadata } from 'next';
+import { getApiKeys } from '@/actions/api-key';
 
 export const metadata: Metadata = {
 	title: `API - ${process.env.SITE_NAME}`,

@@ -1,5 +1,5 @@
-"use client";
-import { DataStats } from "@/staticData/statsData";
+'use client';
+import { DataStats } from '@/staticData/statsData';
 
 export default function DataStatsCard({ data }: { data: DataStats }) {
 	const { icon, value, content, color, isIncrease, percents } = data;
@@ -25,11 +25,11 @@ export default function DataStatsCard({ data }: { data: DataStats }) {
 
 					<p
 						className={`flex items-center gap-1.5 font-satoshi text-sm font-medium ${
-							isIncrease ? "text-[#00BC55]" : "text-red"
+							isIncrease ? 'text-[#00BC55]' : 'text-red'
 						}`}
 					>
 						{percents}
-						<span className={`${isIncrease ? "" : "rotate-180"}`}>
+						<span className={`${isIncrease ? '' : 'rotate-180'}`}>
 							<svg
 								width='10'
 								height='10'

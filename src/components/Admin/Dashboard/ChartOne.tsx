@@ -1,8 +1,8 @@
-"use client";
-import { ApexOptions } from "apexcharts";
-import React, { useState } from "react";
-import dynamic from "next/dynamic";
-const ReactApexChart = dynamic(() => import("react-apexcharts"), {
+'use client';
+import { ApexOptions } from 'apexcharts';
+import React, { useState } from 'react';
+import dynamic from 'next/dynamic';
+const ReactApexChart = dynamic(() => import('react-apexcharts'), {
 	ssr: false,
 });
 
@@ -10,14 +10,14 @@ const options: ApexOptions = {
 	legend: {
 		show: false,
 	},
-	colors: ["#635BFF"],
+	colors: ['#635BFF'],
 	chart: {
-		fontFamily: "Satoshi, sans-serif",
+		fontFamily: 'Satoshi, sans-serif',
 		height: 300,
-		type: "area",
+		type: 'area',
 		dropShadow: {
 			enabled: true,
-			color: "#623CEA14",
+			color: '#623CEA14',
 			top: 10,
 			blur: 4,
 			left: 0,
@@ -30,10 +30,10 @@ const options: ApexOptions = {
 	},
 	fill: {
 		gradient: {
-			shade: "light",
-			type: "vertical",
+			shade: 'light',
+			type: 'vertical',
 			shadeIntensity: 0.1,
-			gradientToColors: ["#635BFF"],
+			gradientToColors: ['#635BFF'],
 			inverseColors: true,
 			opacityFrom: 0.3,
 			opacityTo: 0,
@@ -61,7 +61,7 @@ const options: ApexOptions = {
 	],
 	stroke: {
 		width: [2],
-		curve: "smooth",
+		curve: 'smooth',
 	},
 	// labels: {
 	//   show: false,
@@ -89,20 +89,20 @@ const options: ApexOptions = {
 		},
 	},
 	xaxis: {
-		type: "category",
+		type: 'category',
 		categories: [
-			"Sep",
-			"Oct",
-			"Nov",
-			"Dec",
-			"Jan",
-			"Feb",
-			"Mar",
-			"Apr",
-			"May",
-			"Jun",
-			"Jul",
-			"Aug",
+			'Sep',
+			'Oct',
+			'Nov',
+			'Dec',
+			'Jan',
+			'Feb',
+			'Mar',
+			'Apr',
+			'May',
+			'Jun',
+			'Jul',
+			'Aug',
 		],
 		axisBorder: {
 			show: false,
@@ -114,7 +114,7 @@ const options: ApexOptions = {
 	yaxis: {
 		title: {
 			style: {
-				fontSize: "0px",
+				fontSize: '0px',
 			},
 		},
 		min: 0,
@@ -133,7 +133,7 @@ const ChartOne: React.FC = () => {
 	const [state, setState] = useState<ChartOneState>({
 		series: [
 			{
-				name: "Product One",
+				name: 'Product One',
 				data: [23, 11, 22, 27, 53, 62, 37, 41, 54, 72, 63, 85],
 			},
 		],
@@ -154,8 +154,8 @@ const ChartOne: React.FC = () => {
 				series={state.series}
 				type='area'
 				height={300}
-				width="100%"
-				className="w-full"
+				width='100%'
+				className='w-full'
 			/>
 		</div>
 	);

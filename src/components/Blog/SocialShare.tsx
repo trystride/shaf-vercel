@@ -1,12 +1,12 @@
-import Link from "next/link";
-import React from "react";
+import Link from 'next/link';
+import React from 'react';
 
 const SocialShare = ({ url }: { url: string }) => {
 	return (
 		<>
 			<Link
 				href={`https://twitter.com/intent/post?url=${url}`}
-				className='flex h-10 w-10 items-center justify-center rounded-lg border border-stroke text-gray-6 duration-200 ease-in hover:border-black hover:bg-black hover:text-white dark:border-stroke-dark'
+				className='text-gray-6 flex h-10 w-10 items-center justify-center rounded-lg border border-stroke duration-200 ease-in hover:border-black hover:bg-black hover:text-white dark:border-stroke-dark'
 			>
 				<svg
 					className='fill-current'
@@ -22,7 +22,7 @@ const SocialShare = ({ url }: { url: string }) => {
 
 			<Link
 				href={`https://www.facebook.com/sharer/sharer.php?u=${url}`}
-				className='flex h-10 w-10 items-center justify-center rounded-lg border border-stroke text-gray-6 duration-200 ease-in hover:border-black hover:bg-black hover:text-white dark:border-stroke-dark'
+				className='text-gray-6 flex h-10 w-10 items-center justify-center rounded-lg border border-stroke duration-200 ease-in hover:border-black hover:bg-black hover:text-white dark:border-stroke-dark'
 			>
 				<svg
 					className='fill-current'
@@ -38,7 +38,7 @@ const SocialShare = ({ url }: { url: string }) => {
 
 			<Link
 				href={`https://linkedin.com/share?url=${url}`}
-				className='flex h-10 w-10 items-center justify-center rounded-lg border border-stroke text-gray-6 duration-200 ease-in hover:border-black hover:bg-black hover:text-white dark:border-stroke-dark'
+				className='text-gray-6 flex h-10 w-10 items-center justify-center rounded-lg border border-stroke duration-200 ease-in hover:border-black hover:bg-black hover:text-white dark:border-stroke-dark'
 			>
 				<svg
 					className='fill-current'

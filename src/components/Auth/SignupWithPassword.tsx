@@ -1,18 +1,18 @@
-import React, { useState } from "react";
-import FormButton from "@/components/Common/Dashboard/FormButton";
-import InputGroup from "@/components/Common/Dashboard/InputGroup";
-import toast from "react-hot-toast";
-import axios from "axios";
-import Loader from "../Common/Loader";
-import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
-import { integrations, messages } from "../../../integrations.config";
+import React, { useState } from 'react';
+import FormButton from '@/components/Common/Dashboard/FormButton';
+import InputGroup from '@/components/Common/Dashboard/InputGroup';
+import toast from 'react-hot-toast';
+import axios from 'axios';
+import Loader from '../Common/Loader';
+import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
+import { integrations, messages } from '../../../integrations.config';
 
 const SignupWithPassword = () => {
 	const [data, setData] = useState({
-		name: "",
-		email: "",
-		password: "",
+		name: '',
+		email: '',
+		password: '',
 	});
 
 	const [loading, setLoading] = useState(false);
@@ -35,27 +35,27 @@ const SignupWithPassword = () => {
 		}
 
 		if (!name.trim() || !email || !password) {
-			return toast.error("Please fill in all fields!");
+			return toast.error('Please fill in all fields!');
 		}
 
 		setLoading(true);
 
 		try {
-			const res = await axios.post("/api/user/register", {
+			const res = await axios.post('/api/user/register', {
 				name,
 				email,
 				password,
 			});
 
 			if (res.status === 200) {
-				toast.success("User has been registered");
+				toast.success('User has been registered');
 				setData({
-					name: "",
-					email: "",
-					password: "",
+					name: '',
+					email: '',
+					password: '',
 				});
 				setLoading(false);
-				signIn("credentials", { ...data, redirect: false }).then((callback) => {
+				signIn('credentials', { ...data, redirect: false }).then((callback) => {
 					if (callback?.error) {
 						toast.error(callback.error);
 						setLoading(false);
@@ -63,7 +63,7 @@ const SignupWithPassword = () => {
 
 					if (callback?.ok && !callback?.error) {
 						setLoading(false);
-						router.push("/admin");
+						router.push('/admin');
 					}
 				});
 			} else {

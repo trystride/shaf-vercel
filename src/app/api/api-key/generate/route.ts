@@ -1,45 +1,46 @@
-import { NextResponse } from "next/server";
-// import crypto from "crypto";
-import { prisma } from "@/libs/prismaDb";
-import bcrypt from "bcrypt";
+import { NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { prisma } from '@/libs/prismaDb';
+import bcrypt from 'bcrypt';
+import { authOptions } from '@/libs/auth';
 
-export async function POST(request: Request) {
-	const body = await request.json();
-	const { email, keyName } = body;
-
-	if (!email) {
-		return new NextResponse("Missing Fields", { status: 400 });
-	}
-
-	const formatedEmail = email.toLowerCase();
-
-	const user = await prisma.user.findUnique({
-		where: {
-			email: formatedEmail,
-		},
-	});
-
-	if (!user) {
-		return new NextResponse("User not found!", { status: 400 });
-	}
-
-	// Generate a random key
-	const key = user.role as string;
-
-	// Hash the key
-	const hashedKey = await bcrypt.hash(key, 10);
-
+export async function POST(req: Request) {
 	try {
-		await prisma.apiKey.create({
+		const { name } = await req.json();
+
+		if (!name) {
+			return new NextResponse('Missing Fields', { status: 400 });
+		}
+
+		const session = await getServerSession(authOptions);
+
+		if (!session?.user?.email) {
+			return new NextResponse('User not found!', { status: 401 });
+		}
+
+		const user = await prisma.user.findUnique({
+			where: {
+				email: session.user.email,
+			},
+		});
+
+		if (!user) {
+			return new NextResponse('User not found!', { status: 404 });
+		}
+
+		const apiKey = `${user.id}_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+		const hashedApiKey = await bcrypt.hash(apiKey, 10);
+
+		const newApiKey = await prisma.apiKey.create({
 			data: {
-				name: keyName,
-				key: hashedKey,
+				name,
+				key: hashedApiKey,
 				userId: user.id,
 			},
 		});
 
-		return new NextResponse(key, { status: 200 });
+		return NextResponse.json({ apiKey, id: newApiKey.id });
 	} catch (error) {
-		return new NextResponse("Something went wrong", { status: 500 });
+		return new NextResponse('Something went wrong', { status: 500 });
 	}
 }

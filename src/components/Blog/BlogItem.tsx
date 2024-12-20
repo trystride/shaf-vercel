@@ -1,8 +1,8 @@
-import React from "react";
-import { Blog } from "@/types/blog";
-import Image from "next/image";
-import { imageBuilder } from "@/sanity/sanity-utils";
-import Link from "next/link";
+import React from 'react';
+import { Blog } from '@/types/blog';
+import Image from 'next/image';
+import { imageBuilder } from '@/sanity/sanity-utils';
+import Link from 'next/link';
 
 const BlogItem = ({ blog }: { blog: Blog }) => {
 	return (
@@ -75,13 +75,13 @@ const BlogItem = ({ blog }: { blog: Blog }) => {
 						</svg>
 						{new Date(blog?.publishedAt as string)
 							.toDateString()
-							.split(" ")
+							.split(' ')
 							.slice(1)
-							.join(" ")}
+							.join(' ')}
 					</a>
 				</div>
 
-				<h3 className='mb-4 font-satoshi text-custom-2xl font-bold -tracking-[0.3px] text-black hover:text-primary dark:text-white'>
+				<h3 className='text-custom-2xl mb-4 font-satoshi font-bold -tracking-[0.3px] text-black hover:text-primary dark:text-white'>
 					<Link href={`/blog/${blog?.slug.current}`}>
 						{blog?.title.substring(0, 40)}...
 					</Link>

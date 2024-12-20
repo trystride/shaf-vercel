@@ -1,44 +1,44 @@
 const author = {
-	name: "author",
-	title: "Author",
-	type: "document",
+	name: 'author',
+	title: 'Author',
+	type: 'document',
 	fields: [
 		{
-			name: "name",
-			title: "Name",
-			type: "string",
+			name: 'name',
+			title: 'Name',
+			type: 'string',
 			validation: (Rule: any) => Rule.required(),
 		},
 		{
-			name: "slug",
-			title: "Slug",
-			type: "slug",
+			name: 'slug',
+			title: 'Slug',
+			type: 'slug',
 			options: {
-				source: "name",
+				source: 'name',
 				maxLength: 96,
 			},
 			validation: (Rule: any) => Rule.required(),
 		},
 		{
-			name: "image",
-			title: "Image",
-			type: "image",
+			name: 'image',
+			title: 'Image',
+			type: 'image',
 			options: {
 				hotspot: true,
 			},
 			validation: (Rule: any) => Rule.required(),
 		},
 		{
-			name: "bio",
-			title: "Bio",
-			type: "string",
+			name: 'bio',
+			title: 'Bio',
+			type: 'string',
 			validation: (Rule: any) => Rule.required(),
 		},
 	],
 	preview: {
 		select: {
-			title: "name",
-			media: "image",
+			title: 'name',
+			media: 'image',
 		},
 	},
 };

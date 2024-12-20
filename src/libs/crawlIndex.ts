@@ -1,16 +1,16 @@
-import algoliasearch from "algoliasearch";
-import { load } from "cheerio";
+import algoliasearch from 'algoliasearch';
+import { load } from 'cheerio';
 
-const appID = process.env.NEXT_PUBLIC_ALGOLIA_PROJECT_ID ?? "";
-const apiKEY = process.env.NEXT_PUBLIC_ALGOLIA_API_KEY ?? "";
-const INDEX = process.env.NEXT_PUBLIC_ALGOLIA_INDEX ?? "";
+const appID = process.env.NEXT_PUBLIC_ALGOLIA_PROJECT_ID ?? '';
+const apiKEY = process.env.NEXT_PUBLIC_ALGOLIA_API_KEY ?? '';
+const INDEX = process.env.NEXT_PUBLIC_ALGOLIA_INDEX ?? '';
 
 export const structuredAlgoliaHtmlData = async ({
-	pageUrl = "",
-	htmlString = "",
-	title = "",
-	type = "",
-	imageURL = "",
+	pageUrl = '',
+	htmlString = '',
+	title = '',
+	type = '',
+	imageURL = '',
 }) => {
 	try {
 		const c$ = load(htmlString).text();
@@ -28,7 +28,7 @@ export const structuredAlgoliaHtmlData = async ({
 		return data;
 	} catch (error) {
 		// eslint-disable-next-line no-console
-		console.log("error in structuredAlgoliaHtmlData", error);
+		console.log('error in structuredAlgoliaHtmlData', error);
 	}
 };
 
@@ -42,6 +42,6 @@ async function addToAlgolia(record: any) {
 		});
 	} catch (error) {
 		// eslint-disable-next-line no-console
-		console.log("error in addToAlgolia", error);
+		console.log('error in addToAlgolia', error);
 	}
 }

@@ -1,22 +1,22 @@
-"use client";
-import CopyToClipboard from "@/components/Common/CopyToClipboard";
-import DeleteModal from "@/components/Common/Modals/DeleteModal";
-import { useState } from "react";
-import { ApiKey } from "@prisma/client";
-import { deleteApiKey } from "@/actions/api-key";
-import toast from "react-hot-toast";
+'use client';
+import CopyToClipboard from '@/components/Common/CopyToClipboard';
+import DeleteModal from '@/components/Common/Modals/DeleteModal';
+import { useState } from 'react';
+import { ApiKey } from '@prisma/client';
+import { deleteApiKey } from '@/actions/api-key';
+import toast from 'react-hot-toast';
 
 export default function TokenList({ tokens }: { tokens: ApiKey[] }) {
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
 	const [loading, setLodading] = useState(false);
-	const [id, setId] = useState("");
+	const [id, setId] = useState('');
 
 	const handleDelete = async () => {
 		setLodading(true);
 		try {
 			await deleteApiKey(id);
 		} catch (error) {
-			toast.error("Failed to delete token");
+			toast.error('Failed to delete token');
 		}
 
 		setLodading(false);
@@ -25,11 +25,11 @@ export default function TokenList({ tokens }: { tokens: ApiKey[] }) {
 
 	return (
 		<>
-			<div className='rounded-10 bg-white shadow-1 dark:bg-gray-dark lg:w-3/5'>
+			<div className='rounded-10 shadow-1 bg-white dark:bg-gray-dark lg:w-3/5'>
 				{tokens.length > 0 && (
 					<>
 						<div className='border-b border-stroke px-9 py-5 dark:border-stroke-dark'>
-							<h3 className='font-satoshi text-custom-2xl font-bold tracking-[-.5px] text-dark dark:text-white'>
+							<h3 className='text-custom-2xl font-satoshi font-bold tracking-[-.5px] text-dark dark:text-white'>
 								List of active tokens
 							</h3>
 						</div>
@@ -55,12 +55,12 @@ export default function TokenList({ tokens }: { tokens: ApiKey[] }) {
 									>
 										<td className='p-4.5 pl-9 text-left tracking-[-.16px] text-dark dark:text-white'>
 											<span className='text-body dark:text-gray-5 md:hidden'>
-												Name:{" "}
+												Name:{' '}
 											</span>
 											{token?.name}
 											<span className='block md:hidden'>
 												<span className='text-body dark:text-gray-5'>
-													Date:{" "}
+													Date:{' '}
 													{new Date(token?.createdAt).toLocaleDateString()}
 												</span>
 											</span>
@@ -76,7 +76,7 @@ export default function TokenList({ tokens }: { tokens: ApiKey[] }) {
 														setId(token?.id);
 														setShowDeleteModal(true);
 													}}
-													className='flex h-10 items-center justify-center rounded-lg bg-red-light-5 px-3 text-red hover:bg-red hover:text-white dark:bg-red/10 dark:hover:bg-red'
+													className='bg-red-light-5 text-red hover:bg-red dark:bg-red/10 dark:hover:bg-red flex h-10 items-center justify-center rounded-lg px-3 hover:text-white'
 												>
 													<svg
 														width='23'

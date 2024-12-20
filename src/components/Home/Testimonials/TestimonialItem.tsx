@@ -1,9 +1,9 @@
-import { Testimonial } from "@/types/testimonial";
-import Image from "next/image";
+import { Testimonial } from '@/types/testimonial';
+import Image from 'next/image';
 
 const TestimonialItem = ({ data }: { data: Testimonial }) => {
 	return (
-		<div className='rounded-2xl bg-white p-[35px] shadow-testimonial hover:shadow-testimonial-2 dark:bg-gray-dark'>
+		<div className='shadow-testimonial hover:shadow-testimonial-2 rounded-2xl bg-white p-[35px] dark:bg-gray-dark'>
 			<div className='flex items-center gap-4'>
 				<div className='h-15 w-full max-w-[60px] overflow-hidden rounded-full'>
 					<Image src={data?.image} alt='author' width={60} height={60} />

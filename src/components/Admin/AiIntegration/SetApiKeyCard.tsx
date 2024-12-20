@@ -1,7 +1,7 @@
-"use client";
-import Card from "@/components/Common/Dashboard/Card";
-import { useState } from "react";
-import SetApiKeyModal from "./SetApiKeyModal";
+'use client';
+import Card from '@/components/Common/Dashboard/Card';
+import { useState } from 'react';
+import SetApiKeyModal from './SetApiKeyModal';
 
 export default function SetApiKeyCard() {
 	const [showModal, setShowModal] = useState(false);
@@ -64,7 +64,7 @@ export default function SetApiKeyCard() {
 							</defs>
 						</svg>
 					</div>
-					<h2 className='mb-3.5 font-satoshi text-heading-5 font-bold tracking-[-.5px] text-dark dark:text-white'>
+					<h2 className='text-heading-5 mb-3.5 font-satoshi font-bold tracking-[-.5px] text-dark dark:text-white'>
 						You need an OpenAI API Key to use AI Tools Template&#39;s features.
 					</h2>
 					<p className='mb-7.5 text-sm tracking-[-.14px] text-body'>
@@ -72,7 +72,7 @@ export default function SetApiKeyCard() {
 					</p>
 					<button
 						onClick={() => setShowModal(true)}
-						className='inline-flex h-[52px] items-center justify-center gap-2 rounded-lg bg-primary px-10 font-satoshi font-medium text-white duration-300 hover:bg-primary-dark'
+						className='hover:bg-primary-dark inline-flex h-[52px] items-center justify-center gap-2 rounded-lg bg-primary px-10 font-satoshi font-medium text-white duration-300'
 					>
 						<span>
 							<svg

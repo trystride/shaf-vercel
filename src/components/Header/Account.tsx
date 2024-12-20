@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
-import { useState } from "react";
-import { useSession } from "next-auth/react";
-import AccountMenu from "../Common/AccountMenu";
+import { useState } from 'react';
+import { useSession } from 'next-auth/react';
+import AccountMenu from '../Common/AccountMenu';
 
 const Account = ({ navbarOpen }: { navbarOpen: boolean }) => {
 	const [dropdown, setDropdown] = useState(false);
@@ -11,7 +11,7 @@ const Account = ({ navbarOpen }: { navbarOpen: boolean }) => {
 		<div className='group relative block'>
 			<button
 				onClick={() => setDropdown(!dropdown)}
-				className={`ml-5 flex items-center rounded-lg bg-primary px-5 py-2 font-satoshi font-medium text-white hover:bg-primary-dark `}
+				className={`hover:bg-primary-dark ml-5 flex items-center rounded-lg bg-primary px-5 py-2 font-satoshi font-medium text-white `}
 			>
 				Account
 				<svg
@@ -32,10 +32,10 @@ const Account = ({ navbarOpen }: { navbarOpen: boolean }) => {
 			</button>
 
 			<div
-				className={`border-[.5px]border-stroke absolute left-5 top-full z-9999 w-[280px] rounded-lg bg-white pb-2.5 pt-3.5 shadow-md duration-500 dark:bg-gray-dark lg:invisible lg:absolute lg:left-auto lg:right-0 lg:opacity-0 lg:group-hover:visible lg:group-hover:translate-y-2 lg:group-hover:opacity-100 ${
+				className={`border-[.5px]border-stroke z-9999 absolute left-5 top-full w-[280px] rounded-lg bg-white pb-2.5 pt-3.5 shadow-md duration-500 dark:bg-gray-dark lg:invisible lg:absolute lg:left-auto lg:right-0 lg:opacity-0 lg:group-hover:visible lg:group-hover:translate-y-2 lg:group-hover:opacity-100 ${
 					navbarOpen && dropdown
-						? "visible mb-4 opacity-100"
-						: "invisible opacity-0"
+						? 'visible mb-4 opacity-100'
+						: 'invisible opacity-0'
 				}`}
 			>
 				<AccountMenu user={session?.user} />

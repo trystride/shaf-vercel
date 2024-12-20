@@ -1,14 +1,14 @@
-import { FeatureWithImg } from "@/types/featureWithImg";
-import featureItemData from "./featuresData";
-import FeatureItem from "./FeatureItem";
-import SectionHeader from "@/components/Common/SectionHeader";
+import { FeatureWithImg } from '@/types/featureWithImg';
+import featureItemData from './featuresData';
+import FeatureItem from './FeatureItem';
+import SectionHeader from '@/components/Common/SectionHeader';
 
 const FeaturesWithImage = () => {
 	return (
-		<section className='overflow-hidden py-17.5 lg:py-22.5 xl:py-27.5'>
+		<section className='py-17.5 lg:py-22.5 xl:py-27.5 overflow-hidden'>
 			{/* <!-- section title --> */}
 			<SectionHeader
-				title={"Stand Out, Launch Fast!"}
+				title={'Stand Out, Launch Fast!'}
 				description='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent condimentum dictum euismod malesuada lacus, non consequat quam'
 			/>
 

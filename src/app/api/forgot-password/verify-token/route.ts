@@ -1,12 +1,12 @@
-import { prisma } from "@/libs/prismaDb";
-import { NextResponse } from "next/server";
+import { prisma } from '@/libs/prismaDb';
+import { NextResponse } from 'next/server';
 
 export const POST = async (request: Request) => {
 	const body = await request.json();
 	const { token } = body;
 
 	if (!token) {
-		return new NextResponse("Missing Fields", { status: 400 });
+		return new NextResponse('Missing Fields', { status: 400 });
 	}
 
 	const user = await prisma.user.findUnique({
@@ -19,7 +19,7 @@ export const POST = async (request: Request) => {
 	});
 
 	if (!user) {
-		return new NextResponse("Invalid Token or Token Expired", { status: 400 });
+		return new NextResponse('Invalid Token or Token Expired', { status: 400 });
 	}
 
 	return NextResponse.json(user);

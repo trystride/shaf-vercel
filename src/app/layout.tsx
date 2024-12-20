@@ -1,7 +1,7 @@
 // import "../styles/globals.css";
 // import "../styles/satoshi.css";
-import { Inter } from "next/font/google";
-const inter = Inter({ subsets: ["latin"] });
+import { Inter } from 'next/font/google';
+const inter = Inter({ subsets: ['latin'] });
 
 const layout = ({ children }: { children: React.ReactNode }) => {
 	return (

@@ -1,18 +1,18 @@
 /* eslint-disable @next/next/no-img-element */
-import Link from "next/link";
-import { signOut } from "next-auth/react";
-import { userMenuData, adminMenuData } from "@/staticData/sidebarData";
-import { usePathname } from "next/navigation";
+import Link from 'next/link';
+import { signOut } from 'next-auth/react';
+import { userMenuData, adminMenuData } from '@/staticData/sidebarData';
+import { usePathname } from 'next/navigation';
 
 const AccountMenu = ({ user }: any) => {
 	const pathname = usePathname();
-	const sidebarData = user?.role === "USER" ? userMenuData : adminMenuData;
+	const sidebarData = user?.role === 'USER' ? userMenuData : adminMenuData;
 
 	const profilePic = user?.image
-		? user.image.includes("http")
+		? user.image.includes('http')
 			? user.image
 			: `${process.env.NEXT_PUBLIC_IMAGE_URL}/${user.image}`
-		: "/images/dashboard/profile-avatar.png";
+		: '/images/dashboard/profile-avatar.png';
 
 	return (
 		<>
@@ -20,7 +20,7 @@ const AccountMenu = ({ user }: any) => {
 				<div className='mr-3'>
 					<img
 						src={profilePic}
-						alt={user?.name || "profile"}
+						alt={user?.name || 'profile'}
 						className='h-[48px] w-[48px] overflow-hidden rounded-full'
 					/>
 				</div>
@@ -40,8 +40,8 @@ const AccountMenu = ({ user }: any) => {
 								href={`${item?.path}`}
 								className={`flex w-full items-center gap-2 rounded-lg px-3.5 py-2.5 font-satoshi font-medium text-body hover:bg-gray-2 hover:text-dark dark:hover:bg-primary dark:hover:text-white ${
 									pathname === item?.path
-										? "bg-gray-2 text-dark dark:bg-primary dark:text-white"
-										: ""
+										? 'bg-gray-2 text-dark dark:bg-primary dark:text-white'
+										: ''
 								}`}
 							>
 								<span>{item?.icon}</span>

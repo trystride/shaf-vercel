@@ -1,18 +1,18 @@
-"use client";
-import { useState } from "react";
-import Link from "next/link";
-import FormButton from "../Common/Dashboard/FormButton";
-import InputGroup from "../Common/Dashboard/InputGroup";
-import toast from "react-hot-toast";
-import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import Loader from "../Common/Loader";
-import { integrations, messages } from "../../../integrations.config";
+'use client';
+import { useState } from 'react';
+import Link from 'next/link';
+import FormButton from '../Common/Dashboard/FormButton';
+import InputGroup from '../Common/Dashboard/InputGroup';
+import toast from 'react-hot-toast';
+import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import Loader from '../Common/Loader';
+import { integrations, messages } from '../../../integrations.config';
 
 export default function SigninWithPassword() {
 	const [data, setData] = useState({
-		email: "",
-		password: "",
+		email: '',
+		password: '',
 		remember: false,
 	});
 
@@ -35,22 +35,22 @@ export default function SigninWithPassword() {
 		}
 
 		if (!data.email) {
-			return toast.error("Please enter your email address.");
+			return toast.error('Please enter your email address.');
 		}
 
 		setLoading(true);
 
-		signIn("credentials", { ...data, redirect: false }).then((callback) => {
+		signIn('credentials', { ...data, redirect: false }).then((callback) => {
 			if (callback?.error) {
 				toast.error(callback.error);
 				setLoading(false);
 			}
 
 			if (callback?.ok && !callback?.error) {
-				toast.success("Logged in successfully");
+				toast.success('Logged in successfully');
 				setLoading(false);
-				setData({ email: "", password: "", remember: false });
-				router.push("/admin");
+				setData({ email: '', password: '', remember: false });
+				router.push('/admin');
 			}
 		});
 	};
@@ -97,8 +97,8 @@ export default function SigninWithPassword() {
 						}
 					/>
 					<span
-						className={`mr-2.5 inline-flex h-5.5 w-5.5 items-center justify-center rounded-md border border-stroke bg-white text-white text-opacity-0 peer-checked:border-primary peer-checked:bg-primary peer-checked:text-opacity-100 dark:border-stroke-dark dark:bg-white/5 ${
-							data.remember ? "bg-primary" : ""
+						className={`h-5.5 w-5.5 mr-2.5 inline-flex items-center justify-center rounded-md border border-stroke bg-white text-white text-opacity-0 peer-checked:border-primary peer-checked:bg-primary peer-checked:text-opacity-100 dark:border-stroke-dark dark:bg-white/5 ${
+							data.remember ? 'bg-primary' : ''
 						}`}
 					>
 						<svg

@@ -1,4 +1,4 @@
-import OpenAI from "openai";
+import OpenAI from 'openai';
 
 export async function POST(req: Request) {
 	const body = await req.json();
@@ -12,7 +12,7 @@ export async function POST(req: Request) {
 	try {
 		const chatCompletion = await openai.chat.completions.create({
 			messages: prompt,
-			model: "gpt-3.5-turbo",
+			model: 'gpt-3.5-turbo',
 			temperature: 1,
 			top_p: 1,
 			frequency_penalty: 0,

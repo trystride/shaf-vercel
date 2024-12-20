@@ -1,19 +1,19 @@
-import React from "react";
-import BlogItem from "@/components/Blog/BlogItem";
-import SectionHeader from "@/components/Common/SectionHeader";
-import { getPosts } from "@/sanity/sanity-utils";
+import React from 'react';
+import BlogItem from '@/components/Blog/BlogItem';
+import SectionHeader from '@/components/Common/SectionHeader';
+import { getPosts } from '@/sanity/sanity-utils';
 
 const Blog = async () => {
 	const posts = await getPosts();
 
 	return (
 		<section
-			className='overflow-hidden py-17.5 lg:py-22.5 xl:py-27.5'
+			className='py-17.5 lg:py-22.5 xl:py-27.5 overflow-hidden'
 			id='blog'
 		>
 			{/* <!-- section title --> */}
 			<SectionHeader
-				title={"Latest Blogs & News"}
+				title={'Latest Blogs & News'}
 				description='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent condimentum dictum euismod malesuada lacus, non consequat quam.'
 			/>
 

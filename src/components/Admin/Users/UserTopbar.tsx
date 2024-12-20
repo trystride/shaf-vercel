@@ -1,14 +1,14 @@
-"use client";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
-import InviteUserModal from "@/components/Common/Modals/InviteUserModal";
+'use client';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import InviteUserModal from '@/components/Common/Modals/InviteUserModal';
 
 const filterData = [
 	{
 		id: 1,
-		title: "all users",
-		value: "all",
+		title: 'all users',
+		value: 'all',
 		icon: (
 			<svg
 				width='20'
@@ -34,8 +34,8 @@ const filterData = [
 	},
 	{
 		id: 2,
-		title: "User",
-		value: "USER",
+		title: 'User',
+		value: 'USER',
 		icon: (
 			<svg
 				width='20'
@@ -55,8 +55,8 @@ const filterData = [
 	},
 	{
 		id: 3,
-		title: "Admin",
-		value: "ADMIN",
+		title: 'Admin',
+		value: 'ADMIN',
 		icon: (
 			<svg
 				width='20'
@@ -77,8 +77,8 @@ const filterData = [
 ];
 
 export default function UserTopbar() {
-	const [filterValue, setFilterValue] = useState("all");
-	const [search, setSearch] = useState("");
+	const [filterValue, setFilterValue] = useState('all');
+	const [search, setSearch] = useState('');
 	const [showInviteUserModal, setShowInviteUserModal] = useState(false);
 	const router = useRouter();
 
@@ -86,7 +86,7 @@ export default function UserTopbar() {
 
 	return (
 		<>
-			<div className='items-center justify-between rounded-10 bg-white px-3.5 py-3 shadow-1 dark:bg-gray-dark md:flex'>
+			<div className='rounded-10 shadow-1 items-center justify-between bg-white px-3.5 py-3 dark:bg-gray-dark md:flex'>
 				<div className='mb-6 flex flex-wrap items-center gap-3 md:mb-0'>
 					{filterData?.map((item) => (
 						<button
@@ -94,15 +94,15 @@ export default function UserTopbar() {
 							onClick={() => {
 								router.push(
 									`/admin/manage-users?filter=${
-										item?.value !== "all" ? item?.value : undefined
+										item?.value !== 'all' ? item?.value : undefined
 									}`
 								);
 								setFilterValue(item?.value);
 							}}
-							className={`inline-flex h-10 items-center justify-center gap-2 rounded-lg border bg-gray-1 pl-3 pr-4 font-satoshi text-sm font-medium capitalize dark:bg-white/5 ${
+							className={`bg-gray-1 inline-flex h-10 items-center justify-center gap-2 rounded-lg border pl-3 pr-4 font-satoshi text-sm font-medium capitalize dark:bg-white/5 ${
 								filterValue === item?.value
-									? "border-transparent text-primary shadow-input"
-									: "border-stroke text-body dark:border-stroke-dark dark:text-gray-5"
+									? 'border-transparent text-primary shadow-input'
+									: 'border-stroke text-body dark:border-stroke-dark dark:text-gray-5'
 							}`}
 						>
 							{item?.icon}
@@ -114,14 +114,14 @@ export default function UserTopbar() {
 				<div className='flex flex-wrap items-center gap-3'>
 					<button
 						onClick={() => setShowInviteUserModal(true)}
-						className='flex  h-10 items-center justify-center gap-3 rounded-lg bg-primary p-3 text-white hover:bg-primary-dark'
+						className='hover:bg-primary-dark  flex h-10 items-center justify-center gap-3 rounded-lg bg-primary p-3 text-white'
 					>
 						<Image
 							src='/images/icon/plus.svg'
 							alt='plus'
 							width={20}
 							height={20}
-						/>{" "}
+						/>{' '}
 						Add new user
 					</button>
 
@@ -136,7 +136,7 @@ export default function UserTopbar() {
 							<input
 								type='search'
 								placeholder='Search user'
-								className='h-11 w-full rounded-lg border border-stroke bg-gray-1 pl-11 pr-4.5 outline-none ring-offset-1 duration-300 focus:shadow-input focus:ring-2 focus:ring-primary/20 dark:border-stroke-dark dark:bg-transparent dark:focus:border-transparent'
+								className='bg-gray-1 h-11 w-full rounded-lg border border-stroke pl-11 pr-4.5 outline-none ring-offset-1 duration-300 focus:shadow-input focus:ring-2 focus:ring-primary/20 dark:border-stroke-dark dark:bg-transparent dark:focus:border-transparent'
 								onChange={(e: any) => setSearch(e.target.value)}
 							/>
 
@@ -172,7 +172,7 @@ export default function UserTopbar() {
 				<InviteUserModal
 					setShowModal={setShowInviteUserModal}
 					showModal={showInviteUserModal}
-					text={"Add User"}
+					text={'Add User'}
 					loading={false}
 				/>
 			)}

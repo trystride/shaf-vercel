@@ -1,8 +1,8 @@
-import { prisma } from "@/libs/prismaDb";
-import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/libs/auth";
-import { revalidatePath } from "next/cache";
+import { prisma } from '@/libs/prismaDb';
+import { NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/libs/auth';
+import { revalidatePath } from 'next/cache';
 
 export async function POST(request: Request) {
 	const body = await request.json();
@@ -11,14 +11,14 @@ export async function POST(request: Request) {
 	const session = await getServerSession(authOptions);
 	const updateData: { [key: string]: any } = {};
 
-	const isDemo = session?.user?.email?.includes("demo-");
+	const isDemo = session?.user?.email?.includes('demo-');
 
 	if (!session?.user) {
-		return new NextResponse(JSON.stringify("User not found!"), { status: 400 });
+		return new NextResponse(JSON.stringify('User not found!'), { status: 400 });
 	}
 
 	if (body === null) {
-		return new NextResponse(JSON.stringify("Missing Fields"), { status: 400 });
+		return new NextResponse(JSON.stringify('Missing Fields'), { status: 400 });
 	}
 
 	if (name) {
@@ -49,7 +49,7 @@ export async function POST(request: Request) {
 			},
 		});
 
-		revalidatePath("/user");
+		revalidatePath('/user');
 
 		return NextResponse.json(
 			{
@@ -64,6 +64,6 @@ export async function POST(request: Request) {
 		// 	status: 200,
 		// });
 	} catch (error) {
-		return new NextResponse("Something went wrong", { status: 500 });
+		return new NextResponse('Something went wrong', { status: 500 });
 	}
 }

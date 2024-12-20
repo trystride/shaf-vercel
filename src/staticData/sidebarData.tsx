@@ -1,10 +1,10 @@
-import { Sidebar } from "@/types/sidebar";
+import { Sidebar } from '@/types/sidebar';
 
 export const userSidebarData: Sidebar[] = [
 	{
 		id: 1,
-		title: "Keywords",
-		path: "/user/dashboard/keywords",
+		title: 'Keywords',
+		path: '/user/dashboard/keywords',
 		icon: (
 			<svg
 				width='24'
@@ -24,8 +24,8 @@ export const userSidebarData: Sidebar[] = [
 	},
 	{
 		id: 2,
-		title: "Announcements",
-		path: "/user/dashboard/announcements",
+		title: 'Announcements',
+		path: '/user/dashboard/announcements',
 		icon: (
 			<svg
 				width='24'
@@ -45,35 +45,35 @@ export const userSidebarData: Sidebar[] = [
 	},
 	{
 		id: 3,
-		title: "Notifications",
-		path: "/user/notification-settings",
+		title: 'Notifications',
+		path: '/user/notification-settings',
 		icon: (
 			<svg
-				width="24"
-				height="24"
-				viewBox="0 0 24 24"
-				fill="none"
-				xmlns="http://www.w3.org/2000/svg"
+				width='24'
+				height='24'
+				viewBox='0 0 24 24'
+				fill='none'
+				xmlns='http://www.w3.org/2000/svg'
 			>
 				<path
-					fillRule="evenodd"
-					clipRule="evenodd"
-					d="M12 2.75C8.77611 2.75 6.25 5.27611 6.25 8.5V9.59073C6.25 10.1901 6.0717 10.7742 5.73404 11.2682L4.62279 12.8435C3.84791 13.9848 4.08152 15.5079 5.21881 16.2916C5.41131 16.4279 5.63041 16.5307 5.8633 16.5962L6.45266 16.7455C7.34391 16.9921 8.25002 17.1614 9.16657 17.2513C9.16669 17.2513 9.16644 17.2513 9.16657 17.2513C9.45124 18.8245 10.8602 20 12.5 20C14.1398 20 15.5488 18.8245 15.8334 17.2513C16.75 17.1614 17.6561 16.9921 18.5473 16.7455L19.1367 16.5962C19.3696 16.5307 19.5887 16.4279 19.7812 16.2916C20.9185 15.5079 21.1521 13.9848 20.3772 12.8435L19.266 11.2682C18.9283 10.7742 18.75 10.1901 18.75 9.59073V8.5C18.75 5.27611 16.2239 2.75 13 2.75H12ZM7.75 8.5C7.75 6.15279 9.65279 4.25 12 4.25C14.3472 4.25 16.25 6.15279 16.25 8.5V9.59073C16.25 10.5395 16.5374 11.4654 17.0437 12.2563L18.155 13.8316C18.3933 14.1821 18.3244 14.6668 17.9792 14.9127C17.9167 14.9605 17.8467 14.9985 17.7724 15.0256L17.1831 15.1749C16.1712 15.4506 15.1397 15.6353 14.0981 15.7273C13.8879 14.3267 12.8012 13.25 11.5 13.25C10.1988 13.25 9.11209 14.3267 8.90189 15.7273C7.86027 15.6353 6.82879 15.4506 5.81694 15.1749L5.22758 15.0256C5.15329 14.9985 5.08334 14.9605 5.02078 14.9127C4.67559 14.6668 4.60671 14.1821 4.84497 13.8316L5.95622 12.2563C6.46261 11.4654 6.75 10.5395 6.75 9.59073V8.5Z"
-					fill="currentColor"
+					fillRule='evenodd'
+					clipRule='evenodd'
+					d='M12 2.75C8.77611 2.75 6.25 5.27611 6.25 8.5V9.59073C6.25 10.1901 6.0717 10.7742 5.73404 11.2682L4.62279 12.8435C3.84791 13.9848 4.08152 15.5079 5.21881 16.2916C5.41131 16.4279 5.63041 16.5307 5.8633 16.5962L6.45266 16.7455C7.34391 16.9921 8.25002 17.1614 9.16657 17.2513C9.16669 17.2513 9.16644 17.2513 9.16657 17.2513C9.45124 18.8245 10.8602 20 12.5 20C14.1398 20 15.5488 18.8245 15.8334 17.2513C16.75 17.1614 17.6561 16.9921 18.5473 16.7455L19.1367 16.5962C19.3696 16.5307 19.5887 16.4279 19.7812 16.2916C20.9185 15.5079 21.1521 13.9848 20.3772 12.8435L19.266 11.2682C18.9283 10.7742 18.75 10.1901 18.75 9.59073V8.5C18.75 5.27611 16.2239 2.75 13 2.75H12ZM7.75 8.5C7.75 6.15279 9.65279 4.25 12 4.25C14.3472 4.25 16.25 6.15279 16.25 8.5V9.59073C16.25 10.5395 16.5374 11.4654 17.0437 12.2563L18.155 13.8316C18.3933 14.1821 18.3244 14.6668 17.9792 14.9127C17.9167 14.9605 17.8467 14.9985 17.7724 15.0256L17.1831 15.1749C16.1712 15.4506 15.1397 15.6353 14.0981 15.7273C13.8879 14.3267 12.8012 13.25 11.5 13.25C10.1988 13.25 9.11209 14.3267 8.90189 15.7273C7.86027 15.6353 6.82879 15.4506 5.81694 15.1749L5.22758 15.0256C5.15329 14.9985 5.08334 14.9605 5.02078 14.9127C4.67559 14.6668 4.60671 14.1821 4.84497 13.8316L5.95622 12.2563C6.46261 11.4654 6.75 10.5395 6.75 9.59073V8.5Z'
+					fill='currentColor'
 				/>
 				<path
-					fillRule="evenodd"
-					clipRule="evenodd"
-					d="M11.5 14.75C10.5335 14.75 9.75 15.5335 9.75 16.5C9.75 17.4665 10.5335 18.25 11.5 18.25H13.5C14.4665 18.25 15.25 17.4665 15.25 16.5C15.25 15.5335 14.4665 14.75 13.5 14.75H11.5Z"
-					fill="currentColor"
+					fillRule='evenodd'
+					clipRule='evenodd'
+					d='M11.5 14.75C10.5335 14.75 9.75 15.5335 9.75 16.5C9.75 17.4665 10.5335 18.25 11.5 18.25H13.5C14.4665 18.25 15.25 17.4665 15.25 16.5C15.25 15.5335 14.4665 14.75 13.5 14.75H11.5Z'
+					fill='currentColor'
 				/>
 			</svg>
 		),
 	},
 	{
 		id: 4,
-		title: "API",
-		path: "/user/api",
+		title: 'API',
+		path: '/user/api',
 		icon: (
 			<svg
 				width='24'
@@ -99,8 +99,8 @@ export const userSidebarData: Sidebar[] = [
 	},
 	{
 		id: 5,
-		title: "Billing",
-		path: "/user/billing",
+		title: 'Billing',
+		path: '/user/billing',
 		icon: (
 			<svg
 				width='22'
@@ -120,8 +120,8 @@ export const userSidebarData: Sidebar[] = [
 	},
 	{
 		id: 6,
-		title: "Invoice",
-		path: "/user/invoice",
+		title: 'Invoice',
+		path: '/user/invoice',
 		icon: (
 			<svg
 				width='20'
@@ -141,8 +141,8 @@ export const userSidebarData: Sidebar[] = [
 	},
 	{
 		id: 7,
-		title: "Account Settings",
-		path: "/user/account-settings",
+		title: 'Account Settings',
+		path: '/user/account-settings',
 		icon: (
 			<svg
 				width='24'
@@ -171,8 +171,8 @@ export const userSidebarData: Sidebar[] = [
 export const userMenuData: Sidebar[] = [
 	{
 		id: 1,
-		title: "Keywords",
-		path: "/user/dashboard/keywords",
+		title: 'Keywords',
+		path: '/user/dashboard/keywords',
 		icon: (
 			<svg
 				width='18'
@@ -192,8 +192,8 @@ export const userMenuData: Sidebar[] = [
 	},
 	{
 		id: 2,
-		title: "Announcements",
-		path: "/user/dashboard/announcements",
+		title: 'Announcements',
+		path: '/user/dashboard/announcements',
 		icon: (
 			<svg
 				width='18'
@@ -216,8 +216,8 @@ export const userMenuData: Sidebar[] = [
 export const adminMenuData: Sidebar[] = [
 	{
 		id: 1,
-		title: "Account Settings",
-		path: "/admin/account-settings",
+		title: 'Account Settings',
+		path: '/admin/account-settings',
 		icon: (
 			<svg
 				width='18'
@@ -243,8 +243,8 @@ export const adminMenuData: Sidebar[] = [
 	},
 	{
 		id: 2,
-		title: "Dashboard",
-		path: "/admin",
+		title: 'Dashboard',
+		path: '/admin',
 		icon: (
 			<svg
 				width='16'
@@ -285,8 +285,8 @@ export const adminMenuData: Sidebar[] = [
 export const adminSidebarData: Sidebar[] = [
 	{
 		id: 1,
-		title: "Dashboard",
-		path: "/admin",
+		title: 'Dashboard',
+		path: '/admin',
 		icon: (
 			<svg
 				width='24'
@@ -324,8 +324,8 @@ export const adminSidebarData: Sidebar[] = [
 	},
 	{
 		id: 2,
-		title: "Users",
-		path: "/admin/manage-users",
+		title: 'Users',
+		path: '/admin/manage-users',
 		icon: (
 			<svg
 				width='24'
@@ -359,8 +359,8 @@ export const adminSidebarData: Sidebar[] = [
 	},
 	{
 		id: 3,
-		title: "AI Integration",
-		path: "/admin/ai-integration",
+		title: 'AI Integration',
+		path: '/admin/ai-integration',
 		icon: (
 			<svg
 				width='24'
@@ -380,8 +380,8 @@ export const adminSidebarData: Sidebar[] = [
 	},
 	{
 		id: 5,
-		title: "API",
-		path: "/admin/api",
+		title: 'API',
+		path: '/admin/api',
 		icon: (
 			<svg
 				width='24'
@@ -401,8 +401,8 @@ export const adminSidebarData: Sidebar[] = [
 	},
 	{
 		id: 4,
-		title: "Send Notification",
-		path: "/admin/send-notification",
+		title: 'Send Notification',
+		path: '/admin/send-notification',
 		comingSoon: true,
 		icon: (
 			<svg
@@ -437,8 +437,8 @@ export const adminSidebarData: Sidebar[] = [
 	},
 	{
 		id: 6,
-		title: "Send Newsletter",
-		path: "/admin/send-newsletter",
+		title: 'Send Newsletter',
+		path: '/admin/send-newsletter',
 		comingSoon: true,
 		icon: (
 			<svg
@@ -462,8 +462,8 @@ export const adminSidebarData: Sidebar[] = [
 export const adminSidebarOtherData: Sidebar[] = [
 	{
 		id: 1,
-		title: "Account Settings",
-		path: "/admin/account-settings",
+		title: 'Account Settings',
+		path: '/admin/account-settings',
 		icon: (
 			<svg
 				width='24'

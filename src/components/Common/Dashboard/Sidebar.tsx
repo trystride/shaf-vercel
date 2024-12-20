@@ -1,7 +1,7 @@
-"use client";
-import Image from "next/image";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+'use client';
+import Image from 'next/image';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export default function Sidebar({
 	sidebarOthersData,
@@ -18,14 +18,14 @@ export default function Sidebar({
 			>
 				<Link href='/' className='mb-10 inline-block'>
 					<Image
-						src={"/images/logo/logo.svg"}
+						src={'/images/logo/logo.svg'}
 						alt='logo'
 						className='block dark:hidden'
 						width={193}
 						height={34}
 					/>
 					<Image
-						src={"/images/logo/logo-light.svg"}
+						src={'/images/logo/logo-light.svg'}
 						alt='logo'
 						className='hidden dark:block'
 						width={193}
@@ -33,7 +33,7 @@ export default function Sidebar({
 					/>
 				</Link>
 				<div className='mb-6'>
-					<p className='mb-4 font-satoshi text-sm font-medium uppercase text-body dark:text-gray-6'>
+					<p className='dark:text-gray-6 mb-4 font-satoshi text-sm font-medium uppercase text-body'>
 						Main menu
 					</p>
 					<ul className='space-y-2'>
@@ -44,8 +44,8 @@ export default function Sidebar({
 										href={`${item?.path}`}
 										className={`flex w-full items-center gap-3 rounded-lg px-3.5 py-3 font-satoshi font-medium duration-300 ${
 											pathname === `${item.path}`
-												? "bg-primary/10 text-primary dark:bg-white/10 dark:text-white"
-												: "text-gray-700 hover:bg-primary/5 hover:text-primary dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-white"
+												? 'bg-primary/10 text-primary dark:bg-white/10 dark:text-white'
+												: 'text-gray-700 hover:bg-primary/5 hover:text-primary dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-white'
 										}`}
 									>
 										<span className='h-[24px] w-[24px]'>{item?.icon}</span>
@@ -55,11 +55,11 @@ export default function Sidebar({
 											<span
 												className={`rounded-lg px-1.5 text-sm  ${
 													pathname == `${item.path}`
-														? "bg-white/[.08] text-white"
-														: "bg-primary/[.08] text-primary"
+														? 'bg-white/[.08] text-white'
+														: 'bg-primary/[.08] text-primary'
 												}`}
 											>
-												{" "}
+												{' '}
 												Soon
 											</span>
 										)}
@@ -70,7 +70,7 @@ export default function Sidebar({
 				</div>
 				{sidebarOthersData && (
 					<div>
-						<p className='mb-4 font-satoshi text-sm font-medium uppercase text-body dark:text-gray-6'>
+						<p className='dark:text-gray-6 mb-4 font-satoshi text-sm font-medium uppercase text-body'>
 							Others
 						</p>
 						<ul className='space-y-2'>
@@ -80,8 +80,8 @@ export default function Sidebar({
 										href={`${item?.path}`}
 										className={`flex w-full items-center gap-3 rounded-lg px-3.5 py-3 font-satoshi font-medium duration-300 ${
 											pathname === `${item.path}`
-												? "bg-primary/10 text-primary dark:bg-white/10 dark:text-white"
-												: "text-gray-700 hover:bg-primary/5 hover:text-primary dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-white"
+												? 'bg-primary/10 text-primary dark:bg-white/10 dark:text-white'
+												: 'text-gray-700 hover:bg-primary/5 hover:text-primary dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-white'
 										}`}
 									>
 										<span>{item?.icon}</span>

@@ -1,11 +1,11 @@
-import { useTheme } from "next-themes";
+import { useTheme } from 'next-themes';
 
 export default function ThemeSwitcher() {
 	const { theme, setTheme } = useTheme();
 
 	return (
 		<button
-			onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+			onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
 			className='relative z-10 h-9 w-[36px] cursor-pointer items-center justify-between rounded-lg dark:bg-white/5'
 		>
 			<span className='hidden items-center justify-center text-dark dark:flex dark:text-white'>

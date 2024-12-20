@@ -1,13 +1,13 @@
-import FormButton from "@/components/Common/Dashboard/FormButton";
-import InputGroup from "@/components/Common/Dashboard/InputGroup";
-import ModalCloseButton from "@/components/Common/Modals/ModalCloseButton";
-import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import FormButton from '@/components/Common/Dashboard/FormButton';
+import InputGroup from '@/components/Common/Dashboard/InputGroup';
+import ModalCloseButton from '@/components/Common/Modals/ModalCloseButton';
+import Link from 'next/link';
+import { useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function SetApiKeyModal(props: any) {
 	const { showModal, setShowModal } = props;
-	const [apiKey, setApiKey] = useState("");
+	const [apiKey, setApiKey] = useState('');
 	// const [isDisabled, setIsDisabled] = useState(true);
 
 	const router = useRouter();
@@ -19,23 +19,23 @@ export default function SetApiKeyModal(props: any) {
 		e.preventDefault();
 
 		if (apiKey) {
-			localStorage.setItem("apiKey", apiKey);
+			localStorage.setItem('apiKey', apiKey);
 			setShowModal(false);
 			router.refresh();
 		}
 	};
 
 	useEffect(() => {
-		if (typeof window !== "undefined") {
+		if (typeof window !== 'undefined') {
 			const handleClickOutside = (event: MouseEvent) => {
 				if (divRef.current && !divRef.current.contains(event.target as Node)) {
 					setShowModal(false);
 				}
 			};
 
-			document.addEventListener("mousedown", handleClickOutside);
+			document.addEventListener('mousedown', handleClickOutside);
 			return () => {
-				document.removeEventListener("mousedown", handleClickOutside);
+				document.removeEventListener('mousedown', handleClickOutside);
 			};
 		}
 	});
@@ -51,7 +51,7 @@ export default function SetApiKeyModal(props: any) {
 					>
 						<ModalCloseButton closeModal={setShowModal} />
 
-						<div className='flex flex-wrap gap-5.5 border-stroke p-4 text-center sm:p-7.5 xl:p-10'>
+						<div className='gap-5.5 flex flex-wrap border-stroke p-4 text-center sm:p-7.5 xl:p-10'>
 							<div className='mx-auto w-full max-w-[450px]'>
 								<div className='mb-6 flex justify-center'>
 									<svg
@@ -109,7 +109,7 @@ export default function SetApiKeyModal(props: any) {
 								</div>
 
 								<div>
-									<h2 className='mb-2 text-xl font-bold text-dark dark:text-white sm:text-heading-6'>
+									<h2 className='sm:text-heading-6 mb-2 text-xl font-bold text-dark dark:text-white'>
 										Enter your OpenAI API Key
 									</h2>
 									<p className='mb-7 text-body'>

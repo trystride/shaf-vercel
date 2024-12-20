@@ -1,14 +1,14 @@
-import { Menu } from "@/types/menu";
-import Link from "next/link";
-import { useState } from "react";
-import { usePathname } from "next/navigation";
+import { Menu } from '@/types/menu';
+import Link from 'next/link';
+import { useState } from 'react';
+import { usePathname } from 'next/navigation';
 
 const Dropdown = ({
-	stickyMenu,
+	_stickyMenu,
 	item,
 	setNavbarOpen,
 }: {
-	stickyMenu: boolean;
+	_stickyMenu: boolean;
 	item: Menu;
 	setNavbarOpen: any;
 }) => {
@@ -40,9 +40,11 @@ const Dropdown = ({
 			</button>
 
 			{/* <!-- Dropdown Start --> */}
-			<div className={`absolute left-0 top-[120%] z-50 w-[200px] rounded-lg bg-white p-2 shadow-lg dark:bg-gray-dark ${
-				dropdown ? 'block' : 'hidden'
-			}`}>
+			<div
+				className={`absolute left-0 top-[120%] z-50 w-[200px] rounded-lg bg-white p-2 shadow-lg dark:bg-gray-dark ${
+					dropdown ? 'block' : 'hidden'
+				}`}
+			>
 				<ul className='flex flex-col gap-2'>
 					{item?.submenu &&
 						item?.submenu.map((item, i) => (
@@ -55,8 +57,8 @@ const Dropdown = ({
 									href={item?.path}
 									className={`block w-full rounded-[5px] px-4 py-2 text-dark transition-colors duration-200 hover:bg-primary hover:text-white dark:text-gray-5 dark:hover:text-white ${
 										pathname === item?.path
-											? "bg-primary text-white dark:text-white"
-											: ""
+											? 'bg-primary text-white dark:text-white'
+											: ''
 									}`}
 								>
 									{item?.title}

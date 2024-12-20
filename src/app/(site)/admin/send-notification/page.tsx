@@ -1,6 +1,6 @@
-import SendNotificationCard from "@/components/Admin/SendNotification/SendNotificationCard";
-import Breadcrumb from "@/components/Common/Dashboard/Breadcrumb";
-import { Metadata } from "next";
+import SendNotificationCard from '@/components/Admin/SendNotification/SendNotificationCard';
+import Breadcrumb from '@/components/Common/Dashboard/Breadcrumb';
+import { Metadata } from 'next';
 
 export const metadata: Metadata = {
 	title: `Send Notification - ${process.env.SITE_NAME}`,

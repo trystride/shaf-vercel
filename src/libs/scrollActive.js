@@ -1,9 +1,9 @@
 export function onScroll() {
-	if (typeof window === "undefined") {
+	if (typeof window === 'undefined') {
 		return;
 	}
 
-	const sections = document.querySelectorAll(".menu-scroll");
+	const sections = document.querySelectorAll('.menu-scroll');
 	const scrollPos =
 		window.pageYOffset ||
 		document.documentElement.scrollTop ||
@@ -11,8 +11,8 @@ export function onScroll() {
 
 	for (let i = 0; i < sections.length; i++) {
 		const currLink = sections[i];
-		const val = currLink.getAttribute("href");
-		const newVal = val.replace(/\//g, "");
+		const val = currLink.getAttribute('href');
+		const newVal = val.replace(/\//g, '');
 		const refElement = newVal && document.querySelector(newVal);
 		const scrollTopMinus = scrollPos + 73;
 		if (
@@ -20,10 +20,10 @@ export function onScroll() {
 			refElement.offsetTop <= scrollTopMinus &&
 			refElement.offsetTop + refElement.offsetHeight > scrollTopMinus
 		) {
-			document.querySelector(".menu-scroll").classList.remove("active");
-			currLink.classList.add("active");
+			document.querySelector('.menu-scroll').classList.remove('active');
+			currLink.classList.add('active');
 		} else {
-			currLink.classList.remove("active");
+			currLink.classList.remove('active');
 		}
 	}
 }

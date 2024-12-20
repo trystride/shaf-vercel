@@ -1,17 +1,17 @@
-import { useEffect, useRef, useState } from "react";
-import ModalCloseButton from "./ModalCloseButton";
-import Loader from "../Loader";
-import InputGroup from "../Dashboard/InputGroup";
-import InputSelect from "../InputSelect";
-import FormButton from "../Dashboard/FormButton";
-import toast from "react-hot-toast";
-import axios from "axios";
+import { useEffect, useRef, useState } from 'react';
+import ModalCloseButton from './ModalCloseButton';
+import Loader from '../Loader';
+import InputGroup from '../Dashboard/InputGroup';
+import InputSelect from '../InputSelect';
+import FormButton from '../Dashboard/FormButton';
+import toast from 'react-hot-toast';
+import axios from 'axios';
 
 export default function InviteUserModal(props: any) {
 	const { showModal, setShowModal, text } = props;
 	const [data, setData] = useState({
-		email: "",
-		role: "",
+		email: '',
+		role: '',
 	});
 
 	const [loading, setLoading] = useState(false);
@@ -21,11 +21,11 @@ export default function InviteUserModal(props: any) {
 		setLoading(true);
 		if (!data.email || !data.role) {
 			setLoading(false);
-			return toast.error("Please fill in all fields!");
+			return toast.error('Please fill in all fields!');
 		}
 
 		try {
-			const invite = await axios.post("/api/user/invite/send", data);
+			const invite = await axios.post('/api/user/invite/send', data);
 			toast.success(invite.data);
 			setLoading(false);
 		} catch (error: any) {
@@ -39,16 +39,16 @@ export default function InviteUserModal(props: any) {
 	// ===== click outside of dropdown =====
 	const divRef = useRef<HTMLDivElement | null>(null);
 	useEffect(() => {
-		if (typeof window !== "undefined") {
+		if (typeof window !== 'undefined') {
 			const handleClickOutside = (event: MouseEvent) => {
 				if (divRef.current && !divRef.current.contains(event.target as Node)) {
 					setShowModal(false);
 				}
 			};
 
-			document.addEventListener("mousedown", handleClickOutside);
+			document.addEventListener('mousedown', handleClickOutside);
 			return () => {
-				document.removeEventListener("mousedown", handleClickOutside);
+				document.removeEventListener('mousedown', handleClickOutside);
 			};
 		}
 	});
@@ -60,7 +60,7 @@ export default function InviteUserModal(props: any) {
 				>
 					<div
 						ref={divRef}
-						className='shadow-lg relative w-full max-w-[480px] scale-100 transform overflow-hidden rounded-xl bg-white transition-all dark:bg-black'
+						className='relative w-full max-w-[480px] scale-100 transform overflow-hidden rounded-xl bg-white shadow-lg transition-all dark:bg-black'
 					>
 						<ModalCloseButton closeModal={setShowModal} />
 
@@ -75,7 +75,7 @@ export default function InviteUserModal(props: any) {
 									type='email'
 									name='email'
 									value={data.email}
-									placeholder={"jhon@gmail.com"}
+									placeholder={'jhon@gmail.com'}
 									required={true}
 									handleChange={(e: any) =>
 										setData({ ...data, email: e.target.value })
@@ -86,12 +86,12 @@ export default function InviteUserModal(props: any) {
 									label='Select User Role'
 									options={[
 										{
-											label: "User",
-											value: "USER",
+											label: 'User',
+											value: 'USER',
 										},
 										{
-											label: "Admin",
-											value: "ADMIN",
+											label: 'Admin',
+											value: 'ADMIN',
 										},
 									]}
 									placeholder='Select Role'

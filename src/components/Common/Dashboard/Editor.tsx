@@ -1,7 +1,7 @@
-"use client";
-import dynamic from "next/dynamic";
-import { LegacyRef, useRef } from "react";
-import type ReactQuill from "react-quill";
+'use client';
+import dynamic from 'next/dynamic';
+import { LegacyRef, useRef } from 'react';
+import type ReactQuill from 'react-quill';
 
 interface IWrappedComponent extends React.ComponentProps<typeof ReactQuill> {
 	forwardedRef: LegacyRef<ReactQuill>;
@@ -9,7 +9,7 @@ interface IWrappedComponent extends React.ComponentProps<typeof ReactQuill> {
 
 const ReactQuillBase = dynamic(
 	async () => {
-		const { default: RQ } = await import("react-quill");
+		const { default: RQ } = await import('react-quill');
 
 		function QuillJS({ forwardedRef, ...props }: IWrappedComponent) {
 			return <RQ ref={forwardedRef} {...props} />;

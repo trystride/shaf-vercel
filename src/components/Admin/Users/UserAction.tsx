@@ -1,11 +1,16 @@
-"use client";
-import DeleteModal from "@/components/Common/Modals/DeleteModal";
-import { useState } from "react";
-import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
-import { deleteUser, updateUser } from "@/actions/user";
-import { signIn } from "next-auth/react";
-import { useSession } from "next-auth/react";
+'use client';
+import DeleteModal from '@/components/Common/Modals/DeleteModal';
+import { useState } from 'react';
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
+import { deleteUser, updateUser } from '@/actions/user';
+import { signIn } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
+
+export enum UserRole {
+	ADMIN = 'ADMIN',
+	USER = 'USER',
+}
 
 const arrowIcon = (
 	<svg
@@ -27,46 +32,46 @@ const arrowIcon = (
 export default function UserAction({ user }: any) {
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
 	const [role, setRole] = useState(user.role);
-	const [loading, setLodading] = useState(false);
+	const [loading, setLoading] = useState(false);
 	const router = useRouter();
-	const roles = ["ADMIN", "USER"];
+	const roles = [UserRole.ADMIN, UserRole.USER];
 
 	const { data: session } = useSession();
 
 	const handleDelete = async () => {
-		setLodading(true);
+		setLoading(true);
 		try {
 			await deleteUser(user);
-			toast.success("User deleted successfully!");
+			toast.success('User deleted successfully!');
 			router.refresh();
-			setLodading(false);
+			setLoading(false);
 		} catch (error: any) {
 			toast.error(error.message);
 			setShowDeleteModal(false);
 		}
 	};
 
-	const handleUpdate = async (e: React.ChangeEvent<HTMLSelectElement>) => {
-		setRole(e.target.value);
-		const role = e.target.value;
+	const handleRoleChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+		const newRole = e.target.value as UserRole;
 
 		try {
 			await updateUser({
 				email: user?.email,
-				role,
+				role: newRole,
 			});
 
-			toast.success("User Role updated successfully!");
+			toast.success('User Role updated successfully!');
+			setRole(newRole);
 			router.refresh();
 		} catch (error: any) {
 			toast.error(error.message);
 		}
 	};
 
-	const hangleLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
+	const handleLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
 
-		signIn("impersonate", {
+		signIn('impersonate', {
 			adminEmail: session?.user?.email,
 			userEmail: user?.email,
 		}).then((callback) => {
@@ -75,7 +80,7 @@ export default function UserAction({ user }: any) {
 			}
 
 			if (callback?.ok && !callback?.error) {
-				toast.success("Logged in successfully");
+				toast.success('Logged in successfully');
 				router.refresh();
 			}
 		});
@@ -83,17 +88,17 @@ export default function UserAction({ user }: any) {
 
 	return (
 		<>
-			<div className='mt-2 flex flex-wrap items-center gap-3.5 lsm:ml-auto lsm:justify-end sm:mt-0'>
+			<div className='lsm:ml-auto lsm:justify-end mt-2 flex flex-wrap items-center gap-3.5 sm:mt-0'>
 				<button
-					onClick={hangleLogin}
-					className='flex h-10 items-center justify-center rounded-lg bg-primary p-3 text-white hover:bg-primary-dark'
+					onClick={handleLogin}
+					className='hover:bg-primary-dark flex h-10 items-center justify-center rounded-lg bg-primary p-3 text-white'
 				>
 					Log In
 				</button>
 
 				<div className='relative'>
 					<select
-						onChange={handleUpdate}
+						onChange={handleRoleChange}
 						value={role}
 						className=' h-10 cursor-pointer appearance-none rounded-lg bg-dark px-3 pr-8 text-center text-white'
 					>
@@ -110,7 +115,7 @@ export default function UserAction({ user }: any) {
 				</div>
 				<button
 					onClick={() => setShowDeleteModal(true)}
-					className='flex h-10 w-10 items-center justify-center rounded-lg bg-red-light-5 text-red duration-300 hover:bg-red hover:text-white dark:bg-red/10 dark:hover:bg-red'
+					className='bg-red-light-5 text-red hover:bg-red dark:bg-red/10 dark:hover:bg-red flex h-10 w-10 items-center justify-center rounded-lg duration-300 hover:text-white'
 				>
 					<svg
 						width='21'

@@ -1,13 +1,13 @@
-import bcrypt from "bcrypt";
-import { prisma } from "@/libs/prismaDb";
-import { NextResponse } from "next/server";
+import bcrypt from 'bcrypt';
+import { prisma } from '@/libs/prismaDb';
+import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
 	const body = await request.json();
 	const { name, email, password } = body;
 
 	if (!name || !email || !password) {
-		return new NextResponse("Missing Fields", { status: 400 });
+		return new NextResponse('Missing Fields', { status: 400 });
 	}
 
 	const formatedEmail = email.toLowerCase();
@@ -19,10 +19,10 @@ export async function POST(request: Request) {
 	});
 
 	if (exist) {
-		throw new Error("Email already exists");
+		throw new Error('Email already exists');
 	}
 
-	const adminEmails = process.env.ADMIN_EMAILS?.split(",") || [];
+	const adminEmails = process.env.ADMIN_EMAILS?.split(',') || [];
 
 	// Function to check if an email is in the list of admin emails
 	function isAdminEmail(email: string) {
@@ -35,11 +35,11 @@ export async function POST(request: Request) {
 		name,
 		email: formatedEmail,
 		password: hashedPassword,
-		role: "USER",
+		role: 'USER',
 	};
 
 	if (isAdminEmail(formatedEmail)) {
-		newUser.role = "ADMIN";
+		newUser.role = 'ADMIN';
 	}
 
 	try {
@@ -51,6 +51,6 @@ export async function POST(request: Request) {
 
 		return NextResponse.json(user);
 	} catch (error) {
-		return new NextResponse("Something went wrong", { status: 500 });
+		return new NextResponse('Something went wrong', { status: 500 });
 	}
 }

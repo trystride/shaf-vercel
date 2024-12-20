@@ -1,5 +1,5 @@
 // CountUp.tsx
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from 'react';
 
 interface CountUpProps {
 	targetNumber: number;

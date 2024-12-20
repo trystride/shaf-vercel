@@ -1,9 +1,9 @@
-import { getPosts } from "@/sanity/sanity-utils";
-import BlogItem from "@/components/Blog/BlogItem";
-import Breadcrumbs from "@/components/Common/Breadcrumbs";
-import Image from "next/image";
-import { Metadata } from "next";
-import { integrations, messages } from "../../../../integrations.config";
+import { getPosts } from '@/sanity/sanity-utils';
+import BlogItem from '@/components/Blog/BlogItem';
+import Breadcrumbs from '@/components/Common/Breadcrumbs';
+import Image from 'next/image';
+import { Metadata } from 'next';
+import { integrations, messages } from '../../../../integrations.config';
 
 export const metadata: Metadata = {
 	title: `Blog - ${process.env.SITE_NAME}`,
@@ -15,7 +15,7 @@ const BlogGrid = async () => {
 
 	return (
 		<main>
-			<section className='lg:ub-pb-22.5 relative z-1 overflow-hidden pb-17.5 pt-35 xl:pb-27.5'>
+			<section className='lg:ub-pb-22.5 pb-17.5 pt-35 xl:pb-27.5 relative z-1 overflow-hidden'>
 				{/* <!-- bg shapes --> */}
 				<div>
 					<div className='absolute left-0 top-0 -z-1'>
@@ -36,14 +36,14 @@ const BlogGrid = async () => {
 					</div>
 				</div>
 
-				<Breadcrumbs title='Blog' pages={["Home", "Blog Grids"]} />
+				<Breadcrumbs title='Blog' pages={['Home', 'Blog Grids']} />
 
 				<div className='mx-auto w-full max-w-[1170px] px-4 sm:px-8 xl:px-0'>
 					<div
 						className={`${
 							integrations?.isSanityEnabled
-								? "grid grid-cols-1 gap-x-7.5 gap-y-10 sm:grid-cols-2 lg:grid-cols-3"
-								: ""
+								? 'grid grid-cols-1 gap-x-7.5 gap-y-10 sm:grid-cols-2 lg:grid-cols-3'
+								: ''
 						}`}
 					>
 						{/* Blog Item */}

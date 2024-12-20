@@ -1,20 +1,20 @@
-import { groq } from "next-sanity";
+import { groq } from 'next-sanity';
 const postData = `{
-  title,
-  metadata,
-  slug,
-  tags,
-  author->{
-    _id,
-    name,
-    slug,
-    image,
-    bio
-  },
-  mainImage,
-  publishedAt,
-  body
-}`;
+	title,
+	metadata,
+	slug,
+	tags,
+	author->{
+	_id,
+	name,
+	slug,
+	image,
+	bio
+	},
+	mainImage,
+	publishedAt,
+	body
+	}`;
 
 export const postQuery = groq`*[_type == "post"] ${postData}`;
 

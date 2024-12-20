@@ -1,11 +1,11 @@
-import { useTheme } from "next-themes";
+import { useTheme } from 'next-themes';
 
 export default function ThemeToggler() {
 	const { theme, setTheme } = useTheme();
 
 	return (
 		<button
-			onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+			onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
 			className='relative z-10 hidden h-12 w-full max-w-24 cursor-pointer items-center justify-between rounded-3xl bg-gray-3 p-[5px] dark:bg-white/5 sm:flex'
 		>
 			<span

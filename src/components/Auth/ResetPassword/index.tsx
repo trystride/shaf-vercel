@@ -1,21 +1,21 @@
-"use client";
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import FormButton from "@/components/Common/Dashboard/FormButton";
-import InputGroup from "@/components/Common/Dashboard/InputGroup";
-import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
-import axios from "axios";
-import { integrations, messages } from "../../../../integrations.config";
+'use client';
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import FormButton from '@/components/Common/Dashboard/FormButton';
+import InputGroup from '@/components/Common/Dashboard/InputGroup';
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
+import axios from 'axios';
+import { integrations, messages } from '../../../../integrations.config';
 
 export default function ResetPassword({ token }: { token: string }) {
 	const [data, setData] = useState({
-		newPassword: "",
-		ReNewPassword: "",
+		newPassword: '',
+		ReNewPassword: '',
 	});
 
 	const [user, setUser] = useState({
-		email: "",
+		email: '',
 	});
 
 	const router = useRouter();
@@ -34,7 +34,7 @@ export default function ResetPassword({ token }: { token: string }) {
 				}
 			} catch (error: any) {
 				toast.error(error.response.data);
-				router.push("/auth/forgot-password");
+				router.push('/auth/forgot-password');
 			}
 		};
 
@@ -59,8 +59,8 @@ export default function ResetPassword({ token }: { token: string }) {
 			return toast.error(messages.auth);
 		}
 
-		if (data.newPassword === "") {
-			toast.error("Please enter your password.");
+		if (data.newPassword === '') {
+			toast.error('Please enter your password.');
 			return;
 		}
 
@@ -72,8 +72,8 @@ export default function ResetPassword({ token }: { token: string }) {
 
 			if (res.status === 200) {
 				toast.success(res.data);
-				setData({ newPassword: "", ReNewPassword: "" });
-				router.push("/auth/signin");
+				setData({ newPassword: '', ReNewPassword: '' });
+				router.push('/auth/signin');
 			}
 		} catch (error: any) {
 			toast.error(error.response.data);
@@ -84,7 +84,7 @@ export default function ResetPassword({ token }: { token: string }) {
 		<>
 			<div className='mx-auto w-full max-w-[400px] pb-20 pt-40'>
 				<div className='mb-7.5 text-center'>
-					<h3 className='mb-4 font-satoshi text-heading-5 font-bold text-dark dark:text-white'>
+					<h3 className='text-heading-5 mb-4 font-satoshi font-bold text-dark dark:text-white'>
 						Create New Password
 					</h3>
 					<p className='text-base dark:text-gray-5'>
@@ -117,7 +117,7 @@ export default function ResetPassword({ token }: { token: string }) {
 					</div>
 
 					<p className='text-center font-satoshi text-base font-medium text-dark dark:text-white'>
-						Already have an account?{" "}
+						Already have an account?{' '}
 						<Link
 							href='/auth/signin'
 							className='ml-1 inline-block text-primary'

@@ -1,7 +1,7 @@
-"use client";
-import { OverviewData } from "@/staticData/statsData";
-import ChartOne from "./ChartOne";
-import { Suspense } from "react";
+'use client';
+import { OverviewData } from '@/staticData/statsData';
+import ChartOne from './ChartOne';
+import { Suspense } from 'react';
 
 export default function GraphCard({ data }: { data: OverviewData }) {
 	const { isIncrease } = data;
@@ -13,24 +13,24 @@ export default function GraphCard({ data }: { data: OverviewData }) {
 					<p className='mb-1.5 font-satoshi text-sm font-medium tracking-[-.1px] text-body dark:text-gray-4'>
 						Monthly Recurring Revenue
 					</p>
-					<h5 className='font-satoshi text-heading-5 font-bold text-dark dark:text-white'>
+					<h5 className='text-heading-5 font-satoshi font-bold text-dark dark:text-white'>
 						$9.1
 					</h5>
 				</div>
 				<div>
 					<div
 						className={`inline-flex items-center gap-1.5 ${
-							isIncrease ? "text-green" : "text-red"
+							isIncrease ? 'text-green' : 'text-red'
 						}`}
 					>
 						<div
 							className={`flex h-6 w-6 items-center justify-center rounded-full ${
 								isIncrease
-									? "bg-[#E6F9EC] text-green dark:bg-green/10"
-									: "bg-red-light-6 text-red dark:bg-red/10"
+									? 'text-green dark:bg-green/10 bg-[#E6F9EC]'
+									: 'bg-red-light-6 text-red dark:bg-red/10'
 							}`}
 						>
-							<span className={`${isIncrease ? "" : "rotate-180"}`}>
+							<span className={`${isIncrease ? '' : 'rotate-180'}`}>
 								<svg
 									width='17'
 									height='16'

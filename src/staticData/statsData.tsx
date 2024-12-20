@@ -19,11 +19,11 @@ export type OverviewData = {
 export const dataStats: DataStats[] = [
 	{
 		id: 1,
-		content: "Total Visitors",
-		value: "3.456K",
+		content: 'Total Visitors',
+		value: '3.456K',
 		isIncrease: true,
-		percents: "0.43%",
-		color: "#3FD97F",
+		percents: '0.43%',
+		color: '#3FD97F',
 		icon: (
 			<svg
 				width='26'
@@ -47,11 +47,11 @@ export const dataStats: DataStats[] = [
 	},
 	{
 		id: 2,
-		content: "Total Revenue",
-		value: "$42.2K",
+		content: 'Total Revenue',
+		value: '$42.2K',
 		isIncrease: true,
-		percents: "4.35%",
-		color: "#FF9C55",
+		percents: '4.35%',
+		color: '#FF9C55',
 		icon: (
 			<svg
 				width='26'
@@ -71,11 +71,11 @@ export const dataStats: DataStats[] = [
 	},
 	{
 		id: 3,
-		content: "Free Users",
-		value: "43543",
+		content: 'Free Users',
+		value: '43543',
 		isIncrease: true,
-		percents: "2.59%",
-		color: "#8155FF",
+		percents: '2.59%',
+		color: '#8155FF',
 		icon: (
 			<svg
 				width='26'
@@ -111,11 +111,11 @@ export const dataStats: DataStats[] = [
 	},
 	{
 		id: 4,
-		content: "Pro Users",
-		value: "5334",
+		content: 'Pro Users',
+		value: '5334',
 		isIncrease: false,
-		percents: "0.95%",
-		color: "#18BFFF",
+		percents: '0.95%',
+		color: '#18BFFF',
 		icon: (
 			<svg
 				width='26'
@@ -154,44 +154,44 @@ export const dataStats: DataStats[] = [
 export const overviewData: OverviewData[] = [
 	{
 		id: 1,
-		title: "Monthly Recurring Revenue",
-		value: "$9.1",
-		percents: "(+4%)",
+		title: 'Monthly Recurring Revenue',
+		value: '$9.1',
+		percents: '(+4%)',
 		isIncrease: true,
 	},
 	{
 		id: 2,
-		title: "Revenue",
-		value: "$32.9",
-		percents: "(+4%)",
+		title: 'Revenue',
+		value: '$32.9',
+		percents: '(+4%)',
 		isIncrease: true,
 	},
 	{
 		id: 3,
-		title: "Fees",
-		value: "$0.5",
-		percents: "(+4%)",
+		title: 'Fees',
+		value: '$0.5',
+		percents: '(+4%)',
 		isIncrease: true,
 	},
 	{
 		id: 4,
-		title: "New Customers",
-		value: "231",
-		percents: "(+4%)",
+		title: 'New Customers',
+		value: '231',
+		percents: '(+4%)',
 		isIncrease: true,
 	},
 	{
 		id: 5,
-		title: "Churn",
-		value: "7.4%",
-		percents: "(+4%)",
+		title: 'Churn',
+		value: '7.4%',
+		percents: '(+4%)',
 		isIncrease: true,
 	},
 	{
 		id: 6,
-		title: "Support Ticket",
-		value: "8.9",
-		percents: "(-3%)",
+		title: 'Support Ticket',
+		value: '8.9',
+		percents: '(-3%)',
 		isIncrease: false,
 	},
 ];

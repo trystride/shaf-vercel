@@ -1,14 +1,14 @@
-import { useState } from "react";
-import FormButton from "../Common/Dashboard/FormButton";
-import InputGroup from "../Common/Dashboard/InputGroup";
-import toast from "react-hot-toast";
-import { signIn } from "next-auth/react";
-import validateEmail from "@/libs/validateEmail";
-import Loader from "../Common/Loader";
-import { integrations, messages } from "../../../integrations.config";
+import { useState } from 'react';
+import FormButton from '../Common/Dashboard/FormButton';
+import InputGroup from '../Common/Dashboard/InputGroup';
+import toast from 'react-hot-toast';
+import { signIn } from 'next-auth/react';
+import validateEmail from '@/libs/validateEmail';
+import Loader from '../Common/Loader';
+import { integrations, messages } from '../../../integrations.config';
 
 export default function SigninWithMagicLink() {
-	const [email, setEmail] = useState("");
+	const [email, setEmail] = useState('');
 	const [loading, setLoading] = useState(false);
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,21 +25,21 @@ export default function SigninWithMagicLink() {
 		}
 
 		if (!email) {
-			return toast.error("Please enter your email address.");
+			return toast.error('Please enter your email address.');
 		}
 
 		if (!validateEmail(email)) {
 			setLoading(false);
-			return toast.error("Please enter a valid email address.");
+			return toast.error('Please enter a valid email address.');
 		} else {
-			signIn("email", {
+			signIn('email', {
 				redirect: false,
 				email,
 			})
 				.then((callback) => {
 					if (callback?.ok) {
-						toast.success("Email sent");
-						setEmail("");
+						toast.success('Email sent');
+						setEmail('');
 						setLoading(false);
 					}
 				})
@@ -70,7 +70,7 @@ export default function SigninWithMagicLink() {
 							Sending <Loader style='border-white dark:border-dark' />
 						</>
 					) : (
-						"Send magic link"
+						'Send magic link'
 					)}
 				</FormButton>
 			</div>

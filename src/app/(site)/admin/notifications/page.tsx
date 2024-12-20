@@ -1,7 +1,7 @@
-import Breadcrumb from "@/components/Common/Dashboard/Breadcrumb";
-import React from "react";
-import { Metadata } from "next";
-import Notification from "@/components/Common/Notification";
+import Breadcrumb from '@/components/Common/Dashboard/Breadcrumb';
+import React from 'react';
+import { Metadata } from 'next';
+import Notification from '@/components/Common/Notification';
 
 export const metadata: Metadata = {
 	title: `Notifications - ${process.env.SITE_NAME}`,

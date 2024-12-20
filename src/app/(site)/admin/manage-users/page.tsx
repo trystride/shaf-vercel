@@ -1,6 +1,6 @@
-import UsersListContainer from "@/components/Admin/Users";
-import Breadcrumb from "@/components/Common/Dashboard/Breadcrumb";
-import { Metadata } from "next";
+import UsersListContainer from '@/components/Admin/Users';
+import Breadcrumb from '@/components/Common/Dashboard/Breadcrumb';
+import { Metadata } from 'next';
 
 export const metadata: Metadata = {
 	title: `Users - ${process.env.SITE_NAME}`,
@@ -14,7 +14,7 @@ export default function UsersPage({
 }) {
 	const { filter, search } = searchParams;
 	const validFilter =
-		filter === "USER" || filter === "ADMIN" ? filter : undefined;
+		filter === 'USER' || filter === 'ADMIN' ? filter : undefined;
 
 	return (
 		<>

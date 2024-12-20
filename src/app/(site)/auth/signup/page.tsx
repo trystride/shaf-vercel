@@ -1,6 +1,6 @@
-import Signup from "@/components/Auth/Signup";
+import Signup from '@/components/Auth/Signup';
 
-import { Metadata } from "next";
+import { Metadata } from 'next';
 
 export const metadata: Metadata = {
 	title: `Sign up - ${process.env.SITE_NAME}`,

@@ -1,11 +1,11 @@
-"use client";
-import { useState } from "react";
-import Sidebar from "@/components/Common/Dashboard/Sidebar";
-import Header from "@/components/Common/Dashboard/Header";
+'use client';
+import { useState } from 'react';
+import Sidebar from '@/components/Common/Dashboard/Sidebar';
+import Header from '@/components/Common/Dashboard/Header';
 import {
 	adminSidebarData,
 	adminSidebarOtherData,
-} from "@/staticData/sidebarData";
+} from '@/staticData/sidebarData';
 
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
 	const [openSidebar, setOpenSidebar] = useState(false);
@@ -14,7 +14,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
 			<main className='min-h-screen bg-white dark:bg-[#151F34]'>
 				<aside
 					className={`fixed left-0 top-0 z-[999] h-screen w-[290px] overflow-y-auto bg-white duration-300 dark:bg-gray-dark ${
-						openSidebar ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+						openSidebar ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
 					}`}
 				>
 					<Sidebar
@@ -25,7 +25,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
 				<div
 					onClick={() => setOpenSidebar(false)}
 					className={`fixed inset-0 z-[99] h-screen w-full bg-dark/80 lg:hidden ${
-						openSidebar ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+						openSidebar ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
 					}`}
 				></div>
 				<section className='lg:ml-[290px]'>

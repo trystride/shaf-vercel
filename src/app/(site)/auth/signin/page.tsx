@@ -1,6 +1,6 @@
-import React from "react";
-import Signin from "@/components/Auth/Signin";
-import { Metadata } from "next";
+import React from 'react';
+import Signin from '@/components/Auth/Signin';
+import { Metadata } from 'next';
 
 export const metadata: Metadata = {
 	title: `Sign in - ${process.env.SITE_NAME}`,

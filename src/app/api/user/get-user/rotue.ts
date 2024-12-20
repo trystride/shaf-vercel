@@ -1,5 +1,5 @@
-import { prisma } from "@/libs/prismaDb";
-import { NextRequest, NextResponse } from "next/server";
+import { prisma } from '@/libs/prismaDb';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
 	const body = await req.json();
@@ -13,6 +13,6 @@ export async function GET(req: NextRequest) {
 		});
 		return new NextResponse(JSON.stringify(user), { status: 200 });
 	} catch (error) {
-		return new NextResponse("Something went wrong", { status: 500 });
+		return new NextResponse('Something went wrong', { status: 500 });
 	}
 }

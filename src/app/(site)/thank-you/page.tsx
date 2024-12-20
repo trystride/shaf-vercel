@@ -1,6 +1,6 @@
-import React from "react";
-import { Metadata } from "next";
-import Link from "next/link";
+import React from 'react';
+import { Metadata } from 'next';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
 	title: `Thank You - ${process.env.SITE_NAME}`,

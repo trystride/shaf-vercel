@@ -1,12 +1,12 @@
-import SectionHeader from "@/components/Common/SectionHeader";
-import TestimonialItem from "./TestimonialItem";
-import testimonialData from "./testmonialsData";
+import SectionHeader from '@/components/Common/SectionHeader';
+import TestimonialItem from './TestimonialItem';
+import testimonialData from './testmonialsData';
 const Testimonials = () => {
 	return (
-		<section className='relative z-1 overflow-hidden bg-gray-1 py-17.5 dark:bg-black lg:py-22.5 xl:py-27.5'>
+		<section className='bg-gray-1 py-17.5 lg:py-22.5 xl:py-27.5 relative z-1 overflow-hidden dark:bg-black'>
 			{/* <!-- section title --> */}
 			<SectionHeader
-				title={"Loved by businesses worldwide."}
+				title={'Loved by businesses worldwide.'}
 				description='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent condimentum dictum euismod malesuada lacus, non consequat quam'
 			/>
 

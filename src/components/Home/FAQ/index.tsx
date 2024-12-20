@@ -1,8 +1,8 @@
-"use client";
-import React, { useState } from "react";
-import faqData from "./faqData";
-import FaqItem from "./FaqItem";
-import SectionHeader from "@/components/Common/SectionHeader";
+'use client';
+import React, { useState } from 'react';
+import faqData from './faqData';
+import FaqItem from './FaqItem';
+import SectionHeader from '@/components/Common/SectionHeader';
 
 const FAQ = () => {
 	const [activeFaq, setActiveFaq] = useState<number | string>(1);
@@ -12,11 +12,11 @@ const FAQ = () => {
 	};
 
 	return (
-		<section className='overflow-hidden bg-gray-1 py-17.5 dark:bg-black lg:py-22.5 xl:py-27.5'>
+		<section className='bg-gray-1 py-17.5 lg:py-22.5 xl:py-27.5 overflow-hidden dark:bg-black'>
 			{/* <!-- section title --> */}
 
 			<SectionHeader
-				title={"Frequently Ask Questionss"}
+				title={'Frequently Ask Questionss'}
 				description='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent condimentum dictum euismod malesuada lacus, non consequat quam.'
 			/>
 

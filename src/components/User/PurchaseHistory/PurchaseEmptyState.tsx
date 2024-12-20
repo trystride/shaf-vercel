@@ -1,5 +1,5 @@
-import Card from "@/components/Common/Dashboard/Card";
-import Link from "next/link";
+import Card from '@/components/Common/Dashboard/Card';
+import Link from 'next/link';
 
 export default function PurchaseEmptyState() {
 	return (
@@ -210,7 +210,7 @@ export default function PurchaseEmptyState() {
 					</p>
 
 					<Link
-						className='text-md mt-4 inline-block rounded-md bg-primary px-5.5 py-2 font-satoshi font-medium text-white duration-300 hover:bg-primary-dark'
+						className='text-md px-5.5 hover:bg-primary-dark mt-4 inline-block rounded-md bg-primary py-2 font-satoshi font-medium text-white duration-300'
 						href='/#pricing'
 					>
 						Pricing

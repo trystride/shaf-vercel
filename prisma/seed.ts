@@ -1,39 +1,44 @@
 import { PrismaClient } from '@prisma/client';
 import bcryptjs from 'bcryptjs';
+import { createLogger } from '../src/utils/logger';
 
 const prisma = new PrismaClient();
+const logger = createLogger('prisma:seed');
 
 async function main() {
-  // Create test user
-  const hashedPassword = await bcryptjs.hash('password123', 10);
-  
-  const user = await prisma.user.upsert({
-    where: { email: 'test@test.com' },
-    update: {},
-    create: {
-      email: 'test@test.com',
-      name: 'Test User',
-      password: hashedPassword,
-      role: 'USER',
-      notificationPreference: {
-        create: {
-          emailEnabled: true,
-          emailFrequency: 'IMMEDIATE',
-          emailDigestDay: null,
-          emailDigestTime: null,
-        },
-      },
-    },
-  });
+	try {
+		// Hash password
+		const hashedPassword = await bcryptjs.hash('password123', 10);
 
-  console.log({ user });
+		// Create test user
+		const testUser = await prisma.user.findUnique({
+			where: { email: 'test@test.com' },
+		});
+
+		if (!testUser) {
+			await prisma.user.create({
+				data: {
+					email: 'test@test.com',
+					name: 'Test User',
+					password: hashedPassword,
+					role: 'USER',
+					notificationPreference: {
+						create: {
+							emailEnabled: true,
+							emailFrequency: 'IMMEDIATE',
+							emailDigestDay: null,
+							emailDigestTime: null,
+						},
+					},
+				},
+			});
+		}
+
+		// Log success
+		logger.info('Database has been seeded.');
+	} finally {
+		await prisma.$disconnect();
+	}
 }
 
-main()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+main();

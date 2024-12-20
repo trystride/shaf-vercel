@@ -1,28 +1,28 @@
-"use client";
-import React, { useState } from "react";
-import SetApiKeyCard from "./SetApiKeyCard";
-import InputCard from "./InputCard";
-import OutputCard from "./OutputCard";
-import axios from "axios";
-import toast from "react-hot-toast";
-import { integrations, messages } from "../../../../integrations.config";
+'use client';
+import React, { useState } from 'react';
+import SetApiKeyCard from './SetApiKeyCard';
+import InputCard from './InputCard';
+import OutputCard from './OutputCard';
+import axios from 'axios';
+import toast from 'react-hot-toast';
+import { integrations, messages } from '../../../../integrations.config';
 
 const AiIntegration = ({ APIKey }: { APIKey: string }) => {
 	const [data, setData] = useState({
-		num: "",
-		topic: "",
-		type: "",
+		num: '',
+		topic: '',
+		type: '',
 	});
 
-	const [generatedData, setGeneratedData] = useState("");
+	const [generatedData, setGeneratedData] = useState('');
 
 	let apiKey = APIKey;
 
-	if (typeof window !== "undefined" && !APIKey) {
-		apiKey = localStorage.getItem("apiKey") || "";
+	if (typeof window !== 'undefined' && !APIKey) {
+		apiKey = localStorage.getItem('apiKey') || '';
 	}
 
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+	const handleChange = (e: { target: { name: string; value: string } }) => {
 		setData({
 			...data,
 			[e.target.name]: e.target.value,
@@ -31,55 +31,58 @@ const AiIntegration = ({ APIKey }: { APIKey: string }) => {
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		setGeneratedData("Loading....");
+		setGeneratedData('Loading....');
 
 		if (!integrations?.isOpenAIEnabled) {
 			toast.error(messages.openai);
-			setGeneratedData("");
+			setGeneratedData('');
 			return;
 		}
 
 		// the prompt
 		const prompt = [
 			{
-				role: "system",
+				role: 'system',
 				content:
-					"You will be provided with the content topic and the number of paragraphs and the content type. Your task is to generate the content with the exact paragraphs number if the format is tweet then it must be one paragraph \n",
+					'You will be provided with the content topic and the number of paragraphs and the content type. Your task is to generate the content with the exact paragraphs number if the format is tweet then it must be one paragraph \n',
 			},
 			{
-				role: "user",
+				role: 'user',
 				content: `Content Topic: ${data.topic} \nNumber of Paragraphs: ${data.num} \nContent format: ${data.type}`,
 			},
 			{
-				role: "user",
+				role: 'user',
 				content:
-					"Remove all the paragraph title and add line break after each paragraph",
+					'Remove all the paragraph title and add line break after each paragraph',
 			},
 		];
 
 		//for the demo
-		const apiKey = localStorage.getItem("apiKey");
+		const apiKey = localStorage.getItem('apiKey');
 
 		try {
 			const response = await axios.post(
-				"/api/generate-content",
+				'/api/generate-content',
 				{ apiKey, prompt },
 				{
 					headers: {
-						"Content-Type": "application/json", // Adjust headers as needed
+						'Content-Type': 'application/json',
 					},
 				}
 			);
 			setGeneratedData(response.data);
-		} catch (error: any) {
-			setGeneratedData(error?.response?.data);
-			toast.error(error?.response?.data.substr(0, 32));
+		} catch (error) {
+			const errorMessage = axios.isAxiosError(error)
+				? error.response?.data || error.message
+				: 'An unexpected error occurred';
+			setGeneratedData(errorMessage);
+			toast.error(errorMessage);
 		}
 
 		setData({
-			num: "",
-			topic: "",
-			type: "",
+			num: '',
+			topic: '',
+			type: '',
 		});
 	};
 	return (

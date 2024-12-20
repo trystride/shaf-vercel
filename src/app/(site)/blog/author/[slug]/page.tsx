@@ -1,9 +1,9 @@
-import { getPostsByAuthor, getAuthorBySlug } from "@/sanity/sanity-utils";
-import BlogItem from "@/components/Blog/BlogItem";
-import Breadcrumbs from "@/components/Common/Breadcrumbs";
-import { Author } from "@/types/blog";
-import Image from "next/image";
-import { imageBuilder } from "@/sanity/sanity-utils";
+import { getPostsByAuthor, getAuthorBySlug } from '@/sanity/sanity-utils';
+import BlogItem from '@/components/Blog/BlogItem';
+import Breadcrumbs from '@/components/Common/Breadcrumbs';
+import { Author } from '@/types/blog';
+import Image from 'next/image';
+import { imageBuilder } from '@/sanity/sanity-utils';
 
 type Props = {
 	params: {
@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: Props) {
 	if (author) {
 		return {
 			title: `${
-				author.name || "Author Page"
+				author.name || 'Author Page'
 			} | ${authorName} - Next.js SaaS Starter Kit`,
 			description: author.bio,
 			author: authorName,
@@ -44,12 +44,12 @@ export async function generateMetadata({ params }: Props) {
 						alt: author.name,
 					},
 				],
-				locale: "en_US",
-				type: "article",
+				locale: 'en_US',
+				type: 'article',
 			},
 
 			twitter: {
-				card: "summary_large_image",
+				card: 'summary_large_image',
 				title: `${author.name} | ${authorName}`,
 				description: `${author.bio?.slice(0, 136)}...`,
 				creator: `@${authorName}`,
@@ -60,8 +60,8 @@ export async function generateMetadata({ params }: Props) {
 		};
 	} else {
 		return {
-			title: "Not Found",
-			description: "No Author Found has been found",
+			title: 'Not Found',
+			description: 'No Author Found has been found',
 		};
 	}
 }
@@ -74,7 +74,7 @@ const BlogGrid = async ({ params }: Props) => {
 
 	return (
 		<main>
-			<section className='lg:ub-pb-22.5 relative z-1 overflow-hidden pb-17.5 pt-35 xl:pb-27.5'>
+			<section className='lg:ub-pb-22.5 pb-17.5 pt-35 xl:pb-27.5 relative z-1 overflow-hidden'>
 				{/* <!-- bg shapes --> */}
 				<div>
 					<div className='absolute left-0 top-0 -z-1'>
@@ -95,7 +95,7 @@ const BlogGrid = async ({ params }: Props) => {
 					</div>
 				</div>
 
-				<Breadcrumbs title={author?.name} pages={["Home", author?.name]} />
+				<Breadcrumbs title={author?.name} pages={['Home', author?.name]} />
 
 				<div className='mx-auto w-full max-w-[1170px] px-4 sm:px-8 xl:px-0'>
 					<div className='grid grid-cols-1 gap-x-7.5 gap-y-10 sm:grid-cols-2 lg:grid-cols-3'>

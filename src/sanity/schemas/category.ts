@@ -1,50 +1,50 @@
 const category = {
-	name: "tagDetail",
-	title: "Tag Detail",
-	type: "document",
+	name: 'tagDetail',
+	title: 'Tag Detail',
+	type: 'document',
 	fields: [
 		{
-			name: "tagname",
-			title: "Tag Name",
-			type: "string",
+			name: 'tagname',
+			title: 'Tag Name',
+			type: 'string',
 			options: {
-				source: "tagname",
+				source: 'tagname',
 				unique: true,
 				slugify: (input: any) => {
 					return input
 						.toLowerCase()
-						.replace(/\s+/g, "-")
-						.replace(/[^\w-]+/g, "");
+						.replace(/\s+/g, '-')
+						.replace(/[^\w-]+/g, '');
 				},
 			},
 			validation: (Rule: any) =>
 				Rule.custom((fields: any) => {
 					if (
 						fields !== fields.toLowerCase() ||
-						fields.split(" ").includes("")
+						fields.split(' ').includes('')
 					) {
-						return "Tags must be lowercase and not be included space";
+						return 'Tags must be lowercase and not be included space';
 					}
 					return true;
 				}),
 		},
 		{
-			name: "ogImage",
-			title: "Open Graph Image",
-			type: "image",
+			name: 'ogImage',
+			title: 'Open Graph Image',
+			type: 'image',
 			options: {
 				hotspot: true,
 			},
 		},
 		{
-			name: "title",
-			title: "Title",
-			type: "string",
+			name: 'title',
+			title: 'Title',
+			type: 'string',
 		},
 		{
-			name: "description",
-			title: "Description",
-			type: "text",
+			name: 'description',
+			title: 'Description',
+			type: 'text',
 		},
 	],
 };

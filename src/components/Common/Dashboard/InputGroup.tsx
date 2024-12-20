@@ -1,5 +1,5 @@
-"use client";
-import { useState } from "react";
+'use client';
+import { useState } from 'react';
 
 export default function InputGroup(props: any) {
 	const {
@@ -9,7 +9,7 @@ export default function InputGroup(props: any) {
 		type,
 		placeholder,
 		handleChange,
-		height = "52px",
+		height = '52px',
 		required,
 		maxlength,
 	} = props;
@@ -31,21 +31,21 @@ export default function InputGroup(props: any) {
 					value={value}
 					onChange={handleChange ? (e) => handleChange(e) : undefined}
 					name={name}
-					className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-base font-medium text-gray-900 outline-none transition focus:border-primary focus:shadow-input dark:border-gray-500 dark:bg-gray-700 dark:text-white"
+					className='w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-base font-medium text-gray-900 outline-none transition focus:border-primary focus:shadow-input dark:border-gray-500 dark:bg-gray-700 dark:text-white'
 					style={{ height: height }}
 					required={required}
 					maxLength={maxlength}
 				/>
-				{type === "password" && (
-					<span className='absolute right-5 top-1/2 -translate-y-1/2 text-body dark:text-gray-6'>
-						{inputType === "password" ? (
+				{type === 'password' && (
+					<span className='dark:text-gray-6 absolute right-5 top-1/2 -translate-y-1/2 text-body'>
+						{inputType === 'password' ? (
 							<svg
 								width='25'
 								height='24'
 								viewBox='0 0 25 24'
 								fill='none'
 								xmlns='http://www.w3.org/2000/svg'
-								onClick={() => setInputType("text")}
+								onClick={() => setInputType('text')}
 							>
 								<path
 									fillRule='evenodd'
@@ -73,7 +73,7 @@ export default function InputGroup(props: any) {
 								viewBox='0 0 25 24'
 								fill='none'
 								xmlns='http://www.w3.org/2000/svg'
-								onClick={() => setInputType("password")}
+								onClick={() => setInputType('password')}
 							>
 								<path
 									fillRule='evenodd'

@@ -1,6 +1,6 @@
-import { signIn } from "next-auth/react";
-import { integrations, messages } from "../../../integrations.config";
-import toast from "react-hot-toast";
+import { signIn } from 'next-auth/react';
+import { integrations, messages } from '../../../integrations.config';
+import toast from 'react-hot-toast';
 
 export default function GoogleSigninButton({ text }: { text: string }) {
 	const handleClick = () => {
@@ -8,13 +8,13 @@ export default function GoogleSigninButton({ text }: { text: string }) {
 			return toast.error(messages.auth);
 		}
 
-		signIn("google", { callbackUrl: "/admin" });
+		signIn('google', { callbackUrl: '/admin' });
 	};
 
 	return (
 		<button
 			onClick={handleClick}
-			className='flex h-12 w-full items-center justify-center gap-2 rounded-lg border border-stroke font-satoshi text-base font-medium text-dark duration-300 hover:bg-gray-1 dark:border-stroke-dark dark:text-white dark:hover:bg-white/5'
+			className='hover:bg-gray-1 flex h-12 w-full items-center justify-center gap-2 rounded-lg border border-stroke font-satoshi text-base font-medium text-dark duration-300 dark:border-stroke-dark dark:text-white dark:hover:bg-white/5'
 		>
 			<svg
 				width='21'

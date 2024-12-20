@@ -1,6 +1,6 @@
-import React from "react";
-import { connectHits } from "react-instantsearch-dom";
-import { integrations, messages } from "../../../integrations.config";
+import React from 'react';
+import { connectHits } from 'react-instantsearch-dom';
+import { integrations, messages } from '../../../integrations.config';
 
 const EmptyState = ({ hits }: any) => {
 	return (

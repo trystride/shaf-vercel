@@ -1,32 +1,31 @@
-import { prisma } from "@/libs/prismaDb";
-import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/libs/auth";
+import { prisma } from '@/libs/prismaDb';
+import { NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/libs/auth';
 
-export async function DELETE(request: Request) {
-	const session = await getServerSession(authOptions);
-	const user = session?.user;
-
-	if (!user) {
-		return new NextResponse("Unauthorized", { status: 401 });
-	}
-
-	const body = await request.json();
-	const { id } = body;
-
-	if (!id) {
-		return new NextResponse("Missing Fields", { status: 400 });
-	}
-
+export async function DELETE(req: Request) {
 	try {
+		const session = await getServerSession(authOptions);
+
+		if (!session?.user?.email) {
+			return new NextResponse('Unauthorized', { status: 401 });
+		}
+
+		const { searchParams } = new URL(req.url);
+		const apiKeyId = searchParams.get('apiKeyId');
+
+		if (!apiKeyId) {
+			return new NextResponse('Missing Fields', { status: 400 });
+		}
+
 		await prisma.apiKey.delete({
 			where: {
-				id,
+				id: apiKeyId,
 			},
 		});
 
-		return new NextResponse("API Key Deleted Successfully!", { status: 200 });
+		return new NextResponse('API Key Deleted Successfully!', { status: 200 });
 	} catch (error) {
-		return new NextResponse("Something went wrong", { status: 500 });
+		return new NextResponse('Something went wrong', { status: 500 });
 	}
 }

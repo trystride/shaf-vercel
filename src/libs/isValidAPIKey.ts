@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+import bcrypt from 'bcrypt';
 const isValidKey = async (apiKey: string, role: string) => {
 	const key = role as string;
 	const isValidKey = await bcrypt.compare(key, apiKey);

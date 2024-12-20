@@ -1,19 +1,25 @@
-"use client";
-import { useState } from "react";
-import InputGroup from "@/components/Common/Dashboard/InputGroup";
-import FormButton from "@/components/Common/Dashboard/FormButton";
-import Loader from "@/components/Common/Loader";
-import toast from "react-hot-toast";
-import axios from "axios";
-import { useSearchParams, useRouter } from "next/navigation";
+'use client';
+import { useState } from 'react';
+import InputGroup from '@/components/Common/Dashboard/InputGroup';
+import FormButton from '@/components/Common/Dashboard/FormButton';
+import Loader from '@/components/Common/Loader';
+import toast from 'react-hot-toast';
+import axios from 'axios';
+import { useSearchParams, useRouter } from 'next/navigation';
 
 const InvitedSignin = () => {
-	const [password, setPassword] = useState("");
+	const [password, setPassword] = useState('');
 	const [loading, setLoading] = useState(false);
 
 	const router = useRouter();
 	const searchParams = useSearchParams();
-	const token = searchParams.get("token");
+	const token = searchParams?.get('token');
+
+	// Redirect if no token is present
+	if (!token) {
+		router.push('/auth/signin');
+		return null;
+	}
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setPassword(e.target.value);
@@ -24,7 +30,7 @@ const InvitedSignin = () => {
 
 		setLoading(true);
 		if (!password) {
-			return toast.error("Please enter your password.");
+			return toast.error('Please enter your password.');
 		}
 
 		try {
@@ -34,23 +40,23 @@ const InvitedSignin = () => {
 			});
 
 			if (res.status === 200) {
-				toast.success("Account created successfully");
-				setPassword("");
+				toast.success('Account created successfully');
+				setPassword('');
 				setLoading(false);
-				router.push("/auth/signin");
+				router.push('/auth/signin');
 			}
 		} catch (error: any) {
 			toast.error(error.response.data);
-			setPassword("");
+			setPassword('');
 			setLoading(false);
-			router.push("/auth/signin");
+			router.push('/auth/signin');
 		}
 	};
 
 	return (
 		<div className='mx-auto w-full max-w-[400px] px-4 py-10'>
 			<div className='mb-7.5 text-center'>
-				<h3 className='mb-4 font-satoshi text-heading-5 font-bold text-dark dark:text-white'>
+				<h3 className='text-heading-5 mb-4 font-satoshi font-bold text-dark dark:text-white'>
 					Invited Signin
 				</h3>
 				<p className='text-base dark:text-gray-5'>
@@ -77,7 +83,7 @@ const InvitedSignin = () => {
 								Sign in <Loader style='border-white dark:border-dark' />
 							</>
 						) : (
-							"Sign in"
+							'Sign in'
 						)}
 					</FormButton>
 				</div>

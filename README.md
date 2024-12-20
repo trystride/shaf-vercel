@@ -41,34 +41,40 @@ src/
 ## 🔄 Core Services
 
 ### Bankruptcy Monitoring
+
 - Fetches announcements every 2 hours via Vercel Cron
 - Endpoint: `/api/announcements/fetch`
 - Matches announcements against user keywords
 - Sends email notifications for matches
 
 ### User Management
+
 - Authentication via NextAuth.js
 - User roles: admin, user
 - Subscription handling through paylink
 
 ### Database
+
 - Prisma ORM
 - Key models: User, Keyword, Announcement, Notification
 
 ## 🛠 Development Guidelines
 
 1. **Branches**
+
    - `main`: production
    - `dev`: development
    - Feature branches: `feature/description`
 
 2. **API Routes**
+
    - User routes: `/api/user/*`
    - Admin routes: `/api/admin/*`
-   - Announcement routes: `/api/announcements/*` 
-   - 
+   - Announcement routes: `/api/announcements/*`
+   -
 
 3. **Components**
+
    - Use TypeScript strictly
    - Follow existing component structure
    - Reuse UI components from `/components/ui`
@@ -92,10 +98,12 @@ src/
 ## 🚨 Common Issues
 
 1. **SSL Certificate Issues**
+
    - The bankruptcy.gov.sa API might require SSL verification bypass
    - Use the provided utility in `utils/api-helpers.ts`
 
 2. **API Rate Limiting**
+
    - Implement exponential backoff for retries
    - Log failed attempts
 

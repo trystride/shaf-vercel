@@ -1,12 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
-import AccountMenu from "../../AccountMenu";
+import AccountMenu from '../../AccountMenu';
 
 export default function AccountButton({ user }: any) {
 	const profilePic = user?.image
-		? user.image.includes("http")
+		? user.image.includes('http')
 			? user.image
 			: `${process.env.NEXT_PUBLIC_IMAGE_URL}/${user.image}`
-		: "/images/dashboard/profile-avatar.png";
+		: '/images/dashboard/profile-avatar.png';
 
 	return (
 		<div className='group relative flex items-center'>
@@ -37,7 +37,7 @@ export default function AccountButton({ user }: any) {
 				</svg>
 			</div>
 
-			<div className='invisible absolute right-0 top-[60px] z-50 w-[280px] rounded-lg bg-white pb-2.5 pt-3.5 opacity-0 shadow-lg transition-all duration-300 ease-in-out group-hover:visible group-hover:translate-y-2 group-hover:opacity-100 dark:bg-gray-dark border border-gray-100 dark:border-gray-800'>
+			<div className='invisible absolute right-0 top-[60px] z-50 w-[280px] rounded-lg border border-gray-100 bg-white pb-2.5 pt-3.5 opacity-0 shadow-lg transition-all duration-300 ease-in-out group-hover:visible group-hover:translate-y-2 group-hover:opacity-100 dark:border-gray-800 dark:bg-gray-dark'>
 				<AccountMenu user={user} />
 			</div>
 		</div>

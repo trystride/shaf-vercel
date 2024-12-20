@@ -1,6 +1,6 @@
-import { signIn } from "next-auth/react";
-import { integrations, messages } from "../../../integrations.config";
-import toast from "react-hot-toast";
+import { signIn } from 'next-auth/react';
+import { integrations, messages } from '../../../integrations.config';
+import toast from 'react-hot-toast';
 
 export default function GithubSigninButton({ text }: { text: string }) {
 	const handleSignin = () => {
@@ -8,13 +8,13 @@ export default function GithubSigninButton({ text }: { text: string }) {
 			return toast.error(messages.auth);
 		}
 
-		signIn("github", { callbackUrl: "/admin" });
+		signIn('github', { callbackUrl: '/admin' });
 	};
 
 	return (
 		<button
 			onClick={handleSignin}
-			className='flex h-12 w-full items-center justify-center gap-2 rounded-lg border border-stroke font-satoshi text-base font-medium text-dark duration-300 hover:bg-gray-1 dark:border-stroke-dark dark:text-white dark:hover:bg-white/5 '
+			className='hover:bg-gray-1 flex h-12 w-full items-center justify-center gap-2 rounded-lg border border-stroke font-satoshi text-base font-medium text-dark duration-300 dark:border-stroke-dark dark:text-white dark:hover:bg-white/5 '
 		>
 			<svg
 				width='20'

@@ -1,6 +1,6 @@
-import Breadcrumb from "@/components/Common/Dashboard/Breadcrumb";
-import { Metadata } from "next";
-import AiIntegration from "@/components/Admin/AiIntegration";
+import Breadcrumb from '@/components/Common/Dashboard/Breadcrumb';
+import { Metadata } from 'next';
+import AiIntegration from '@/components/Admin/AiIntegration';
 
 export const metadata: Metadata = {
 	title: `AI Integration - ${process.env.SITE_NAME}`,

@@ -1,18 +1,18 @@
-import { FeatureWithImg } from "@/types/featureWithImg";
-import Image from "next/image";
-import React from "react";
+import { FeatureWithImg } from '@/types/featureWithImg';
+import Image from 'next/image';
+import React from 'react';
 
 const FeatureItem = ({ data }: { data: FeatureWithImg }) => {
 	return (
 		<div
 			className={`flex flex-col items-center justify-between gap-10 ${
 				data?.id % 2 === 0
-					? "pt-17.5 sm:flex-row-reverse lg:pt-22.5 xl:pt-27.5"
-					: "sm:flex-row"
+					? 'pt-17.5 lg:pt-22.5 xl:pt-27.5 sm:flex-row-reverse'
+					: 'sm:flex-row'
 			}`}
 		>
 			<div className='w-full max-w-[475px]'>
-				<h3 className='mb-4.5 font-satoshi text-2xl font-bold text-black dark:text-white lg:text-3xl xl:text-heading-4'>
+				<h3 className='xl:text-heading-4 mb-4.5 font-satoshi text-2xl font-bold text-black dark:text-white lg:text-3xl'>
 					{data?.title}
 				</h3>
 				<p className='dark:text-gray-5'>{data?.description}</p>
