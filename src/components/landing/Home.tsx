@@ -239,7 +239,7 @@ export default function Home() {
 					<div className='relative mx-auto mt-16 h-24 w-full max-w-5xl overflow-hidden rounded-xl bg-white dark:bg-gray-800'>
 						<div className='absolute left-0 top-0 z-10 h-full w-32 bg-gradient-to-r from-white to-transparent dark:from-gray-800'></div>
 						<div className='absolute right-0 top-0 z-10 h-full w-32 bg-gradient-to-l from-white to-transparent dark:from-gray-800'></div>
-						<div className='flex animate-scroll'>
+						<div className='animate-scroll flex'>
 							{/* First set of logos */}
 							{sources.map((source) => (
 								<div

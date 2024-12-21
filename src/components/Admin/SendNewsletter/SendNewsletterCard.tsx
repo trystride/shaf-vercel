@@ -24,7 +24,7 @@ export default function SendNewsletterCard() {
 			<Card>
 				<div className='mb-6 items-end justify-between sm:flex'>
 					<div className='mb-6 sm:mb-0'>
-						<h3 className='text-custom-2xl mb-1.5 font-satoshi font-bold tracking-[-.5px] text-dark dark:text-white'>
+						<h3 className='mb-1.5 font-satoshi text-custom-2xl font-bold tracking-[-.5px] text-dark dark:text-white'>
 							Newsletter Content
 						</h3>
 						<p className='text-body dark:text-gray-4'>
@@ -61,7 +61,7 @@ export default function SendNewsletterCard() {
 									<select
 										name='name'
 										id='select'
-										className='bg-gray-1 relative h-12 w-full appearance-none rounded-md border border-stroke pl-4 pr-10 text-dark outline-none ring-offset-1 duration-300 focus:shadow-input focus:ring-2 focus:ring-primary/20 dark:border-stroke-dark dark:bg-white/5 dark:text-white dark:focus:border-transparent'
+										className='relative h-12 w-full appearance-none rounded-md border border-stroke bg-gray-1 pl-4 pr-10 text-dark outline-none ring-offset-1 duration-300 focus:shadow-input focus:ring-2 focus:ring-primary/20 dark:border-stroke-dark dark:bg-white/5 dark:text-white dark:focus:border-transparent'
 									>
 										<option value='all-users' className='dark:bg-dark'>
 											All Users
@@ -80,7 +80,7 @@ export default function SendNewsletterCard() {
 							</div>
 						</label>
 
-						<button className='hover:bg-primary-dark flex h-12 items-center justify-center gap-2 rounded-lg bg-primary px-5 font-satoshi text-base font-medium tracking-[-.2px] text-white duration-300'>
+						<button className='flex h-12 items-center justify-center gap-2 rounded-lg bg-primary px-5 font-satoshi text-base font-medium tracking-[-.2px] text-white duration-300 hover:bg-primary-dark'>
 							Send
 							<span>
 								<svg

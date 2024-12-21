@@ -71,7 +71,7 @@ export class PaylinkClient {
 			});
 
 			const response = await this.axiosInstance.post('/addInvoice', payload);
-			logger.debug('Raw Paylink API Response', response.data);
+			logger.debug('Raw Paylink API Response', { data: response.data });
 
 			if (response.data.status === 'success' && response.data.data) {
 				const result = {
@@ -84,7 +84,7 @@ export class PaylinkClient {
 						amount: request.amount,
 					},
 				};
-				logger.debug('Processed response', result);
+				logger.debug('Processed response', { result });
 				return result;
 			} else {
 				const error = {
@@ -98,12 +98,14 @@ export class PaylinkClient {
 				return error;
 			}
 		} catch (error) {
-			logger.error('Paylink API Error', error);
+			logger.error('Paylink API Error', {
+				error: error instanceof Error ? error.message : String(error),
+			});
 			if (axios.isAxiosError(error)) {
 				logger.error('Axios Error Details', {
 					status: error.response?.status,
+					statusText: error.response?.statusText,
 					data: error.response?.data,
-					headers: error.response?.headers,
 				});
 				const errorResponse = {
 					success: false,
@@ -123,10 +125,14 @@ export class PaylinkClient {
 		transactionNo: string
 	): Promise<PaylinkResponse<InvoiceResponse>> {
 		try {
+			logger.debug('Getting invoice details', { transactionNo });
+
 			const response = await this.axiosInstance.get(
 				`/getInvoice/${transactionNo}`
 			);
-			return {
+			logger.debug('Raw Paylink API Response', { data: response.data });
+
+			const result = {
 				success: true,
 				data: {
 					transactionNo: response.data.transactionNo,
@@ -136,15 +142,27 @@ export class PaylinkClient {
 					amount: response.data.amount,
 				},
 			};
+			logger.debug('Processed response', { result });
+			return result;
 		} catch (error) {
+			logger.error('Paylink API Error', {
+				error: error instanceof Error ? error.message : String(error),
+			});
 			if (axios.isAxiosError(error)) {
-				return {
+				logger.error('Axios Error Details', {
+					status: error.response?.status,
+					statusText: error.response?.statusText,
+					data: error.response?.data,
+				});
+				const errorResponse = {
 					success: false,
 					error: {
 						message: error.response?.data?.message || error.message,
 						code: error.response?.status?.toString() || '500',
 					},
 				};
+				logger.error('Formatted error response', { error: errorResponse });
+				return errorResponse;
 			}
 			throw error;
 		}
@@ -154,7 +172,7 @@ export class PaylinkClient {
 		transactionNo: string
 	): Promise<PaylinkResponse<{ success: boolean }>> {
 		try {
-			logger.debug('Cancelling invoice with transactionNo', transactionNo);
+			logger.debug('Cancelling invoice with transactionNo', { transactionNo });
 
 			const payload = { transactionNo };
 
@@ -164,16 +182,18 @@ export class PaylinkClient {
 			});
 
 			const response = await this.axiosInstance.post('/cancelInvoice', payload);
-			logger.debug('Raw Paylink API Response', response.data);
+			logger.debug('Raw Paylink API Response', { data: response.data });
 
 			const result = {
 				success: true,
 				data: { success: true },
 			};
-			logger.debug('Processed response', result);
+			logger.debug('Processed response', { result });
 			return result;
 		} catch (error) {
-			logger.error('Paylink API Error', error);
+			logger.error('Paylink API Error', {
+				error: error instanceof Error ? error.message : String(error),
+			});
 			if (axios.isAxiosError(error)) {
 				const errorResponse = {
 					success: false,

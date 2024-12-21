@@ -1,17 +1,18 @@
 'use client';
 
+import { FC } from 'react';
 import PriceItem from './PriceItem';
 import { Price } from '../../types/priceItem';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
-interface Props {
+interface PaylinkBillingProps {
 	isBilling: boolean;
 }
 
-const PaylinkBilling = ({ isBilling }: Props) => {
-	const [_session] = useSession();
+const PaylinkBilling: FC<PaylinkBillingProps> = ({ isBilling }) => {
+	const { data: _session } = useSession();
 	const [prices, setPrices] = useState<Price[]>([]);
 	const [subscriptionPlan, _setSubscriptionPlan] = useState<string>('');
 
@@ -48,8 +49,8 @@ const PaylinkBilling = ({ isBilling }: Props) => {
 					<PriceItem
 						key={plan.priceId}
 						plan={plan}
-						isBilling={isBilling}
-						subscriptionPlan={subscriptionPlan}
+						_isBilling={isBilling}
+						_subscriptionPlan={subscriptionPlan}
 					/>
 				))}
 			</div>

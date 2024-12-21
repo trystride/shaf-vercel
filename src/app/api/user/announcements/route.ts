@@ -1,7 +1,24 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
-import { db } from '@/libs/db';
-import { authOptions } from '@/libs/auth';
+import { db } from '@/lib/db';
+import { authOptions } from '@/lib/auth';
+
+export const dynamic = 'force-dynamic';
+
+type MatchWithDetails = {
+	announcement: {
+		id: string;
+		annId: string;
+		title: string;
+		description: string;
+		publishDate: Date;
+		announcementUrl: string;
+		createdAt: Date | null;
+	};
+	keyword: {
+		term: string;
+	};
+};
 
 export async function GET() {
 	try {
@@ -67,7 +84,7 @@ export async function GET() {
 			],
 		});
 
-		const announcements = matches.map((match) => ({
+		const announcements = matches.map((match: MatchWithDetails) => ({
 			Id: match.announcement.id,
 			AnnId: match.announcement.annId,
 			Header: match.announcement.title,

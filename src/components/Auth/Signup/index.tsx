@@ -25,7 +25,7 @@ export default function Signup() {
 					<span className='block h-px w-full bg-stroke dark:bg-stroke-dark'></span>
 				</div>
 
-				<div className='rounded-10 mb-4.5 flex w-full items-center justify-between gap-1.5 border border-stroke p-1 dark:border-stroke-dark'>
+				<div className='mb-4.5 flex w-full items-center justify-between gap-1.5 rounded-10 border border-stroke p-1 dark:border-stroke-dark'>
 					<button
 						onClick={() => setSigninOption('magic-link')}
 						className={`h-[38px] w-full rounded-lg font-satoshi text-base font-medium tracking-[-.2px] ${

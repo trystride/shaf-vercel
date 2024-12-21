@@ -1,4 +1,4 @@
-import { prisma } from '@/libs/prismaDb';
+import { prisma } from '@/lib/prisma';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { type NextAuthOptions, DefaultSession } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
@@ -6,7 +6,8 @@ import GitHubProvider from 'next-auth/providers/github';
 import GoogleProvider from 'next-auth/providers/google';
 import EmailProvider from 'next-auth/providers/email';
 import { getServerSession } from 'next-auth';
-import bcryptjs from 'bcryptjs';
+import bcrypt from 'bcrypt';
+import logger from './logger';
 
 declare module 'next-auth' {
 	interface Session extends DefaultSession {
@@ -49,45 +50,83 @@ export const authOptions: NextAuthOptions = {
 			},
 
 			async authorize(credentials) {
-				// check to see if email and password is there
-				if (!credentials?.email || !credentials?.password) {
-					throw new Error('Please enter an email or password');
-				}
+				try {
+					// check to see if email and password is there
+					if (!credentials?.email || !credentials?.password) {
+						logger.error('Missing credentials');
+						throw new Error('Please enter an email and password');
+					}
 
-				// check to see if user already exist
-				const user = await prisma.user.findUnique({
-					where: {
+					// debug log
+					logger.info('Credentials received:', {
 						email: credentials.email,
-					},
-				});
+						hasPassword: !!credentials.password,
+					});
 
-				// if user was not found
-				if (!user || !user?.password) {
-					throw new Error('No user found');
+					const user = await prisma.user.findUnique({
+						where: {
+							email: credentials.email.toLowerCase(),
+						},
+						select: {
+							id: true,
+							name: true,
+							email: true,
+							image: true,
+							password: true,
+							role: true,
+							customerId: true,
+							subscriptionId: true,
+							priceId: true,
+							currentPeriodEnd: true,
+						},
+					});
+
+					logger.info('User lookup result:', {
+						found: !!user,
+						email: credentials.email.toLowerCase(),
+					});
+
+					// if user was not found
+					if (!user || !user?.password) {
+						logger.error('Invalid credentials - user not found');
+						throw new Error('Invalid credentials');
+					}
+
+					const isValid = await bcrypt.compare(
+						credentials.password,
+						user.password
+					);
+
+					logger.info('Password validation result:', { isValid });
+
+					if (!isValid) {
+						logger.error('Invalid credentials - password mismatch');
+						throw new Error('Invalid credentials');
+					}
+
+					// Convert null values to undefined for NextAuth compatibility
+					const userToReturn = {
+						id: user.id,
+						name: user.name ?? undefined,
+						email: user.email ?? undefined,
+						image: user.image ?? undefined,
+						role: user.role ?? undefined,
+						customerId: user.customerId ?? undefined,
+						subscriptionId: user.subscriptionId ?? undefined,
+						priceId: user.priceId ?? undefined,
+						currentPeriodEnd: user.currentPeriodEnd ?? undefined,
+					};
+
+					logger.info('Authentication successful, returning user:', {
+						...userToReturn,
+						password: undefined,
+					});
+
+					return userToReturn;
+				} catch (error) {
+					logger.error('Auth error:', error);
+					throw error;
 				}
-
-				// check to see if passwords match
-				const passwordMatch = await bcryptjs.compare(
-					credentials.password,
-					user.password
-				);
-
-				if (!passwordMatch) {
-					throw new Error('Incorrect password');
-				}
-
-				// Convert null values to undefined for NextAuth compatibility
-				return {
-					id: user.id,
-					name: user.name ?? undefined,
-					email: user.email ?? undefined,
-					image: user.image ?? undefined,
-					role: user.role ?? undefined,
-					priceId: user.priceId ?? undefined,
-					currentPeriodEnd: user.currentPeriodEnd ?? undefined,
-					subscriptionId: user.subscriptionId ?? undefined,
-					customerId: user.customerId ?? undefined,
-				};
 			},
 		}),
 
@@ -245,7 +284,7 @@ export const authOptions: NextAuthOptions = {
 		},
 	},
 
-	// debug: process.env.NODE_ENV === "developement",
+	debug: process.env.NODE_ENV === 'development',
 };
 
 export const getAuthSession = async () => {

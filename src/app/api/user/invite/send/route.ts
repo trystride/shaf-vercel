@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/libs/prismaDb';
-import { sendEmail } from '@/libs/email';
-import { isAuthorized } from '@/libs/isAuthorized';
+import { prisma } from '@/lib/prisma';
+import { sendEmail } from '@/lib/email';
+import { isAuthorized } from '@/lib/isAuthorized';
 import crypto from 'crypto';
 
 export async function POST(request: Request) {

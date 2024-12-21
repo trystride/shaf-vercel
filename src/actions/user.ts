@@ -1,6 +1,6 @@
 'use server';
-import prisma from '@/libs/prisma';
-import { isAuthorized } from '@/libs/isAuthorized';
+import { prisma } from '@/lib/prisma';
+import { isAuthorized } from '@/lib/isAuthorized';
 import type { User } from '@prisma/client';
 
 type UserRole = 'USER' | 'ADMIN';

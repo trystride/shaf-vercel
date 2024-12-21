@@ -59,7 +59,7 @@ export default function PasswordChange() {
 	return (
 		<div className='w-full max-w-[525px]'>
 			<Card>
-				<h3 className='text-custom-2xl mb-9 font-satoshi font-bold tracking-[-.5px] text-dark dark:text-white'>
+				<h3 className='mb-9 font-satoshi text-custom-2xl font-bold tracking-[-.5px] text-dark dark:text-white'>
 					Password
 				</h3>
 

@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/libs/prismaDb';
-import { sendEmail } from '@/libs/email';
+import { prisma } from '@/lib/prisma';
+import { sendEmail } from '@/lib/email';
 import { headers } from 'next/headers';
-import { DigestQueue, Match, Announcement } from '@prisma/client';
+import type { DigestQueue, Match, Announcement } from '@prisma/client';
 
 // Vercel cron authentication
 const CRON_SECRET = process.env.CRON_SECRET;
@@ -19,6 +19,8 @@ type DigestWithMatches = DigestQueue & {
 type GroupedAnnouncements = {
 	[keyword: string]: Announcement[];
 };
+
+export const dynamic = 'force-dynamic';
 
 export async function GET(_req: Request) {
 	try {

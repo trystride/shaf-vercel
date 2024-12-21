@@ -8,7 +8,7 @@ const Blog = async () => {
 
 	return (
 		<section
-			className='py-17.5 lg:py-22.5 xl:py-27.5 overflow-hidden'
+			className='overflow-hidden py-17.5 lg:py-22.5 xl:py-27.5'
 			id='blog'
 		>
 			{/* <!-- section title --> */}

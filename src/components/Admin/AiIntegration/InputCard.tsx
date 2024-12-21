@@ -66,7 +66,7 @@ export default function InputCard({
 	return (
 		<Card>
 			<div className='mb-6'>
-				<h3 className='text-custom-2xl mb-1.5 font-satoshi font-bold tracking-[-.5px] text-dark dark:text-white'>
+				<h3 className='mb-1.5 font-satoshi text-custom-2xl font-bold tracking-[-.5px] text-dark dark:text-white'>
 					Content Topic
 				</h3>
 				<p className='text-body'>What your content will be about?</p>
@@ -80,7 +80,7 @@ export default function InputCard({
 						onChange={handleChange}
 						required
 						placeholder='Type your topic'
-						className='px-5.5 h-[150px] w-full rounded-lg border border-gray-3 py-3 text-dark outline-none ring-offset-1 duration-300 focus:shadow-input focus:ring-2 focus:ring-primary/20 dark:border-stroke-dark dark:bg-transparent dark:text-white dark:focus:border-transparent'
+						className='h-[150px] w-full rounded-lg border border-gray-3 px-5.5 py-3 text-dark outline-none ring-offset-1 duration-300 focus:shadow-input focus:ring-2 focus:ring-primary/20 dark:border-stroke-dark dark:bg-transparent dark:text-white dark:focus:border-transparent'
 					/>
 				</div>
 

@@ -1,7 +1,10 @@
 import { NextResponse } from 'next/server';
-import { db } from '@/libs/db';
+import { db } from '@/lib/db';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/libs/auth';
+import { authOptions } from '@/lib/auth';
+import type { Announcement, Keyword } from '@prisma/client';
+
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
 	try {
@@ -44,7 +47,7 @@ export async function GET() {
 		// Create matches for each of the user's keywords with relevant announcements
 		for (const keyword of user.keywords) {
 			const relevantAnnouncements = announcements.filter(
-				(ann) =>
+				(ann: Announcement) =>
 					ann.title.includes(keyword.term) ||
 					ann.description.includes(keyword.term)
 			);
@@ -97,8 +100,8 @@ export async function GET() {
 			message: `Created ${matches.length} new matches`,
 			matches,
 			debug: {
-				userKeywords: user.keywords.map((k) => k.term),
-				announcements: announcements.map((a) => a.title),
+				userKeywords: user.keywords.map((k: Keyword) => k.term),
+				announcements: announcements.map((a: Announcement) => a.title),
 			},
 		});
 	} catch (error) {

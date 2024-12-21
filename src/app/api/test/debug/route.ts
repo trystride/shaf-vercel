@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server';
-import { db } from '@/libs/db';
+import { db } from '@/lib/db';
+import type { Announcement, Keyword, Match } from '@prisma/client';
+
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
 	try {
@@ -38,22 +41,24 @@ export async function GET() {
 
 		return NextResponse.json({
 			announcementsCount: announcements.length,
-			announcements: announcements.map((a) => ({
+			announcements: announcements.map((a: Announcement) => ({
 				id: a.id,
 				title: a.title,
 				description: a.description,
 			})),
 			keywordsCount: keywords.length,
-			keywords: keywords.map((k) => ({
+			keywords: keywords.map((k: Keyword) => ({
 				id: k.id,
 				term: k.term,
 			})),
 			matchesCount: matches.length,
-			matches: matches.map((m) => ({
-				id: m.id,
-				keyword: m.keyword.term,
-				announcement: m.announcement.title,
-			})),
+			matches: matches.map(
+				(m: Match & { keyword: Keyword; announcement: Announcement }) => ({
+					id: m.id,
+					keyword: m.keyword.term,
+					announcement: m.announcement.title,
+				})
+			),
 		});
 	} catch (error) {
 		console.error('Debug error:', error);

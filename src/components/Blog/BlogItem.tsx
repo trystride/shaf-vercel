@@ -81,7 +81,7 @@ const BlogItem = ({ blog }: { blog: Blog }) => {
 					</a>
 				</div>
 
-				<h3 className='text-custom-2xl mb-4 font-satoshi font-bold -tracking-[0.3px] text-black hover:text-primary dark:text-white'>
+				<h3 className='mb-4 font-satoshi text-custom-2xl font-bold -tracking-[0.3px] text-black hover:text-primary dark:text-white'>
 					<Link href={`/blog/${blog?.slug.current}`}>
 						{blog?.title.substring(0, 40)}...
 					</Link>

@@ -13,7 +13,7 @@ export default function CreateToken() {
 		<div className='lg:w-2/6'>
 			<Card>
 				<div className='mb-6'>
-					<h3 className='text-custom-2xl mb-2.5 font-satoshi font-bold tracking-[-.5px] text-dark dark:text-white'>
+					<h3 className='mb-2.5 font-satoshi text-custom-2xl font-bold tracking-[-.5px] text-dark dark:text-white'>
 						Want to use the API?
 					</h3>
 					<p className='text-body'>Create a new token to get the access.</p>

@@ -84,7 +84,7 @@ export default function ResetPassword({ token }: { token: string }) {
 		<>
 			<div className='mx-auto w-full max-w-[400px] pb-20 pt-40'>
 				<div className='mb-7.5 text-center'>
-					<h3 className='text-heading-5 mb-4 font-satoshi font-bold text-dark dark:text-white'>
+					<h3 className='mb-4 font-satoshi text-heading-5 font-bold text-dark dark:text-white'>
 						Create New Password
 					</h3>
 					<p className='text-base dark:text-gray-5'>

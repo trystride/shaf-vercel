@@ -1,21 +1,21 @@
-import {
+import type {
 	PaylinkWebhookEvent,
 	WebhookHandlerResponse,
 	WebhookHandler,
 } from '../types/webhook';
 import { SubscriptionService } from './SubscriptionService';
-import { PrismaClient, SubscriptionStatus } from '@prisma/client';
+import { PrismaClient, type SubscriptionStatus } from '@prisma/client';
 import { createLogger } from '@/utils/logger';
 
 const logger = createLogger('WebhookService');
 
 export class WebhookService {
-	private subscriptionService: SubscriptionService;
 	private prisma: PrismaClient;
+	private subscriptionService: SubscriptionService;
 
-	constructor(subscriptionService: SubscriptionService, prisma: PrismaClient) {
-		this.subscriptionService = subscriptionService;
+	constructor(prisma: PrismaClient, subscriptionService: SubscriptionService) {
 		this.prisma = prisma;
+		this.subscriptionService = subscriptionService;
 	}
 
 	// Process webhook event
@@ -48,7 +48,9 @@ export class WebhookService {
 					};
 			}
 		} catch (error) {
-			logger.error('Webhook processing error', error);
+			logger.error('Webhook processing error', {
+				error: error instanceof Error ? error.message : String(error),
+			});
 			return {
 				success: false,
 				message: 'Failed to process webhook',
@@ -107,7 +109,9 @@ export class WebhookService {
 				message: 'Payment processed successfully',
 			};
 		} catch (error) {
-			logger.error('Payment success handler error', error);
+			logger.error('Payment success handler error', {
+				error: error instanceof Error ? error.message : String(error),
+			});
 			return {
 				success: false,
 				message: 'Failed to process payment success',
@@ -166,7 +170,9 @@ export class WebhookService {
 				message: 'Payment failure processed',
 			};
 		} catch (error) {
-			logger.error('Payment failure handler error', error);
+			logger.error('Payment failure handler error', {
+				error: error instanceof Error ? error.message : String(error),
+			});
 			return {
 				success: false,
 				message: 'Failed to process payment failure',
@@ -223,7 +229,9 @@ export class WebhookService {
 				message: 'Payment cancellation processed',
 			};
 		} catch (error) {
-			logger.error('Payment cancellation handler error', error);
+			logger.error('Payment cancellation handler error', {
+				error: error instanceof Error ? error.message : String(error),
+			});
 			return {
 				success: false,
 				message: 'Failed to process payment cancellation',
@@ -235,7 +243,7 @@ export class WebhookService {
 	// Helper method to notify users of payment failures
 	private async notifyPaymentFailure(
 		userId: string,
-		_event: any
+		_event: PaylinkWebhookEvent
 	): Promise<void> {
 		try {
 			const user = await this.prisma.user.findUnique({
@@ -256,7 +264,9 @@ export class WebhookService {
 			//   }
 			// });
 		} catch (error) {
-			logger.error('Failed to send payment failure notification', error);
+			logger.error('Failed to send payment failure notification', {
+				error: error instanceof Error ? error.message : String(error),
+			});
 		}
 	}
 }

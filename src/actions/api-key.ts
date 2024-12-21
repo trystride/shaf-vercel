@@ -1,8 +1,8 @@
 'use server';
-import prisma from '@/libs/prisma';
+import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcrypt';
 import { revalidatePath } from 'next/cache';
-import { isAuthorized } from '@/libs/isAuthorized';
+import { isAuthorized } from '@/lib/isAuthorized';
 
 export async function getApiKeys() {
 	const user = await isAuthorized();

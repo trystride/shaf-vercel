@@ -51,7 +51,7 @@ export default function SetApiKeyModal(props: any) {
 					>
 						<ModalCloseButton closeModal={setShowModal} />
 
-						<div className='gap-5.5 flex flex-wrap border-stroke p-4 text-center sm:p-7.5 xl:p-10'>
+						<div className='flex flex-wrap gap-5.5 border-stroke p-4 text-center sm:p-7.5 xl:p-10'>
 							<div className='mx-auto w-full max-w-[450px]'>
 								<div className='mb-6 flex justify-center'>
 									<svg
@@ -109,7 +109,7 @@ export default function SetApiKeyModal(props: any) {
 								</div>
 
 								<div>
-									<h2 className='sm:text-heading-6 mb-2 text-xl font-bold text-dark dark:text-white'>
+									<h2 className='mb-2 text-xl font-bold text-dark dark:text-white sm:text-heading-6'>
 										Enter your OpenAI API Key
 									</h2>
 									<p className='mb-7 text-body'>

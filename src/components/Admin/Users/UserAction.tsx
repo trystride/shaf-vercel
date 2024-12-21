@@ -88,10 +88,10 @@ export default function UserAction({ user }: any) {
 
 	return (
 		<>
-			<div className='lsm:ml-auto lsm:justify-end mt-2 flex flex-wrap items-center gap-3.5 sm:mt-0'>
+			<div className='mt-2 flex flex-wrap items-center gap-3.5 lsm:ml-auto lsm:justify-end sm:mt-0'>
 				<button
 					onClick={handleLogin}
-					className='hover:bg-primary-dark flex h-10 items-center justify-center rounded-lg bg-primary p-3 text-white'
+					className='flex h-10 items-center justify-center rounded-lg bg-primary p-3 text-white hover:bg-primary-dark'
 				>
 					Log In
 				</button>
@@ -115,7 +115,7 @@ export default function UserAction({ user }: any) {
 				</div>
 				<button
 					onClick={() => setShowDeleteModal(true)}
-					className='bg-red-light-5 text-red hover:bg-red dark:bg-red/10 dark:hover:bg-red flex h-10 w-10 items-center justify-center rounded-lg duration-300 hover:text-white'
+					className='flex h-10 w-10 items-center justify-center rounded-lg bg-red-light-5 text-red duration-300 hover:bg-red hover:text-white dark:bg-red/10 dark:hover:bg-red'
 				>
 					<svg
 						width='21'

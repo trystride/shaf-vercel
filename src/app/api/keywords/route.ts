@@ -1,7 +1,7 @@
 import { NextResponse, NextRequest } from 'next/server';
-import { prisma } from '@/libs/prismaDb';
+import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/libs/auth';
+import { authOptions } from '@/lib/auth';
 
 // GET /api/keywords - Get all keywords for the current user
 export async function GET() {

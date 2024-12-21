@@ -25,11 +25,11 @@ export default function TokenList({ tokens }: { tokens: ApiKey[] }) {
 
 	return (
 		<>
-			<div className='rounded-10 shadow-1 bg-white dark:bg-gray-dark lg:w-3/5'>
+			<div className='rounded-10 bg-white shadow-1 dark:bg-gray-dark lg:w-3/5'>
 				{tokens.length > 0 && (
 					<>
 						<div className='border-b border-stroke px-9 py-5 dark:border-stroke-dark'>
-							<h3 className='text-custom-2xl font-satoshi font-bold tracking-[-.5px] text-dark dark:text-white'>
+							<h3 className='font-satoshi text-custom-2xl font-bold tracking-[-.5px] text-dark dark:text-white'>
 								List of active tokens
 							</h3>
 						</div>
@@ -76,7 +76,7 @@ export default function TokenList({ tokens }: { tokens: ApiKey[] }) {
 														setId(token?.id);
 														setShowDeleteModal(true);
 													}}
-													className='bg-red-light-5 text-red hover:bg-red dark:bg-red/10 dark:hover:bg-red flex h-10 items-center justify-center rounded-lg px-3 hover:text-white'
+													className='flex h-10 items-center justify-center rounded-lg bg-red-light-5 px-3 text-red hover:bg-red hover:text-white dark:bg-red/10 dark:hover:bg-red'
 												>
 													<svg
 														width='23'

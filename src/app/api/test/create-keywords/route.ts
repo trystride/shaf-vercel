@@ -1,7 +1,9 @@
 import { NextResponse } from 'next/server';
-import { db } from '@/libs/db';
+import { db } from '@/lib/db';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/libs/auth';
+import { authOptions } from '@/lib/auth';
+
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
 	try {

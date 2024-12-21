@@ -14,7 +14,7 @@ export default function GithubSigninButton({ text }: { text: string }) {
 	return (
 		<button
 			onClick={handleSignin}
-			className='hover:bg-gray-1 flex h-12 w-full items-center justify-center gap-2 rounded-lg border border-stroke font-satoshi text-base font-medium text-dark duration-300 dark:border-stroke-dark dark:text-white dark:hover:bg-white/5 '
+			className='flex h-12 w-full items-center justify-center gap-2 rounded-lg border border-stroke font-satoshi text-base font-medium text-dark duration-300 hover:bg-gray-1 dark:border-stroke-dark dark:text-white dark:hover:bg-white/5 '
 		>
 			<svg
 				width='20'

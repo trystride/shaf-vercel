@@ -2,8 +2,8 @@ import Link from 'next/link';
 
 export default function Notification({ link }: any) {
 	return (
-		<div className='hover:bg-gray mb-3 flex cursor-pointer gap-5 rounded-md bg-white px-2 py-2 dark:bg-gray-dark dark:hover:bg-dark '>
-			<div className='h-10.5 w-10.5 hidden items-center justify-center rounded-full bg-primary text-white md:flex'>
+		<div className='mb-3 flex cursor-pointer gap-5 rounded-md bg-white px-2 py-2 hover:bg-gray dark:bg-gray-dark dark:hover:bg-dark '>
+			<div className='hidden h-10.5 w-10.5 items-center justify-center rounded-full bg-primary text-white md:flex'>
 				<svg
 					width='18'
 					height='18'

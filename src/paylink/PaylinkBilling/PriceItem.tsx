@@ -1,18 +1,24 @@
 'use client';
+
 import axios from 'axios';
 import { Price } from '../../types/priceItem';
 import Image from 'next/image';
 import { useSession } from 'next-auth/react';
 import { integrations, messages } from '../../../integrations.config';
 import toast from 'react-hot-toast';
+import { FC } from 'react';
 
-type Props = {
+interface PriceItemProps {
 	plan: Price;
-	_isBilling?: boolean;
-	subscriptionPlan?: any;
-};
+	_isBilling: boolean;
+	_subscriptionPlan?: string;
+}
 
-const PriceItem = ({ plan, _isBilling }: Props) => {
+const PriceItem: FC<PriceItemProps> = ({
+	plan,
+	_isBilling,
+	_subscriptionPlan,
+}) => {
 	const { data: session } = useSession();
 	const _user = session?.user;
 
@@ -42,7 +48,9 @@ const PriceItem = ({ plan, _isBilling }: Props) => {
 	};
 
 	const active = plan?.active;
-	const isSubscribed = session && session?.user?.priceId === plan?.priceId;
+	const isSubscribed = Boolean(
+		session && session?.user?.priceId === plan?.priceId
+	);
 
 	const activeStyle = active
 		? 'relative flex flex-col p-6 bg-white shadow-lg rounded-lg dark:bg-zinc-850 justify-between border-2 border-blue-600'

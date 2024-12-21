@@ -1,15 +1,14 @@
 import { PaylinkClient } from '../client';
 import { SubscriptionPlan, UserSubscription } from '../types/subscription';
 import { CreateInvoiceRequest } from '../types';
-import { PrismaClient, BillingCycle } from '@prisma/client';
+import { BillingCycle } from '@prisma/client';
+import { prisma } from '@/lib/prisma';
 
 export class SubscriptionService {
 	private paylinkClient: PaylinkClient;
-	private prisma: PrismaClient;
 
-	constructor(paylinkClient: PaylinkClient, prisma: PrismaClient) {
+	constructor(paylinkClient: PaylinkClient) {
 		this.paylinkClient = paylinkClient;
-		this.prisma = prisma;
 	}
 
 	// Create trial subscription
@@ -18,7 +17,7 @@ export class SubscriptionService {
 		plan: SubscriptionPlan
 	): Promise<void> {
 		// Check if user has already used trial
-		const existingTrial = await this.prisma.subscription.findFirst({
+		const existingTrial = await prisma.subscription.findFirst({
 			where: {
 				userId,
 				status: 'trial',
@@ -34,7 +33,7 @@ export class SubscriptionService {
 		const endDate = new Date(startDate);
 		endDate.setDate(endDate.getDate() + trialDays);
 
-		await this.prisma.subscription.create({
+		await prisma.subscription.create({
 			data: {
 				userId,
 				planId: plan.id,
@@ -84,7 +83,7 @@ export class SubscriptionService {
 		const _isTrialUpgrade = existingSubscription?.status === 'trial';
 
 		// Create subscription record
-		await this.prisma.subscription.create({
+		await prisma.subscription.create({
 			data: {
 				userId,
 				planId: plan.id,
@@ -116,7 +115,7 @@ export class SubscriptionService {
 
 	// Get user's current subscription
 	async getUserSubscription(userId: string): Promise<UserSubscription | null> {
-		const subscription = await this.prisma.subscription.findFirst({
+		const subscription = await prisma.subscription.findFirst({
 			where: {
 				userId,
 				status: { in: ['active', 'trial'] },
@@ -142,22 +141,22 @@ export class SubscriptionService {
 			status: subscription.status,
 			billingCycle: subscription.billingCycle,
 			startDate: subscription.startDate,
-			endDate: subscription.endDate,
-			trialEndsAt: subscription.trialEndsAt,
-			cancelledAt: subscription.cancelledAt,
+			endDate: subscription.endDate ?? undefined,
+			trialEndsAt: subscription.trialEndsAt ?? undefined,
+			cancelledAt: subscription.cancelledAt ?? undefined,
 			features: subscription.features.map((f) => ({
 				id: f.id,
 				name: f.name,
 				enabled: f.enabled,
-				limit: f.limit,
+				limit: f.limit ?? undefined,
 				used: f.used,
 			})),
 			transactions: subscription.transactions.map((t) => ({
 				id: t.id,
-				amount: t.amount,
+				amount: Number(t.amount),
 				currency: t.currency,
 				status: t.status,
-				paylinkTransactionId: t.paylinkTransactionId,
+				paylinkTransactionId: t.paylinkTransactionId ?? undefined,
 				createdAt: t.createdAt,
 			})),
 		};
@@ -168,7 +167,7 @@ export class SubscriptionService {
 		userId: string,
 		featureName: string
 	): Promise<boolean> {
-		const subscription = await this.prisma.subscription.findFirst({
+		const subscription = await prisma.subscription.findFirst({
 			where: {
 				userId,
 				status: { in: ['active', 'trial'] },
@@ -193,7 +192,7 @@ export class SubscriptionService {
 		userId: string,
 		featureName: string
 	): Promise<boolean> {
-		const subscription = await this.prisma.subscription.findFirst({
+		const subscription = await prisma.subscription.findFirst({
 			where: {
 				userId,
 				status: { in: ['active', 'trial'] },
@@ -220,7 +219,7 @@ export class SubscriptionService {
 		userId: string,
 		featureName: string
 	): Promise<void> {
-		const subscription = await this.prisma.subscription.findFirst({
+		const subscription = await prisma.subscription.findFirst({
 			where: {
 				userId,
 				status: { in: ['active', 'trial'] },
@@ -236,7 +235,7 @@ export class SubscriptionService {
 
 		if (!subscription || !subscription.features[0]) return;
 
-		await this.prisma.subscriptionFeature.update({
+		await prisma.subscriptionFeature.update({
 			where: { id: subscription.features[0].id },
 			data: {
 				used: {

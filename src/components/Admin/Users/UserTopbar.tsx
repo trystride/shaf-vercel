@@ -86,7 +86,7 @@ export default function UserTopbar() {
 
 	return (
 		<>
-			<div className='rounded-10 shadow-1 items-center justify-between bg-white px-3.5 py-3 dark:bg-gray-dark md:flex'>
+			<div className='items-center justify-between rounded-10 bg-white px-3.5 py-3 shadow-1 dark:bg-gray-dark md:flex'>
 				<div className='mb-6 flex flex-wrap items-center gap-3 md:mb-0'>
 					{filterData?.map((item) => (
 						<button
@@ -99,7 +99,7 @@ export default function UserTopbar() {
 								);
 								setFilterValue(item?.value);
 							}}
-							className={`bg-gray-1 inline-flex h-10 items-center justify-center gap-2 rounded-lg border pl-3 pr-4 font-satoshi text-sm font-medium capitalize dark:bg-white/5 ${
+							className={`inline-flex h-10 items-center justify-center gap-2 rounded-lg border bg-gray-1 pl-3 pr-4 font-satoshi text-sm font-medium capitalize dark:bg-white/5 ${
 								filterValue === item?.value
 									? 'border-transparent text-primary shadow-input'
 									: 'border-stroke text-body dark:border-stroke-dark dark:text-gray-5'
@@ -114,7 +114,7 @@ export default function UserTopbar() {
 				<div className='flex flex-wrap items-center gap-3'>
 					<button
 						onClick={() => setShowInviteUserModal(true)}
-						className='hover:bg-primary-dark  flex h-10 items-center justify-center gap-3 rounded-lg bg-primary p-3 text-white'
+						className='flex  h-10 items-center justify-center gap-3 rounded-lg bg-primary p-3 text-white hover:bg-primary-dark'
 					>
 						<Image
 							src='/images/icon/plus.svg'
@@ -136,7 +136,7 @@ export default function UserTopbar() {
 							<input
 								type='search'
 								placeholder='Search user'
-								className='bg-gray-1 h-11 w-full rounded-lg border border-stroke pl-11 pr-4.5 outline-none ring-offset-1 duration-300 focus:shadow-input focus:ring-2 focus:ring-primary/20 dark:border-stroke-dark dark:bg-transparent dark:focus:border-transparent'
+								className='h-11 w-full rounded-lg border border-stroke bg-gray-1 pl-11 pr-4.5 outline-none ring-offset-1 duration-300 focus:shadow-input focus:ring-2 focus:ring-primary/20 dark:border-stroke-dark dark:bg-transparent dark:focus:border-transparent'
 								onChange={(e: any) => setSearch(e.target.value)}
 							/>
 

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { db } from '@/libs/db';
-import { matchAnnouncementsWithKeywords } from '@/libs/matchAnnouncements';
+import { db } from '@/lib/db';
+import { matchAnnouncementsWithKeywords } from '@/lib/matchAnnouncements';
 
 export const dynamic = 'force-dynamic';
 

@@ -2,7 +2,7 @@
 
 export default function PurchaseTable({ data }: any) {
 	return (
-		<div className='rounded-10 shadow-1 bg-white dark:bg-gray-dark'>
+		<div className='rounded-10 bg-white shadow-1 dark:bg-gray-dark'>
 			<div>
 				<table className='w-full'>
 					<thead className='border-b border-stroke dark:border-stroke-dark'>
@@ -50,7 +50,7 @@ export default function PurchaseTable({ data }: any) {
 								</span>
 								<span className='block xl:hidden'>
 									<span className='text-body dark:text-gray-5'>Action:</span>
-									<button className='h-8.5 hover:bg-primary-dark ml-auto flex items-center justify-center rounded-md bg-primary px-4.5 font-satoshi text-sm font-medium tracking-[-.1px] text-white duration-300'>
+									<button className='ml-auto flex h-8.5 items-center justify-center rounded-md bg-primary px-4.5 font-satoshi text-sm font-medium tracking-[-.1px] text-white duration-300 hover:bg-primary-dark'>
 										Download
 									</button>
 								</span>
@@ -65,7 +65,7 @@ export default function PurchaseTable({ data }: any) {
 								${data?.unit_amount / 100}
 							</td>
 							<td className='hidden p-5 pr-7.5 text-right tracking-[-.16px] text-dark dark:text-white'>
-								<button className='h-8.5 hover:bg-primary-dark ml-auto flex items-center justify-center rounded-md bg-primary px-4.5 font-satoshi text-sm font-medium tracking-[-.1px] text-white duration-300'>
+								<button className='ml-auto flex h-8.5 items-center justify-center rounded-md bg-primary px-4.5 font-satoshi text-sm font-medium tracking-[-.1px] text-white duration-300 hover:bg-primary-dark'>
 									Download
 								</button>
 							</td>

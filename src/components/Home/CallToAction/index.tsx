@@ -1,9 +1,9 @@
 import Image from 'next/image';
 const CallToAction = () => {
 	return (
-		<section className='py-17.5 lg:py-22.5 xl:py-25 relative z-1 overflow-hidden bg-primary'>
+		<section className='relative z-1 overflow-hidden bg-primary py-17.5 lg:py-22.5 xl:py-25'>
 			<div className='mx-auto w-full max-w-[585px] px-4 text-center sm:px-8 xl:px-0'>
-				<h2 className='lg:text-heading-4 xl:text-heading-2 mb-5 font-satoshi text-3xl font-bold -tracking-[1.6px] text-white'>
+				<h2 className='mb-5 font-satoshi text-3xl font-bold -tracking-[1.6px] text-white lg:text-heading-4 xl:text-heading-2'>
 					Check Out The Demo
 				</h2>
 

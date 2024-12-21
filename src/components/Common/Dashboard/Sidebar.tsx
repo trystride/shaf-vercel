@@ -33,7 +33,7 @@ export default function Sidebar({
 					/>
 				</Link>
 				<div className='mb-6'>
-					<p className='dark:text-gray-6 mb-4 font-satoshi text-sm font-medium uppercase text-body'>
+					<p className='mb-4 font-satoshi text-sm font-medium uppercase text-body dark:text-gray-6'>
 						Main menu
 					</p>
 					<ul className='space-y-2'>
@@ -70,7 +70,7 @@ export default function Sidebar({
 				</div>
 				{sidebarOthersData && (
 					<div>
-						<p className='dark:text-gray-6 mb-4 font-satoshi text-sm font-medium uppercase text-body'>
+						<p className='mb-4 font-satoshi text-sm font-medium uppercase text-body dark:text-gray-6'>
 							Others
 						</p>
 						<ul className='space-y-2'>

@@ -12,7 +12,7 @@ const FAQ = () => {
 	};
 
 	return (
-		<section className='bg-gray-1 py-17.5 lg:py-22.5 xl:py-27.5 overflow-hidden dark:bg-black'>
+		<section className='overflow-hidden bg-gray-1 py-17.5 dark:bg-black lg:py-22.5 xl:py-27.5'>
 			{/* <!-- section title --> */}
 
 			<SectionHeader

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/libs/prismaDb';
-import formatPassword from '@/libs/formatPassword';
+import { prisma } from '@/lib/prisma';
+import formatPassword from '@/lib/formatPassword';
 
 export async function POST(request: Request) {
 	const body = await request.json();

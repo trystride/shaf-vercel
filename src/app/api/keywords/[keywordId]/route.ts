@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/libs/prismaDb';
+import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/libs/auth';
+import { authOptions } from '@/lib/auth';
 
 // PATCH /api/keywords/[keywordId] - Update a keyword
 export async function PATCH(

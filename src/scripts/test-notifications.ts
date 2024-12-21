@@ -1,5 +1,5 @@
-import { db } from '../libs/db';
-import { matchAnnouncementsWithKeywords } from '../libs/matchAnnouncements';
+import { prisma } from '@/lib/prisma';
+import { matchAnnouncementsWithKeywords } from '@/lib/matchAnnouncements';
 import { createLogger } from '@/utils/logger';
 
 const logger = createLogger('TestNotifications');
@@ -9,14 +9,14 @@ async function testNotifications() {
 		logger.info('Starting notification test...');
 
 		// Get test user
-		const testUser = await db.user.findFirst();
+		const testUser = await prisma.user.findFirst();
 		if (!testUser) {
 			throw new Error('No test user found. Please create a user first.');
 		}
 		logger.info('Test user found', { email: testUser.email });
 
 		// Create test keyword
-		const testKeyword = await db.keyword.upsert({
+		const testKeyword = await prisma.keyword.upsert({
 			where: {
 				id: 'test-keyword',
 			},
@@ -35,7 +35,7 @@ async function testNotifications() {
 		logger.info('Test keyword created', { term: testKeyword.term });
 
 		// Create test announcement
-		const testAnnouncement = await db.announcement.create({
+		const testAnnouncement = await prisma.announcement.create({
 			data: {
 				id: 'test-announcement',
 				annId: 'TEST-' + Date.now(),
@@ -56,7 +56,9 @@ async function testNotifications() {
 		logger.info('Test completed successfully!');
 		process.exit(0);
 	} catch (error) {
-		logger.error('Test failed', error);
+		logger.error('Test failed', {
+			error: error instanceof Error ? error.message : String(error),
+		});
 		process.exit(1);
 	}
 }

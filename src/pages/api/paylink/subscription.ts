@@ -1,19 +1,19 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import type { NextApiRequest, NextApiResponse } from 'next';
 import { PaylinkClient } from '../../../paylink/client';
 import { SubscriptionService } from '../../../paylink/services/SubscriptionService';
-import { PrismaClient, _BillingCycle } from '@prisma/client';
+import { BillingCycle } from '@prisma/client';
 import { unstable_getServerSession } from 'next-auth';
-import { authOptions } from '@/libs/auth';
-import { SubscriptionPlan } from '@/paylink/types/subscription';
+import { authOptions } from '@/lib/auth';
+import type { SubscriptionPlan } from '@/paylink/types/subscription';
+import { prisma } from '@/lib/prisma';
 
-const prisma = new PrismaClient();
 const paylinkClient = new PaylinkClient({
-	apiId: process.env.PAYLINK_API_ID!,
-	secretKey: process.env.PAYLINK_SECRET_KEY!,
-	baseUrl: process.env.PAYLINK_BASE_URL!,
+	apiId: process.env.PAYLINK_API_ID || '',
+	secretKey: process.env.PAYLINK_SECRET_KEY || '',
+	baseUrl: process.env.PAYLINK_BASE_URL || '',
 });
 
-const subscriptionService = new SubscriptionService(paylinkClient, prisma);
+const subscriptionService = new SubscriptionService(paylinkClient);
 
 const DEFAULT_FEATURES = {
 	KEYWORD_MANAGEMENT: 'keyword_management',
@@ -36,7 +36,7 @@ const SUBSCRIPTION_PLANS: Record<PlanId, SubscriptionPlan> = {
 			{ name: DEFAULT_FEATURES.ANNOUNCEMENT_HISTORY, enabled: true, limit: 10 },
 			{ name: DEFAULT_FEATURES.NOTIFICATION_SETTINGS, enabled: true },
 		],
-		billingCycle: 'trial',
+		billingCycle: BillingCycle.trial,
 		trialDays: 14,
 		isTrial: true,
 	},
@@ -51,7 +51,7 @@ const SUBSCRIPTION_PLANS: Record<PlanId, SubscriptionPlan> = {
 			{ name: DEFAULT_FEATURES.ANNOUNCEMENT_HISTORY, enabled: true },
 			{ name: DEFAULT_FEATURES.NOTIFICATION_SETTINGS, enabled: true },
 		],
-		billingCycle: 'monthly',
+		billingCycle: BillingCycle.monthly,
 	},
 	PRO: {
 		id: 'pro',
@@ -64,7 +64,7 @@ const SUBSCRIPTION_PLANS: Record<PlanId, SubscriptionPlan> = {
 			{ name: DEFAULT_FEATURES.ANNOUNCEMENT_HISTORY, enabled: true },
 			{ name: DEFAULT_FEATURES.NOTIFICATION_SETTINGS, enabled: true },
 		],
-		billingCycle: 'monthly',
+		billingCycle: BillingCycle.monthly,
 	},
 	ENTERPRISE: {
 		id: 'enterprise',
@@ -77,7 +77,7 @@ const SUBSCRIPTION_PLANS: Record<PlanId, SubscriptionPlan> = {
 			{ name: DEFAULT_FEATURES.ANNOUNCEMENT_HISTORY, enabled: true },
 			{ name: DEFAULT_FEATURES.NOTIFICATION_SETTINGS, enabled: true },
 		],
-		billingCycle: 'monthly',
+		billingCycle: BillingCycle.monthly,
 	},
 };
 
@@ -91,11 +91,7 @@ export default async function handler(
 
 	try {
 		const { priceId, amount, callBackUrl } = req.body;
-		const session = (await unstable_getServerSession(
-			req,
-			res,
-			authOptions
-		)) as any;
+		const session = await unstable_getServerSession(req, res, authOptions);
 		const userId = session?.user?.id;
 
 		if (!userId) {

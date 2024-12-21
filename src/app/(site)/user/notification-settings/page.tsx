@@ -1,6 +1,6 @@
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/libs/auth';
-import { prisma } from '@/libs/prismaDb';
+import { authOptions } from '@/lib/auth';
+import { prisma } from '@/lib/prisma';
 import Card from '@/components/Common/Dashboard/Card';
 import NotificationSettingsForm from '@/components/User/NotificationSettings/NotificationSettingsForm';
 import { BellIcon } from '@heroicons/react/24/outline';

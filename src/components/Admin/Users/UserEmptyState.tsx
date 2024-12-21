@@ -201,7 +201,7 @@ export default function UserEmptyState() {
 							</defs>
 						</svg>
 					</div>
-					<h2 className='text-heading-5 mb-3.5 font-satoshi font-bold tracking-[-.5px] text-dark dark:text-white'>
+					<h2 className='mb-3.5 font-satoshi text-heading-5 font-bold tracking-[-.5px] text-dark dark:text-white'>
 						You don’t have any registered user yet!
 					</h2>
 					<p className='text-sm tracking-[-.14px] text-body dark:text-gray-5'>

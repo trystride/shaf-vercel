@@ -6,7 +6,7 @@ import FormButton from '@/components/Common/Dashboard/FormButton';
 import InputGroup from '@/components/Common/Dashboard/InputGroup';
 import axios from 'axios';
 import Loader from '@/components/Common/Loader';
-import validateEmail from '@/libs/validateEmail';
+import validateEmail from '@/lib/validateEmail';
 import { integrations, messages } from '../../../../integrations.config';
 
 export default function ForgotPassword() {
@@ -64,7 +64,7 @@ export default function ForgotPassword() {
 		<>
 			<div className='mx-auto w-full max-w-[400px] py-10'>
 				<div className='mb-7.5 text-center'>
-					<h3 className='text-heading-5 mb-4 font-satoshi font-bold text-dark dark:text-white'>
+					<h3 className='mb-4 font-satoshi text-heading-5 font-bold text-dark dark:text-white'>
 						Forgot Password?
 					</h3>
 					<p className='text-base dark:text-gray-5'>

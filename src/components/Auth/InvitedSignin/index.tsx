@@ -56,7 +56,7 @@ const InvitedSignin = () => {
 	return (
 		<div className='mx-auto w-full max-w-[400px] px-4 py-10'>
 			<div className='mb-7.5 text-center'>
-				<h3 className='text-heading-5 mb-4 font-satoshi font-bold text-dark dark:text-white'>
+				<h3 className='mb-4 font-satoshi text-heading-5 font-bold text-dark dark:text-white'>
 					Invited Signin
 				</h3>
 				<p className='text-base dark:text-gray-5'>

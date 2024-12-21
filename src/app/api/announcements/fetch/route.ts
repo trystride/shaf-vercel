@@ -2,13 +2,13 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { z } from 'zod';
-import { authOptions } from '@/libs/auth';
-import prisma from '@/libs/prisma';
+import { authOptions } from '@/lib/auth';
+import { prisma } from '@/lib/prisma';
 import type { Prisma } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 import { headers } from 'next/headers';
-import { db } from '@/libs/db';
-import { matchAnnouncementsWithKeywords } from '@/libs/matchAnnouncements';
+import { db } from '@/lib/db';
+import { matchAnnouncementsWithKeywords } from '@/lib/matchAnnouncements';
 import fetch from 'node-fetch';
 import https from 'node:https';
 import { AbortController } from 'node-abort-controller';
@@ -61,21 +61,16 @@ type BankruptcyAnnouncement = z.infer<typeof BankruptcyAnnouncementSchema>;
 
 // Timeout wrapper
 const withTimeout = <T>(promise: Promise<T>, timeoutMs: number): Promise<T> => {
-	return new Promise((resolve, reject) => {
-		const timeoutId = setTimeout(() => {
+	let timeoutId: NodeJS.Timeout;
+	const timeoutPromise = new Promise<never>((_, reject) => {
+		timeoutId = setTimeout(() => {
 			reject(new Error(`Operation timed out after ${timeoutMs}ms`));
 		}, timeoutMs);
-
-		promise
-			.then((result: T) => {
-				clearTimeout(timeoutId);
-				resolve(result);
-			})
-			.catch((error: unknown) => {
-				clearTimeout(timeoutId);
-				reject(error);
-			});
 	});
+
+	return Promise.race([promise, timeoutPromise]).finally(() =>
+		clearTimeout(timeoutId)
+	);
 };
 
 // Retry wrapper with exponential backoff
@@ -250,6 +245,8 @@ async function storeAnnouncements(
 
 	return { newCount, errors };
 }
+
+export const dynamic = 'force-dynamic';
 
 export async function GET(req: NextRequest) {
 	try {

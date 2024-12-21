@@ -4,30 +4,17 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import axios from 'axios';
-import { pricingData } from '@/pricing/pricingData';
+import type { FC } from 'react';
 import Image from 'next/image';
-
-interface Price {
-	priceId: string;
-	nickname: string;
-	description: string;
-	subtitle?: string;
-	unit_amount: number;
-	includes: string[];
-	active?: boolean;
-	icon?: string;
-	icon2?: string;
-}
+import { pricingData } from '@/pricing/pricingData';
 
 interface PaylinkBillingProps {
 	isBilling?: boolean;
 }
 
-const PaylinkBilling: React.FC<PaylinkBillingProps> = ({
-	isBilling = true,
-}) => {
+const PaylinkBilling: FC<PaylinkBillingProps> = ({ isBilling = true }) => {
 	const router = useRouter();
-	const [prices] = useState<Price[]>(pricingData);
+	const [prices] = useState(pricingData);
 
 	const handlePayment = async (
 		priceId: string,
@@ -144,8 +131,11 @@ const PaylinkBilling: React.FC<PaylinkBillingProps> = ({
 									What&apos;s included
 								</h4>
 								<ul className='space-y-4'>
-									{price.includes.map((feature, idx) => (
-										<li key={idx} className='flex items-center'>
+									{price.includes.map((feature) => (
+										<li
+											key={`${price.priceId}-${feature}`}
+											className='flex items-center'
+										>
 											<svg
 												className={`mr-3 h-5 w-5 ${
 													isPro ? 'text-white' : 'text-blue-600'
@@ -153,6 +143,7 @@ const PaylinkBilling: React.FC<PaylinkBillingProps> = ({
 												fill='currentColor'
 												viewBox='0 0 20 20'
 											>
+												<title>Checkmark</title>
 												<path
 													fillRule='evenodd'
 													d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z'
@@ -170,8 +161,9 @@ const PaylinkBilling: React.FC<PaylinkBillingProps> = ({
 							</div>
 
 							<button
+								type='button'
 								onClick={() =>
-									isBilling
+									isBilling && price.priceId
 										? handlePayment(price.priceId, price.unit_amount)
 										: undefined
 								}

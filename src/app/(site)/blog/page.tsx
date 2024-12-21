@@ -15,7 +15,7 @@ const BlogGrid = async () => {
 
 	return (
 		<main>
-			<section className='lg:ub-pb-22.5 pb-17.5 pt-35 xl:pb-27.5 relative z-1 overflow-hidden'>
+			<section className='lg:ub-pb-22.5 relative z-1 overflow-hidden pb-17.5 pt-35 xl:pb-27.5'>
 				{/* <!-- bg shapes --> */}
 				<div>
 					<div className='absolute left-0 top-0 -z-1'>

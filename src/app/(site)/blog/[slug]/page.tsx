@@ -3,7 +3,7 @@ import { getPostBySlug, imageBuilder } from '@/sanity/sanity-utils';
 import RenderBodyContent from '@/components/Blog/RenderBodyContent';
 import Link from 'next/link';
 import Image from 'next/image';
-import { structuredAlgoliaHtmlData } from '@/libs/crawlIndex';
+import { structuredAlgoliaHtmlData } from '@/lib/crawlIndex';
 import CopyToClipboard from '@/components/Common/CopyToClipboard';
 import SocialShare from '@/components/Blog/SocialShare';
 import { integrations, messages } from '../../../../../integrations.config';
@@ -106,7 +106,7 @@ const SingleBlog = async ({ params }: Props) => {
 	return (
 		<main>
 			{/* <!-- ===== Blog Details Section Start ===== --> */}
-			<section className='lg:ub-pb-22.5 pb-17.5 pt-35 xl:pb-27.5 relative z-1 overflow-hidden'>
+			<section className='lg:ub-pb-22.5 relative z-1 overflow-hidden pb-17.5 pt-35 xl:pb-27.5'>
 				{/* <!-- bg shapes --> */}
 				<div>
 					<div className='absolute left-0 top-0 -z-1'>
@@ -129,7 +129,7 @@ const SingleBlog = async ({ params }: Props) => {
 
 				{integrations.isSanityEnabled ? (
 					<div className='mx-auto w-full max-w-[1170px] px-4 sm:px-8 xl:px-0'>
-						<div className='mb-12.5 mx-auto w-full max-w-[770px] text-center'>
+						<div className='mx-auto mb-12.5 w-full max-w-[770px] text-center'>
 							<div className='mb-5 flex flex-wrap items-center justify-center gap-6'>
 								<Link
 									href={`/blog/author/${post?.author?.slug?.current}`}
@@ -189,7 +189,7 @@ const SingleBlog = async ({ params }: Props) => {
 										.join(' ')}
 								</Link>
 							</div>
-							<h2 className='mb-5.5 lg:text-heading-4 xl:text-heading-3 font-satoshi text-3xl font-bold -tracking-[1.6px] text-black dark:text-white'>
+							<h2 className='mb-5.5 font-satoshi text-3xl font-bold -tracking-[1.6px] text-black dark:text-white lg:text-heading-4 xl:text-heading-3'>
 								{post.title}
 							</h2>
 

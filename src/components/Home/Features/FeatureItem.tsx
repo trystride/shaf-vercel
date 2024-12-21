@@ -4,7 +4,7 @@ import React from 'react';
 
 const SingleFeature = ({ data }: { data: FeatureItem }) => {
 	return (
-		<div className='shadow-1 hover:shadow-features rounded-[15px] bg-white p-[35px] dark:bg-gray-dark'>
+		<div className='rounded-[15px] bg-white p-[35px] shadow-1 hover:shadow-features dark:bg-gray-dark'>
 			<Image src={data.icon} alt={data?.title} width={40} height={40} />
 			<h3 className='mb-4.5 mt-7.5 font-satoshi text-2xl font-bold text-dark dark:text-white'>
 				{data.title}

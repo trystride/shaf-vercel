@@ -1,7 +1,10 @@
 import { NextResponse } from 'next/server';
-import { db } from '@/libs/db';
+import { db } from '@/lib/db';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/libs/auth';
+import { authOptions } from '@/lib/auth';
+import type { Match, Keyword, Announcement } from '@prisma/client';
+
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
 	try {
@@ -32,17 +35,24 @@ export async function GET() {
 			announcements: announcements.length,
 			matches: matches.length,
 			sampleData: {
-				keywords: keywords.map((k) => ({ id: k.id, term: k.term })),
-				announcements: announcements.map((a) => ({
-					id: a.id,
-					title: a.title,
-					publishDate: a.publishDate,
+				keywords: keywords.map((k: { id: string; term: string }) => ({
+					id: k.id,
+					term: k.term,
 				})),
-				matches: matches.map((m) => ({
-					id: m.id,
-					keyword: m.keyword.term,
-					announcement: m.announcement.title,
-				})),
+				announcements: announcements.map(
+					(a: { id: string; title: string; publishDate: Date }) => ({
+						id: a.id,
+						title: a.title,
+						publishDate: a.publishDate,
+					})
+				),
+				matches: matches.map(
+					(m: Match & { keyword: Keyword; announcement: Announcement }) => ({
+						id: m.id,
+						keyword: m.keyword.term,
+						announcement: m.announcement.title,
+					})
+				),
 			},
 		});
 	} catch (error) {

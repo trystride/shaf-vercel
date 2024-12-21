@@ -40,7 +40,7 @@ export default function InputSelect(props: {
 					value={value || ''}
 					onChange={onChange}
 					required={required}
-					className='pl-5.5 relative z-20 h-[52px] w-full appearance-none rounded-lg border border-gray-3 bg-white py-3 pr-12 text-dark outline-none ring-offset-1 duration-300 focus:shadow-input focus:ring-primary/20 dark:border-stroke-dark dark:bg-dark dark:text-white dark:focus:border-transparent'
+					className='relative z-20 h-[52px] w-full appearance-none rounded-lg border border-gray-3 bg-white py-3 pl-5.5 pr-12 text-dark outline-none ring-offset-1 duration-300 focus:shadow-input focus:ring-primary/20 dark:border-stroke-dark dark:bg-dark dark:text-white dark:focus:border-transparent'
 				>
 					<option value='' disabled>
 						{placeholder || 'Select option'}

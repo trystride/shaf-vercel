@@ -13,7 +13,7 @@ export default function GraphCard({ data }: { data: OverviewData }) {
 					<p className='mb-1.5 font-satoshi text-sm font-medium tracking-[-.1px] text-body dark:text-gray-4'>
 						Monthly Recurring Revenue
 					</p>
-					<h5 className='text-heading-5 font-satoshi font-bold text-dark dark:text-white'>
+					<h5 className='font-satoshi text-heading-5 font-bold text-dark dark:text-white'>
 						$9.1
 					</h5>
 				</div>
@@ -26,7 +26,7 @@ export default function GraphCard({ data }: { data: OverviewData }) {
 						<div
 							className={`flex h-6 w-6 items-center justify-center rounded-full ${
 								isIncrease
-									? 'text-green dark:bg-green/10 bg-[#E6F9EC]'
+									? 'bg-[#E6F9EC] text-green dark:bg-green/10'
 									: 'bg-red-light-6 text-red dark:bg-red/10'
 							}`}
 						>

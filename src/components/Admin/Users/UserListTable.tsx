@@ -5,10 +5,10 @@ import UserAction from './UserAction';
 export default function UserListTable({ users }: { users: User[] }) {
 	return (
 		<>
-			<div className='rounded-10 shadow-1 bg-white dark:bg-gray-dark'>
+			<div className='rounded-10 bg-white shadow-1 dark:bg-gray-dark'>
 				<table className='w-full'>
 					<thead>
-						<tr className='lsm:table-row hidden border-b border-stroke dark:border-stroke-dark'>
+						<tr className='hidden border-b border-stroke dark:border-stroke-dark lsm:table-row'>
 							<th className='min-w-[150px] px-4 py-5 text-left font-satoshi text-base font-medium tracking-[-.2px] text-body dark:text-gray-5 sm:pl-7.5'>
 								Name
 							</th>
@@ -21,7 +21,7 @@ export default function UserListTable({ users }: { users: User[] }) {
 							<th className='hidden px-4 py-5 text-left font-satoshi text-base font-medium tracking-[-.2px] text-body dark:text-gray-5 md:table-cell'>
 								Registered on
 							</th>
-							<th className='lsm:table-cell hidden px-4 py-5 text-right font-satoshi text-base font-medium tracking-[-.2px] text-body dark:text-gray-5 sm:pr-7.5'>
+							<th className='hidden px-4 py-5 text-right font-satoshi text-base font-medium tracking-[-.2px] text-body dark:text-gray-5 lsm:table-cell sm:pr-7.5'>
 								Action
 							</th>
 						</tr>
@@ -51,7 +51,7 @@ export default function UserListTable({ users }: { users: User[] }) {
 										Register Date: {user?.createdAt?.toLocaleDateString()}
 									</span>
 
-									<span className='lsm:hidden block'>
+									<span className='block lsm:hidden'>
 										<UserAction user={user} />
 									</span>
 								</td>
@@ -67,7 +67,7 @@ export default function UserListTable({ users }: { users: User[] }) {
 								<td className='hidden p-4 text-left text-base tracking-[-.16px] text-body dark:text-gray-5 md:table-cell'>
 									{user?.createdAt?.toLocaleDateString()}
 								</td>
-								<td className='lsm:table-cell hidden p-4 text-right text-base tracking-[-.16px] text-body dark:text-gray-5 sm:pr-7.5'>
+								<td className='hidden p-4 text-right text-base tracking-[-.16px] text-body dark:text-gray-5 lsm:table-cell sm:pr-7.5'>
 									<UserAction user={user} />
 								</td>
 							</tr>

@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/libs/auth';
+import { authOptions } from '@/lib/auth';
 import { redirect } from 'next/navigation';
-import { prisma } from '@/libs/prismaDb';
+import { prisma } from '@/lib/prisma';
 import NotificationHistoryTable from '@/components/User/NotificationHistory/NotificationHistoryTable';
 
 export const metadata: Metadata = {
@@ -44,7 +44,7 @@ export default async function NotificationHistoryPage() {
 	return (
 		<>
 			<div className='shadow-default dark:border-strokedark dark:bg-boxdark rounded-sm border border-stroke bg-white'>
-				<div className='px-6.5 dark:border-strokedark border-b border-stroke py-4'>
+				<div className='dark:border-strokedark border-b border-stroke px-6.5 py-4'>
 					<h3 className='font-medium text-black dark:text-white'>
 						Notification History
 					</h3>
