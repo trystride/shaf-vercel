@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 
 // Default values
 const DEFAULT_URL = 'http://localhost:3000';
-const DEFAULT_SITE_NAME = 'SaaS Bold';
+const DEFAULT_SITE_NAME = 'Shaf';
 
 // Ensure we have a valid URL during build time
 const getBaseUrl = () => {

@@ -97,9 +97,9 @@ const Contact = () => {
 								<div>
 									<h3 className='font-medium'>Our Location</h3>
 									<p className='mt-1 text-gray-400'>
-										123 Business Street, Suite 100
+										123 Riyadh Avenue, Office 203
 										<br />
-										San Francisco, CA 94111
+										Riyadh, Kingdom of Saudi Arabia
 									</p>
 								</div>
 							</div>
@@ -108,7 +108,7 @@ const Contact = () => {
 								<Phone className='h-6 w-6 flex-shrink-0 text-primary' />
 								<div>
 									<h3 className='font-medium'>Phone</h3>
-									<p className='mt-1 text-gray-400'>+1 (555) 123-4567</p>
+									<p className='mt-1 text-gray-400'>+966 (11) 234-5678</p>
 								</div>
 							</div>
 
@@ -116,7 +116,7 @@ const Contact = () => {
 								<Mail className='h-6 w-6 flex-shrink-0 text-primary' />
 								<div>
 									<h3 className='font-medium'>Email</h3>
-									<p className='mt-1 text-gray-400'>contact@yourcompany.com</p>
+									<p className='mt-1 text-gray-400'>info@shaf.sa</p>
 								</div>
 							</div>
 						</div>

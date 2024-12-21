@@ -12,8 +12,8 @@ export const revalidate = 0;
 
 export const metadata: Metadata = {
 	...baseGenerateMetadata(
-		'SaaS Bold - Your Modern SaaS Solution',
-		'A powerful SaaS platform built with Next.js'
+		'Shaf - Business Intelligence',
+		'A powerful Business Intelligence platform built with Next.js'
 	),
 	robots: {
 		index: true,
