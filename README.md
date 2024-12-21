@@ -40,9 +40,9 @@ src/
 
 ## 🔄 Core Services
 
-### Bankruptcy Monitoring
+### Keywords Monitoring
 
-- Fetches announcements every 2 hours via Vercel Cron
+- Fetches announcements every ** hours via Vercel Cron
 - Endpoint: `/api/announcements/fetch`
 - Matches announcements against user keywords
 - Sends email notifications for matches
@@ -89,11 +89,6 @@ src/
 - Monitor API health: `/api/health`
 - Debug email notifications: `/admin/notifications`
 
-## 📞 Team Contacts
-
-- Backend: [Contact Name]
-- Frontend: [Contact Name]
-- DevOps: [Contact Name]
 
 ## 🚨 Common Issues
 
