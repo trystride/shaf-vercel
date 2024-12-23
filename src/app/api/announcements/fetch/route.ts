@@ -37,7 +37,7 @@ export async function GET(_req: NextRequest) {
 		console.log(`Fetched ${announcements.length} announcements`);
 
 		// Store announcements without waiting
-		storeAnnouncements(announcements).then(({ newCount, errors }) => {
+		storeAnnouncements(announcements).then(({ newCount }) => {
 			console.log(`Stored ${newCount} new announcements`);
 
 			// If this is a cron job and we have new announcements, trigger match creation
@@ -61,8 +61,6 @@ export async function GET(_req: NextRequest) {
 
 				console.log('Triggered match creation');
 			}
-		}).catch((error) => {
-			console.error('Error storing announcements:', error);
 		});
 
 		return NextResponse.json({

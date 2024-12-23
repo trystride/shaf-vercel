@@ -42,7 +42,7 @@ src/
 
 ### Keywords Monitoring
 
-- Fetches announcements every ** hours via Vercel Cron
+- Fetches announcements every \*\* hours via Vercel Cron
 - Endpoint: `/api/announcements/fetch`
 - Matches announcements against user keywords
 - Sends email notifications for matches
@@ -88,7 +88,6 @@ src/
 - Check announcement fetch logs: `/admin/logs`
 - Monitor API health: `/api/health`
 - Debug email notifications: `/admin/notifications`
-
 
 ## 🚨 Common Issues
 

@@ -4,6 +4,25 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import type { Announcement, Keyword } from '@prisma/client';
 
+// Function to normalize Arabic text
+function normalizeArabicText(text: string): string {
+	return (
+		text
+			.toLowerCase()
+			// Normalize alef variations
+			.replace(/[أإآا]/g, 'ا')
+			// Normalize teh marbuta and heh
+			.replace(/[ةه]/g, 'ه')
+			// Normalize yeh and alef maksura
+			.replace(/[ىي]/g, 'ي')
+			// Remove Arabic diacritics (tashkeel)
+			.replace(/[\u064B-\u065F]/g, '')
+			// Normalize spaces and remove extra whitespace
+			.replace(/\s+/g, ' ')
+			.trim()
+	);
+}
+
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
@@ -47,9 +66,25 @@ export async function GET() {
 		// Create matches for each of the user's keywords with relevant announcements
 		for (const keyword of user.keywords) {
 			const relevantAnnouncements = announcements.filter(
-				(ann: Announcement) =>
-					ann.title.includes(keyword.term) ||
-					ann.description.includes(keyword.term)
+				(ann: Announcement) => {
+					const title = normalizeArabicText(ann.title);
+					const description = normalizeArabicText(ann.description);
+					const term = normalizeArabicText(keyword.term);
+
+					const isMatch = title.includes(term) || description.includes(term);
+
+					console.log(
+						`Checking keyword "${keyword.term}" against announcement "${ann.title}": ${isMatch ? 'MATCH' : 'NO MATCH'}`
+					);
+					if (isMatch) {
+						console.log(`Match found! Normalized forms:
+							Keyword: ${term}
+							Title: ${title}
+							Description: ${description}`);
+					}
+
+					return isMatch;
+				}
 			);
 
 			console.log(

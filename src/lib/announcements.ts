@@ -54,7 +54,7 @@ export async function fetchBankruptcyAnnouncements(): Promise<
 		});
 
 		const controller = new AbortController();
-		const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
+		const timeoutId = setTimeout(() => controller.abort(), 8000); // 8 second timeout to leave room for processing
 
 		logger.info('Making fetch request with headers');
 		const response = await fetch(apiUrl, {
@@ -132,13 +132,8 @@ export async function fetchBankruptcyAnnouncements(): Promise<
 
 		logger.info(`Successfully parsed ${announcements.length} announcements`);
 
-		// Validate the data
-		const validated = z
-			.array(BankruptcyAnnouncementSchema)
-			.parse(announcements);
-		logger.info(`Validated ${validated.length} announcements`);
-
-		return validated;
+		// Return immediately with raw announcements
+		return announcements;
 	} catch (error) {
 		if (error instanceof Error) {
 			logger.error('Error fetching announcements:', error.message);
@@ -150,40 +145,60 @@ export async function fetchBankruptcyAnnouncements(): Promise<
 }
 
 // Store announcements in database
-export async function storeAnnouncements(
-	announcements: BankruptcyAnnouncement[]
-): Promise<{
+export async function storeAnnouncements(rawAnnouncements: unknown[]): Promise<{
 	newCount: number;
 	errors: Array<{ annId: number; error: string }>;
 }> {
-	const errors = [];
+	const errors: Array<{ annId: number; error: string }> = [];
 	let newCount = 0;
 
-	for (const ann of announcements) {
-		try {
-			const existingAnnouncement = await db.announcement.findUnique({
-				where: { annId: ann.AnnId.toString() },
-			});
+	try {
+		// Validate the data
+		const announcements = z
+			.array(BankruptcyAnnouncementSchema)
+			.parse(rawAnnouncements);
+		logger.info(`Validated ${announcements.length} announcements`);
 
-			if (!existingAnnouncement) {
-				await db.announcement.create({
-					data: {
-						annId: ann.AnnId.toString(),
-						title: ann.Header.trim(),
-						description: ann.Comment.trim(),
-						announcementUrl: `https://bankruptcy.gov.sa/ar/Pages/AnnouncementDetails.aspx?aid=${ann.AnnId}`,
-						publishDate: new Date(ann.PublishDate),
-					},
-				});
-				newCount++;
-				logger.info(`Stored announcement: ${ann.AnnId}`);
-			}
-		} catch (error) {
-			errors.push({
-				annId: ann.AnnId,
-				error: error instanceof Error ? error.message : String(error),
-			});
+		// Process in batches of 10
+		const batchSize = 10;
+		for (let i = 0; i < announcements.length; i += batchSize) {
+			const batch = announcements.slice(i, i + batchSize);
+
+			await Promise.all(
+				batch.map(async (announcement) => {
+					try {
+						const exists = await db.announcement.findUnique({
+							where: { annId: announcement.AnnId.toString() },
+						});
+
+						if (!exists) {
+							await db.announcement.create({
+								data: {
+									annId: announcement.AnnId.toString(),
+									title: announcement.Header.trim(),
+									description: announcement.Comment.trim(),
+									announcementUrl: `https://bankruptcy.gov.sa/ar/Pages/AnnouncementDetails.aspx?aid=${announcement.AnnId}`,
+									publishDate: new Date(announcement.PublishDate),
+								},
+							});
+							newCount++;
+						}
+					} catch (error) {
+						errors.push({
+							annId: announcement.AnnId,
+							error: error instanceof Error ? error.message : String(error),
+						});
+					}
+				})
+			);
 		}
+	} catch (error) {
+		if (error instanceof Error) {
+			logger.error('Error storing announcements:', error.message);
+		} else {
+			logger.error('Error storing announcements:', error);
+		}
+		throw error;
 	}
 
 	return { newCount, errors };
