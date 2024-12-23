@@ -1,6 +1,5 @@
 import { z } from 'zod';
 import { db } from './db';
-import https from 'node:https';
 import fetch from 'node-fetch';
 import logger from './logger';
 
@@ -48,11 +47,12 @@ export async function fetchBankruptcyAnnouncements(): Promise<
 	logger.info('Starting API request to:', apiUrl);
 
 	try {
-		const httpsAgent = new https.Agent({
-			rejectUnauthorized: false,
-			keepAlive: true,
-			timeout: 3000, // 3 second socket timeout
-		});
+		// Create an AbortController with a 5-second timeout
+		const controller = new AbortController();
+		const timeoutId = setTimeout(() => {
+			controller.abort();
+			logger.warn('API request timed out after 5 seconds');
+		}, 5000);
 
 		logger.info('Making fetch request with headers');
 		try {
@@ -63,9 +63,10 @@ export async function fetchBankruptcyAnnouncements(): Promise<
 					'Accept-Language': 'ar-SA,ar;q=0.9,en-US;q=0.8,en;q=0.7',
 					'Cache-Control': 'no-cache',
 				},
-				agent: httpsAgent,
+				signal: controller.signal,
 			});
 
+			clearTimeout(timeoutId);
 			logger.info(`Response status: ${response.status} ${response.statusText}`);
 
 			if (!response.ok) {
@@ -128,15 +129,9 @@ export async function fetchBankruptcyAnnouncements(): Promise<
 			}
 
 			logger.info(`Successfully parsed ${announcements.length} announcements`);
-
-			// Return immediately with raw announcements
 			return announcements;
 		} catch (error) {
-			if (error instanceof Error) {
-				logger.error('Error fetching announcements:', error.message);
-			} else {
-				logger.error('Error fetching announcements:', error);
-			}
+			clearTimeout(timeoutId);
 			throw error;
 		}
 	} catch (error) {
