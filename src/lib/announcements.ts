@@ -51,89 +51,104 @@ export async function fetchBankruptcyAnnouncements(): Promise<
 	try {
 		const httpsAgent = new https.Agent({
 			rejectUnauthorized: false,
+			keepAlive: true,
+			timeout: 5000, // Socket timeout
 		});
 
 		const controller = new AbortController();
-		const timeoutId = setTimeout(() => controller.abort(), 8000); // 8 second timeout to leave room for processing
+		const timeoutId = setTimeout(() => {
+			controller.abort();
+			logger.warn('API request timed out after 5 seconds');
+		}, 5000); // 5 second timeout
 
 		logger.info('Making fetch request with headers');
-		const response = await fetch(apiUrl, {
-			headers: {
-				Accept: 'application/json',
-				'User-Agent': 'Mozilla/5.0 (compatible; BankruptcyMonitor/1.0)',
-				'Accept-Language': 'ar-SA,ar;q=0.9,en-US;q=0.8,en;q=0.7',
-				'Cache-Control': 'no-cache',
-			},
-			agent: httpsAgent,
-			signal: controller.signal,
-		});
-
-		clearTimeout(timeoutId);
-
-		logger.info(`Response status: ${response.status} ${response.statusText}`);
-
-		if (!response.ok) {
-			const errorText = await response.text();
-			logger.error('API error response:', {
-				status: response.status,
-				statusText: response.statusText,
-				body: errorText.substring(0, 500),
-			});
-			throw new Error(
-				`API request failed with status ${response.status}: ${errorText.substring(
-					0,
-					200
-				)}`
-			);
-		}
-
-		const text = await response.text();
-		logger.info(`Received response of length: ${text.length}`);
-
-		if (text.length === 0) {
-			throw new Error('Empty response received from API');
-		}
-
-		logger.info('Raw API response:', text.substring(0, 500));
-
-		let announcements: BankruptcyAnnouncement[] | null = null;
 		try {
-			// The API returns a JSON string that's double-encoded
-			// First, remove any XML wrapper if present
-			const xmlMatch = text.match(/<string[^>]*>(.*)<\/string>/s);
-			const jsonText = xmlMatch ? xmlMatch[1] : text;
-
-			// Then handle the double-encoded JSON
-			// First parse: Convert the string into a JSON string
-			const parsed = JSON.parse(jsonText);
-			// Second parse: Parse the actual JSON data
-			announcements = typeof parsed === 'string' ? JSON.parse(parsed) : parsed;
-
-			logger.info('Parsed announcements structure:', {
-				type: typeof announcements,
-				isArray: Array.isArray(announcements),
-				length: Array.isArray(announcements) ? announcements.length : 0,
-				sample:
-					Array.isArray(announcements) && announcements.length > 0
-						? Object.keys(announcements[0])
-						: null,
+			const response = await fetch(apiUrl, {
+				headers: {
+					Accept: 'application/json',
+					'User-Agent': 'Mozilla/5.0 (compatible; BankruptcyMonitor/1.0)',
+					'Accept-Language': 'ar-SA,ar;q=0.9,en-US;q=0.8,en;q=0.7',
+					'Cache-Control': 'no-cache',
+				},
+				agent: httpsAgent,
+				signal: controller.signal,
 			});
-		} catch (e) {
-			logger.error('Parse error:', e);
-			logger.info('Response format:', text.substring(0, 1000));
-			throw new Error('Failed to parse API response');
+
+			clearTimeout(timeoutId);
+
+			logger.info(`Response status: ${response.status} ${response.statusText}`);
+
+			if (!response.ok) {
+				const errorText = await response.text();
+				logger.error('API error response:', {
+					status: response.status,
+					statusText: response.statusText,
+					body: errorText.substring(0, 500),
+				});
+				throw new Error(
+					`API request failed with status ${response.status}: ${errorText.substring(
+						0,
+						200
+					)}`
+				);
+			}
+
+			const text = await response.text();
+			logger.info(`Received response of length: ${text.length}`);
+
+			if (text.length === 0) {
+				throw new Error('Empty response received from API');
+			}
+
+			logger.info('Raw API response:', text.substring(0, 500));
+
+			let announcements: BankruptcyAnnouncement[] | null = null;
+			try {
+				// The API returns a JSON string that's double-encoded
+				// First, remove any XML wrapper if present
+				const xmlMatch = text.match(/<string[^>]*>(.*)<\/string>/s);
+				const jsonText = xmlMatch ? xmlMatch[1] : text;
+
+				// Then handle the double-encoded JSON
+				// First parse: Convert the string into a JSON string
+				const parsed = JSON.parse(jsonText);
+				// Second parse: Parse the actual JSON data
+				announcements =
+					typeof parsed === 'string' ? JSON.parse(parsed) : parsed;
+
+				logger.info('Parsed announcements structure:', {
+					type: typeof announcements,
+					isArray: Array.isArray(announcements),
+					length: Array.isArray(announcements) ? announcements.length : 0,
+					sample:
+						Array.isArray(announcements) && announcements.length > 0
+							? Object.keys(announcements[0])
+							: null,
+				});
+			} catch (e) {
+				logger.error('Parse error:', e);
+				logger.info('Response format:', text.substring(0, 1000));
+				throw new Error('Failed to parse API response');
+			}
+
+			if (!Array.isArray(announcements)) {
+				logger.error('Unexpected response format:', typeof announcements);
+				logger.info('Response content:', announcements);
+				throw new Error('API response is not an array');
+			}
+
+			logger.info(`Successfully parsed ${announcements.length} announcements`);
+
+			// Return immediately with raw announcements
+			return announcements;
+		} catch (error) {
+			if (error instanceof Error) {
+				logger.error('Error fetching announcements:', error.message);
+			} else {
+				logger.error('Error fetching announcements:', error);
+			}
+			throw error;
 		}
-
-		if (!Array.isArray(announcements)) {
-			logger.error('Unexpected response format:', typeof announcements);
-			logger.info('Response content:', announcements);
-			throw new Error('API response is not an array');
-		}
-
-		logger.info(`Successfully parsed ${announcements.length} announcements`);
-
-		// Return immediately with raw announcements
-		return announcements;
 	} catch (error) {
 		if (error instanceof Error) {
 			logger.error('Error fetching announcements:', error.message);
