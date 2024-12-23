@@ -7,9 +7,16 @@ import {
 	fetchBankruptcyAnnouncements,
 	storeAnnouncements,
 } from '@/lib/announcements';
-import logger from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
+
+// Set route segment config
+export const fetchCache = 'force-no-store';
+export const revalidate = 0;
+export const runtime = 'nodejs';
+
+// Set longer timeout for this route
+export const maxDuration = 300; // 5 minutes
 
 export async function GET(_req: NextRequest) {
 	try {
@@ -33,45 +40,46 @@ export async function GET(_req: NextRequest) {
 
 		// Only fetch and store announcements
 		console.log('Fetching announcements...');
-		const announcements = await fetchBankruptcyAnnouncements();
+		const announcements = await fetchBankruptcyAnnouncements().catch(
+			(error) => {
+				console.error('Error fetching announcements:', error);
+				throw error;
+			}
+		);
 		console.log(`Fetched ${announcements.length} announcements`);
 
 		// Store announcements without waiting
-		storeAnnouncements(announcements).then(({ newCount }) => {
-			console.log(`Stored ${newCount} new announcements`);
+		storeAnnouncements(announcements)
+			.then(({ newCount }) => {
+				console.log(`Stored ${newCount} new announcements`);
 
-			// If this is a cron job and we have new announcements, trigger match creation
-			if (isCronJob && newCount > 0) {
-				// Trigger match creation as a separate request
-				fetch(
-					`${process.env.NEXT_PUBLIC_APP_URL}/api/announcements/create-matches`,
-					{
-						method: 'POST',
-						headers: {
-							Authorization: `Bearer ${process.env.CRON_SECRET}`,
-							'Content-Type': 'application/json',
-						},
-						body: JSON.stringify({
-							since: new Date(Date.now() - 24 * 60 * 60 * 1000),
-						}),
-					}
-				).catch((error) => {
-					console.error('Failed to trigger match creation:', error);
-				});
+				// If this is a cron job and we have new announcements, trigger match creation
+				if (isCronJob && newCount > 0) {
+					// Trigger match creation as a separate request
+					return fetch(
+						`${process.env.NEXT_PUBLIC_APP_URL}/api/announcements/create-matches`,
+						{
+							method: 'POST',
+							headers: {
+								Authorization: `Bearer ${process.env.CRON_SECRET}`,
+								'Content-Type': 'application/json',
+							},
+						}
+					);
+				}
+			})
+			.catch((error) => {
+				console.error('Error storing announcements:', error);
+			});
 
-				console.log('Triggered match creation');
-			}
-		});
-
-		return NextResponse.json({
-			message: `Fetched ${announcements.length} announcements. Storage and matching in progress.`,
-		});
+		// Return success response immediately
+		return NextResponse.json({ success: true });
 	} catch (error) {
-		logger.error('Error in fetch announcements:', error);
+		console.error('Error in /api/announcements/fetch:', error);
 		return NextResponse.json(
 			{
 				success: false,
-				error: error instanceof Error ? error.message : String(error),
+				error: error instanceof Error ? error.message : 'An error occurred',
 			},
 			{ status: 500 }
 		);
