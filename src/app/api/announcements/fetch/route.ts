@@ -10,10 +10,12 @@ export const dynamic = 'force-dynamic';
 // Set route segment config
 export const fetchCache = 'force-no-store';
 export const revalidate = 0;
-export const runtime = 'nodejs';
 
-// Vercel has a 10s timeout limit for serverless functions
-export const maxDuration = 10;
+// Use Edge Runtime for longer timeout (30s instead of 10s)
+export const runtime = 'edge';
+
+// Vercel has a 30s timeout limit for Edge Runtime
+export const maxDuration = 30;
 
 export async function GET(_req: NextRequest) {
 	try {

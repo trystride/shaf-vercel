@@ -47,12 +47,12 @@ export async function fetchBankruptcyAnnouncements(): Promise<
 	logger.info('Starting API request to:', apiUrl);
 
 	try {
-		// Create an AbortController with a 5-second timeout
+		// Create an AbortController with a 15-second timeout
 		const controller = new AbortController();
 		const timeoutId = setTimeout(() => {
 			controller.abort();
-			logger.warn('API request timed out after 5 seconds');
-		}, 5000);
+			logger.warn('API request timed out after 15 seconds');
+		}, 15000);
 
 		logger.info('Making fetch request with headers');
 		try {
