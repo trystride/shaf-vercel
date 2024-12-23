@@ -1,8 +1,5 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
-import { headers } from 'next/headers';
 import { fetchBankruptcyAnnouncements } from '@/lib/announcements';
 
 export const dynamic = 'force-dynamic';
@@ -17,24 +14,14 @@ export const runtime = 'edge';
 // Vercel has a 30s timeout limit for Edge Runtime
 export const maxDuration = 30;
 
-export async function GET(_req: NextRequest) {
+export async function GET(req: NextRequest) {
 	try {
-		const headersList = headers();
-		const authHeader = headersList.get('authorization');
-
-		// Debug logging
-		console.log('Auth header:', authHeader);
-		console.log('Expected:', `Bearer ${process.env.CRON_SECRET}`);
-		console.log('Match:', authHeader === `Bearer ${process.env.CRON_SECRET}`);
-
 		// Check if this is a cron job request
+		const authHeader = req.headers.get('authorization');
 		const isCronJob = authHeader === `Bearer ${process.env.CRON_SECRET}`;
 
 		if (!isCronJob) {
-			const session = await getServerSession(authOptions);
-			if (!session?.user?.email) {
-				return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-			}
+			return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 		}
 
 		// Phase 1: Quick fetch
