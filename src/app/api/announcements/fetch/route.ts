@@ -36,14 +36,14 @@ export async function GET(_req: NextRequest) {
 		const announcements = await fetchBankruptcyAnnouncements();
 		console.log(`Fetched ${announcements.length} announcements`);
 
-		const { newCount, errors } = await storeAnnouncements(announcements);
-		console.log(`Stored ${newCount} new announcements`);
+		// Store announcements without waiting
+		storeAnnouncements(announcements).then(({ newCount, errors }) => {
+			console.log(`Stored ${newCount} new announcements`);
 
-		// If this is a cron job and we have new announcements, trigger match creation
-		if (isCronJob && newCount > 0) {
-			try {
+			// If this is a cron job and we have new announcements, trigger match creation
+			if (isCronJob && newCount > 0) {
 				// Trigger match creation as a separate request
-				await fetch(
+				fetch(
 					`${process.env.NEXT_PUBLIC_APP_URL}/api/announcements/create-matches`,
 					{
 						method: 'POST',
@@ -55,17 +55,18 @@ export async function GET(_req: NextRequest) {
 							since: new Date(Date.now() - 24 * 60 * 60 * 1000),
 						}),
 					}
-				);
+				).catch((error) => {
+					console.error('Failed to trigger match creation:', error);
+				});
 
 				console.log('Triggered match creation');
-			} catch (error) {
-				console.error('Failed to trigger match creation:', error);
 			}
-		}
+		}).catch((error) => {
+			console.error('Error storing announcements:', error);
+		});
 
 		return NextResponse.json({
-			message: `Fetched ${announcements.length} announcements. Added ${newCount} new ones.`,
-			errors,
+			message: `Fetched ${announcements.length} announcements. Storage and matching in progress.`,
 		});
 	} catch (error) {
 		logger.error('Error in fetch announcements:', error);
