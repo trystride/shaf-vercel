@@ -1,6 +1,5 @@
 import { z } from 'zod';
 import { db } from './db';
-import fetch from 'node-fetch';
 import logger from './logger';
 
 // Types
@@ -56,7 +55,7 @@ export async function fetchBankruptcyAnnouncements(): Promise<
 
 		logger.info('Making fetch request with headers');
 		try {
-			const response = await fetch(apiUrl, {
+			const response = await globalThis.fetch(apiUrl, {
 				headers: {
 					Accept: 'application/json',
 					'User-Agent': 'Mozilla/5.0 (compatible; BankruptcyMonitor/1.0)',

@@ -36,16 +36,18 @@ export async function GET(req: NextRequest) {
 
 		// Phase 2: Trigger background processing
 		console.log('Phase 2: Triggering background processing...');
-		fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/announcements/process`, {
-			method: 'POST',
-			headers: {
-				Authorization: `Bearer ${process.env.CRON_SECRET}`,
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({ announcements }),
-		}).catch((error) => {
-			console.error('Error triggering background processing:', error);
-		});
+		globalThis
+			.fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/announcements/process`, {
+				method: 'POST',
+				headers: {
+					Authorization: `Bearer ${process.env.CRON_SECRET}`,
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({ announcements }),
+			})
+			.catch((error) => {
+				console.error('Error triggering background processing:', error);
+			});
 
 		// Return success immediately
 		return NextResponse.json({
