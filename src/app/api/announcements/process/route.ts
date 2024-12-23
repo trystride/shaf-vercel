@@ -9,7 +9,7 @@ export const revalidate = 0;
 export const runtime = 'nodejs';
 
 // This endpoint handles long-running tasks
-export const maxDuration = 300; // 5 minutes
+export const maxDuration = 60; // Maximum allowed for hobby plan
 
 export async function POST(req: NextRequest) {
 	try {

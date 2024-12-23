@@ -11,8 +11,8 @@ export const revalidate = 0;
 // Use Edge Runtime for longer timeout (30s instead of 10s)
 export const runtime = 'edge';
 
-// Vercel has a 30s timeout limit for Edge Runtime
-export const maxDuration = 30;
+// Vercel has a 60s timeout limit for hobby plan
+export const maxDuration = 60;
 
 export async function GET(req: NextRequest) {
 	try {
