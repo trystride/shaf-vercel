@@ -2,7 +2,6 @@ import { z } from 'zod';
 import { db } from './db';
 import https from 'node:https';
 import fetch from 'node-fetch';
-import { AbortController } from 'node-abort-controller';
 import logger from './logger';
 
 // Types
@@ -52,14 +51,8 @@ export async function fetchBankruptcyAnnouncements(): Promise<
 		const httpsAgent = new https.Agent({
 			rejectUnauthorized: false,
 			keepAlive: true,
-			timeout: 5000, // Socket timeout
+			timeout: 3000, // 3 second socket timeout
 		});
-
-		const controller = new AbortController();
-		const timeoutId = setTimeout(() => {
-			controller.abort();
-			logger.warn('API request timed out after 5 seconds');
-		}, 5000); // 5 second timeout
 
 		logger.info('Making fetch request with headers');
 		try {
@@ -71,10 +64,7 @@ export async function fetchBankruptcyAnnouncements(): Promise<
 					'Cache-Control': 'no-cache',
 				},
 				agent: httpsAgent,
-				signal: controller.signal,
 			});
-
-			clearTimeout(timeoutId);
 
 			logger.info(`Response status: ${response.status} ${response.statusText}`);
 
