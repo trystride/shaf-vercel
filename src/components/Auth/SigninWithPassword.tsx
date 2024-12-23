@@ -47,10 +47,21 @@ export default function SigninWithPassword() {
 			}
 
 			if (callback?.ok && !callback?.error) {
-				toast.success('Logged in successfully');
-				setLoading(false);
-				setData({ email: '', password: '', remember: false });
-				router.push('/admin');
+				// Get the user's role from the session
+				fetch('/api/auth/session')
+					.then((res) => res.json())
+					.then((session) => {
+						toast.success('Logged in successfully');
+						setLoading(false);
+						setData({ email: '', password: '', remember: false });
+
+						// Redirect based on role
+						if (session?.user?.role === 'ADMIN') {
+							router.push('/admin');
+						} else {
+							router.push('/user/dashboard/announcements');
+						}
+					});
 			}
 		});
 	};
@@ -102,17 +113,21 @@ export default function SigninWithPassword() {
 						}`}
 					>
 						<svg
-							width='10'
-							height='7'
-							viewBox='0 0 10 7'
-							fill='none'
 							xmlns='http://www.w3.org/2000/svg'
+							width='24'
+							height='24'
+							viewBox='0 0 24 24'
+							fill='none'
+							stroke='currentColor'
+							role='img'
+							aria-labelledby='emailTitle'
 						>
+							<title id='emailTitle'>Email Icon</title>
 							<path
-								fillRule='evenodd'
-								clipRule='evenodd'
-								d='M9.70692 0.292787C9.89439 0.480314 9.99971 0.734622 9.99971 0.999786C9.99971 1.26495 9.89439 1.51926 9.70692 1.70679L4.70692 6.70679C4.51939 6.89426 4.26508 6.99957 3.99992 6.99957C3.73475 6.99957 3.48045 6.89426 3.29292 6.70679L0.292919 3.70679C0.110761 3.51818 0.00996641 3.26558 0.0122448 3.00339C0.0145233 2.74119 0.119692 2.49038 0.3051 2.30497C0.490508 2.11956 0.741321 2.01439 1.00352 2.01211C1.26571 2.00983 1.51832 2.11063 1.70692 2.29279L3.99992 4.58579L8.29292 0.292787C8.48045 0.105316 8.73475 0 8.99992 0C9.26508 0 9.51939 0.105316 9.70692 0.292787Z'
-								fill='currentColor'
+								d='M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z'
+								strokeLinecap='round'
+								strokeLinejoin='round'
+								strokeWidth='2'
 							/>
 						</svg>
 					</span>

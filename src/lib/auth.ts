@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/prisma';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
-import { type NextAuthOptions, DefaultSession } from 'next-auth';
+import type { NextAuthOptions, DefaultSession } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GitHubProvider from 'next-auth/providers/github';
 import GoogleProvider from 'next-auth/providers/google';
@@ -251,6 +251,26 @@ export const authOptions: NextAuthOptions = {
 	],
 
 	callbacks: {
+		async signIn({ user, account }) {
+			if (account?.provider === 'github' || account?.provider === 'google') {
+				const adminEmails = process.env.ADMIN_EMAILS?.split(',') || [];
+				const isAdmin = adminEmails.includes(user.email?.toLowerCase() || '');
+
+				// Update or create user with role
+				await prisma.user.upsert({
+					where: { email: user.email?.toLowerCase() },
+					update: { role: isAdmin ? 'ADMIN' : 'USER' },
+					create: {
+						email: user.email?.toLowerCase(),
+						name: user.name,
+						role: isAdmin ? 'ADMIN' : 'USER',
+						emailVerified: new Date(),
+					},
+				});
+			}
+			return true;
+		},
+
 		async jwt({ token, user }) {
 			if (user) {
 				token.id = user.id;
