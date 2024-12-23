@@ -3,10 +3,7 @@ import type { NextRequest } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { headers } from 'next/headers';
-import {
-	fetchBankruptcyAnnouncements,
-	storeAnnouncements,
-} from '@/lib/announcements';
+import { fetchBankruptcyAnnouncements } from '@/lib/announcements';
 
 export const dynamic = 'force-dynamic';
 
@@ -15,8 +12,8 @@ export const fetchCache = 'force-no-store';
 export const revalidate = 0;
 export const runtime = 'nodejs';
 
-// Set longer timeout for this route
-export const maxDuration = 300; // 5 minutes
+// Vercel has a 10s timeout limit for serverless functions
+export const maxDuration = 10;
 
 export async function GET(_req: NextRequest) {
 	try {
@@ -38,8 +35,8 @@ export async function GET(_req: NextRequest) {
 			}
 		}
 
-		// Only fetch and store announcements
-		console.log('Fetching announcements...');
+		// Phase 1: Quick fetch
+		console.log('Phase 1: Fetching announcements...');
 		const announcements = await fetchBankruptcyAnnouncements().catch(
 			(error) => {
 				console.error('Error fetching announcements:', error);
@@ -48,32 +45,24 @@ export async function GET(_req: NextRequest) {
 		);
 		console.log(`Fetched ${announcements.length} announcements`);
 
-		// Store announcements without waiting
-		storeAnnouncements(announcements)
-			.then(({ newCount }) => {
-				console.log(`Stored ${newCount} new announcements`);
+		// Phase 2: Trigger background processing
+		console.log('Phase 2: Triggering background processing...');
+		fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/announcements/process`, {
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${process.env.CRON_SECRET}`,
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ announcements }),
+		}).catch((error) => {
+			console.error('Error triggering background processing:', error);
+		});
 
-				// If this is a cron job and we have new announcements, trigger match creation
-				if (isCronJob && newCount > 0) {
-					// Trigger match creation as a separate request
-					return fetch(
-						`${process.env.NEXT_PUBLIC_APP_URL}/api/announcements/create-matches`,
-						{
-							method: 'POST',
-							headers: {
-								Authorization: `Bearer ${process.env.CRON_SECRET}`,
-								'Content-Type': 'application/json',
-							},
-						}
-					);
-				}
-			})
-			.catch((error) => {
-				console.error('Error storing announcements:', error);
-			});
-
-		// Return success response immediately
-		return NextResponse.json({ success: true });
+		// Return success immediately
+		return NextResponse.json({
+			success: true,
+			message: `Fetched ${announcements.length} announcements. Processing started.`,
+		});
 	} catch (error) {
 		console.error('Error in /api/announcements/fetch:', error);
 		return NextResponse.json(
