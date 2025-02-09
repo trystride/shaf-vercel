@@ -2,16 +2,17 @@ import React from 'react';
 import Breadcrumb from '@/components/Common/Dashboard/Breadcrumb';
 import AccountSettings from '@/components/User/AccountSettings';
 import { Metadata } from 'next';
+import { ar } from '@/translations/ar';
 
 export const metadata: Metadata = {
-	title: `Account Settings - ${process.env.SITE_NAME}`,
-	description: `Manage your account settings on ${process.env.SITE_NAME}`,
+	title: `${ar.accountSettings.title} - ${process.env.SITE_NAME}`,
+	description: ar.accountSettings.description,
 };
 
 const AccountSettingsPage = () => {
 	return (
 		<>
-			<Breadcrumb pageTitle='Account Settings' />
+			<Breadcrumb pageTitle={ar.accountSettings.title} />
 			<AccountSettings />
 		</>
 	);

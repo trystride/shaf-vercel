@@ -15,6 +15,7 @@ import { Badge } from '@/components/ui/badge';
 import { ShareIcon, CalendarIcon, DownloadIcon } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
 import DOMPurify from 'isomorphic-dompurify';
+import { useTranslation } from '@/app/context/TranslationContext';
 
 // Safe HTML rendering component
 const SafeHTML: React.FC<{ html: string; className?: string }> = ({
@@ -69,6 +70,7 @@ export default function AnnouncementsPage() {
 	const [keywords, setKeywords] = useState<string[]>([]);
 	const [currentPage, setCurrentPage] = useState(1);
 	const itemsPerPage = 10;
+	const t = useTranslation();
 
 	const formatDate = (date: string) => {
 		try {
@@ -114,8 +116,7 @@ export default function AnnouncementsPage() {
 					});
 
 					toast.error(
-						announcementsError?.error ||
-							'Failed to load announcements. Please try again later.'
+						announcementsError?.error || t.announcements.errors.fetchFailed
 					);
 					return;
 				}
@@ -132,25 +133,25 @@ export default function AnnouncementsPage() {
 						'Invalid announcements data format:',
 						announcementsData
 					);
-					toast.error('Received invalid data format from server');
+					toast.error(t.announcements.errors.invalidData);
 				}
 
 				if (Array.isArray(keywordsData)) {
 					setKeywords(keywordsData.map((k) => k.term));
 				} else {
 					console.error('Invalid keywords data format:', keywordsData);
-					toast.error('Failed to load keywords');
+					toast.error(t.announcements.errors.keywordsFailed);
 				}
 			} catch (error) {
 				console.error('Error in fetchData:', error);
-				toast.error('An error occurred while fetching data');
+				toast.error(t.announcements.errors.generalError);
 			} finally {
 				setLoading(false);
 			}
 		};
 
 		fetchData();
-	}, [session]);
+	}, [session, t]);
 
 	const filteredAnnouncements = announcements.filter((ann) =>
 		selectedKeyword === 'all' ? true : ann.matchedKeyword === selectedKeyword
@@ -184,13 +185,13 @@ export default function AnnouncementsPage() {
 
 		// Define CSV headers and map announcement data
 		const headers = [
-			'Announcement ID',
-			'Title',
-			'Action Type',
-			'Court',
-			'Publish Date',
-			'Matched Keyword',
-			'Link',
+			'رقم الإعلان',
+			'العنوان',
+			'نوع الإجراء',
+			'المحكمة',
+			'تاريخ النشر',
+			'الكلمة المفتاحية المطابقة',
+			'الرابط',
 		];
 
 		const csvData = announcements.map((announcement) => [
@@ -217,7 +218,7 @@ export default function AnnouncementsPage() {
 		link.setAttribute('href', url);
 		link.setAttribute(
 			'download',
-			`announcements_${new Date().toISOString().split('T')[0]}.csv`
+			`${t.announcements.export.filename}_${new Date().toISOString().split('T')[0]}.csv`
 		);
 		document.body.appendChild(link);
 		link.click();
@@ -231,7 +232,7 @@ export default function AnnouncementsPage() {
 				<div className='mb-8 flex items-center justify-between'>
 					<div className='flex items-center gap-4'>
 						<h1 className='text-2xl font-semibold text-gray-700'>
-							Matched Announcements
+							{t.announcements.title}
 						</h1>
 						{announcements.length > 0 && (
 							<Button
@@ -241,7 +242,7 @@ export default function AnnouncementsPage() {
 								onClick={exportToCSV}
 							>
 								<DownloadIcon className='mr-2 h-4 w-4' />
-								Export CSV
+								{t.announcements.export.button}
 							</Button>
 						)}
 					</div>
@@ -255,10 +256,10 @@ export default function AnnouncementsPage() {
 						>
 							<SelectTrigger className='w-full border-gray-200 bg-white focus:ring-[#00A7B1] focus:ring-offset-0'>
 								<div className='flex items-center gap-2'>
-									<span className='text-gray-600'>Filter by:</span>
+									<span className='text-gray-600'>{t.announcements.filter.label}</span>
 									<span className='font-medium text-gray-900'>
 										{selectedKeyword === 'all'
-											? 'All Keywords'
+											? t.announcements.filter.allKeywords
 											: selectedKeyword}
 									</span>
 								</div>
@@ -272,7 +273,7 @@ export default function AnnouncementsPage() {
 									className='px-3 py-2 text-gray-900 hover:bg-[#00A7B1]/5 focus:bg-[#00A7B1]/5'
 								>
 									<div className='flex items-center gap-2'>
-										<span className='font-medium'>All Keywords</span>
+										<span className='font-medium'>{t.announcements.filter.allKeywords}</span>
 									</div>
 								</SelectItem>
 								<div className='max-h-[200px] overflow-auto'>
@@ -301,7 +302,6 @@ export default function AnnouncementsPage() {
 				{loading ? (
 					<div className='grid gap-4'>
 						{[...Array(3)].map((_, i) => (
-							// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
 							<Card key={i} className='bg-white'>
 								<CardContent className='p-6'>
 									<div className='mb-4 flex items-center justify-between'>
@@ -316,7 +316,7 @@ export default function AnnouncementsPage() {
 					</div>
 				) : (
 					<div className='grid gap-4'>
-						{paginatedAnnouncements.map((announcement, _index) => (
+						{paginatedAnnouncements.map((announcement) => (
 							<Card
 								key={announcement.Id}
 								className='mb-4 border border-gray-100 bg-white transition-shadow hover:shadow-md'
@@ -337,6 +337,7 @@ export default function AnnouncementsPage() {
 													type='button'
 													onClick={() => handleShare(announcement)}
 													className='text-gray-600 hover:text-gray-800'
+													title={t.announcements.card.share}
 												>
 													<ShareIcon className='h-4 w-4' />
 												</Button>
@@ -360,7 +361,7 @@ export default function AnnouncementsPage() {
 													className='mb-2 text-sm leading-relaxed text-gray-600'
 													html={`${announcement.Comment} <a href="https://bankruptcy.gov.sa/ar/Announcements/Pages/announcementDetails.aspx?AdID=${announcement.url}" 
                               class="text-[#00A7B1] hover:text-[#008288]">
-                            المزيد...
+                              ${t.announcements.card.readMore}
                           </a>`}
 												/>
 											</div>
@@ -371,8 +372,8 @@ export default function AnnouncementsPage() {
 												html={announcement.Body}
 											/>
 										)}
-										<p className='mt-2 text-sm text-gray-500'>
-											{`Matched keyword: ${announcement.matchedKeyword}`}
+										<p className='mt-2 text-sm text-gray-500' dir='rtl'>
+											{`${t.announcements.card.matchedKeyword} ${announcement.matchedKeyword}`}
 										</p>
 									</div>
 								</CardContent>
@@ -389,10 +390,10 @@ export default function AnnouncementsPage() {
 							disabled={currentPage === 1}
 							className='border-[#00A7B1] text-[#00A7B1] hover:bg-[#00A7B1] hover:text-white'
 						>
-							Previous
+							{t.announcements.pagination.previous}
 						</Button>
-						<div className='mx-4 flex items-center text-sm text-gray-600'>
-							Page {currentPage} of{' '}
+						<div className='mx-4 flex items-center text-sm text-gray-600' dir='rtl'>
+							{t.announcements.pagination.page} {currentPage} {t.announcements.pagination.of}{' '}
 							{Math.ceil(filteredAnnouncements.length / itemsPerPage)}
 						</div>
 						<Button
@@ -411,14 +412,14 @@ export default function AnnouncementsPage() {
 							}
 							className='border-[#00A7B1] text-[#00A7B1] hover:bg-[#00A7B1] hover:text-white'
 						>
-							Next
+							{t.announcements.pagination.next}
 						</Button>
 					</div>
 				)}
 
 				{!loading && filteredAnnouncements.length === 0 && (
 					<div className='py-12 text-center'>
-						<p className='text-gray-500'>No announcements found</p>
+						<p className='text-gray-500'>{t.announcements.noResults}</p>
 					</div>
 				)}
 			</div>

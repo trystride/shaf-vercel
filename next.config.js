@@ -40,6 +40,12 @@ const nextConfig = {
 		},
 	},
 	webpack: (config, { isServer }) => {
+		// Exclude problematic files from being processed
+		config.module.rules.push({
+			test: /node-pre-gyp.*\.html$/,
+			use: 'null-loader',
+		});
+
 		if (!isServer) {
 			config.optimization.splitChunks = {
 				chunks: 'all',

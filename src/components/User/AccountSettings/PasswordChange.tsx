@@ -6,17 +6,18 @@ import { useState } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useSession } from 'next-auth/react';
+import { useTranslation } from '@/app/context/TranslationContext';
 import Loader from '@/components/Common/Loader';
 
 export default function PasswordChange() {
+	const t = useTranslation();
 	const [data, setData] = useState({
 		currentPassword: '',
 		newPassword: '',
 		reTypeNewPassword: '',
 	});
 	const [loading, setLoading] = useState(false);
-	const { currentPassword, newPassword } = data;
-
+	const { currentPassword, newPassword, reTypeNewPassword } = data;
 	const { data: session } = useSession();
 
 	const handleChange = (e: any) => {
@@ -29,10 +30,15 @@ export default function PasswordChange() {
 	const handleSubmit = async (e: any) => {
 		e.preventDefault();
 
+		if (newPassword !== reTypeNewPassword) {
+			toast.error(t.accountSettings.passwordChange.messages.passwordMismatch);
+			return;
+		}
+
 		setLoading(true);
 
 		if (!session?.user) {
-			toast.error('Please login first!');
+			toast.error(t.accountSettings.passwordChange.messages.loginFirst);
 			return;
 		}
 
@@ -43,68 +49,67 @@ export default function PasswordChange() {
 				email: session?.user?.email,
 			});
 
-			toast.success('Password changed successfully');
+			toast.success(t.accountSettings.passwordChange.messages.success);
 			setData({
 				currentPassword: '',
 				newPassword: '',
 				reTypeNewPassword: '',
 			});
-			setLoading(false);
 		} catch (error: any) {
+			toast.error(
+				error.response?.data || t.accountSettings.passwordChange.messages.error
+			);
+		} finally {
 			setLoading(false);
-			toast.error(error?.response?.data);
 		}
 	};
 
 	return (
-		<div className='w-full max-w-[525px]'>
-			<Card>
-				<h3 className='mb-9 font-satoshi text-custom-2xl font-bold tracking-[-.5px] text-dark dark:text-white'>
-					Password
+		<Card className='w-full xl:w-1/3'>
+			<div className='border-b border-stroke py-4 px-7'>
+				<h3 className='font-medium text-black'>
+					{t.accountSettings.passwordChange.title}
 				</h3>
-
-				<form onSubmit={handleSubmit} className='space-y-5.5'>
-					<InputGroup
-						label='Current password'
-						name='currentPassword'
-						placeholder='Enter your current password'
-						type='password'
-						value={data.currentPassword}
-						handleChange={handleChange}
-						required={true}
+			</div>
+			<div className='p-7'>
+				<form onSubmit={handleSubmit}>
+					<div className='mb-5.5'>
+						<InputGroup
+							label={t.accountSettings.passwordChange.currentPassword}
+							type='password'
+							name='currentPassword'
+							value={currentPassword}
+							onChange={handleChange}
+							required
+						/>
+					</div>
+					<div className='mb-5.5'>
+						<InputGroup
+							label={t.accountSettings.passwordChange.newPassword}
+							type='password'
+							name='newPassword'
+							value={newPassword}
+							onChange={handleChange}
+							required
+						/>
+					</div>
+					<div className='mb-5.5'>
+						<InputGroup
+							label={t.accountSettings.passwordChange.reTypeNewPassword}
+							type='password'
+							name='reTypeNewPassword'
+							value={reTypeNewPassword}
+							onChange={handleChange}
+							required
+						/>
+					</div>
+					<FormButton
+						loading={loading}
+						text={t.accountSettings.passwordChange.changePassword}
+						loadingText={t.accountSettings.passwordChange.changing}
 					/>
-
-					<InputGroup
-						label='New password'
-						name='newPassword'
-						placeholder='Enter your new password'
-						type='password'
-						value={data.newPassword}
-						handleChange={handleChange}
-						required={true}
-					/>
-
-					<InputGroup
-						label='Re-type new password'
-						name='reTypeNewPassword'
-						placeholder='Re-type your new password'
-						type='password'
-						value={data.reTypeNewPassword}
-						handleChange={handleChange}
-						required={true}
-					/>
-
-					<FormButton>
-						{loading ? (
-							<>
-								Changing <Loader style='border-white' />
-							</>
-						) : (
-							'Change Password'
-						)}
-					</FormButton>
 				</form>
-			</Card>
-		</div>
+			</div>
+		</Card>
 	);
 }

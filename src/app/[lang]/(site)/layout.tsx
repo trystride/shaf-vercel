@@ -1,12 +1,16 @@
-import '../../styles/satoshi.css';
+import '@/styles/satoshi.css';
 import 'react-quill/dist/quill.snow.css';
-import '../../styles/globals.css';
+import '@/styles/globals.css';
 import { Providers } from './providers';
-import ToastContext from '../context/ToastContext';
+import ToastContext from '@/app/context/ToastContext';
 import NextTopLoader from 'nextjs-toploader';
-import Loader from '@/components/Common/PreLoader';
+import dynamic from 'next/dynamic';
 import FooterWrapper from '@/components/Footer/FooterWrapper';
 import { HeaderWrapper } from '@/components/Header/HeaderWrapper';
+
+const Loader = dynamic(() => import('@/components/Common/PreLoader'), {
+	ssr: false,
+});
 
 export default function RootLayout({
 	children,

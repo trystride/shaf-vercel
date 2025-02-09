@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 import { CsvUpload } from './components/CsvUpload';
+import { useTranslation } from '@/app/context/TranslationContext';
 
 interface Keyword {
 	id: string;
@@ -18,6 +19,7 @@ export default function KeywordsPage() {
 	const [isLoading, setIsLoading] = useState(false);
 	const [editingKeyword, setEditingKeyword] = useState<Keyword | null>(null);
 	const _router = useRouter();
+	const t = useTranslation();
 
 	// Fetch keywords
 	const fetchKeywords = async () => {
@@ -25,13 +27,13 @@ export default function KeywordsPage() {
 			const response = await fetch('/api/keywords');
 			if (!response.ok) {
 				const error = await response.text();
-				throw new Error(error || 'Failed to fetch keywords');
+				throw new Error(error || t.keywords.messages.fetchError);
 			}
 			const data = await response.json();
 			setKeywords(data);
 		} catch (error) {
 			toast.error(
-				error instanceof Error ? error.message : 'Failed to load keywords'
+				error instanceof Error ? error.message : t.keywords.messages.fetchError
 			);
 		}
 	};
@@ -44,7 +46,7 @@ export default function KeywordsPage() {
 	const handleAddKeyword = async (e: React.FormEvent) => {
 		e.preventDefault();
 		if (!newKeyword.trim()) {
-			toast.error('Please enter a keyword');
+			toast.error(t.keywords.messages.enterKeyword);
 			return;
 		}
 
@@ -58,15 +60,15 @@ export default function KeywordsPage() {
 
 			if (!response.ok) {
 				const error = await response.text();
-				throw new Error(error || 'Failed to add keyword');
+				throw new Error(error || t.keywords.messages.addError);
 			}
 
-			toast.success('Keyword added successfully');
+			toast.success(t.keywords.messages.addSuccess);
 			setNewKeyword('');
 			fetchKeywords();
 		} catch (error) {
 			toast.error(
-				error instanceof Error ? error.message : 'Failed to add keyword'
+				error instanceof Error ? error.message : t.keywords.messages.addError
 			);
 		} finally {
 			setIsLoading(false);
@@ -77,7 +79,7 @@ export default function KeywordsPage() {
 	const handleEditKeyword = async (e: React.FormEvent) => {
 		e.preventDefault();
 		if (!editingKeyword || !editingKeyword.term.trim()) {
-			toast.error('Please enter a keyword');
+			toast.error(t.keywords.messages.enterKeyword);
 			return;
 		}
 
@@ -91,15 +93,15 @@ export default function KeywordsPage() {
 
 			if (!response.ok) {
 				const error = await response.text();
-				throw new Error(error || 'Failed to update keyword');
+				throw new Error(error || t.keywords.messages.updateError);
 			}
 
-			toast.success('Keyword updated successfully');
+			toast.success(t.keywords.messages.updateSuccess);
 			setEditingKeyword(null);
 			fetchKeywords();
 		} catch (error) {
 			toast.error(
-				error instanceof Error ? error.message : 'Failed to update keyword'
+				error instanceof Error ? error.message : t.keywords.messages.updateError
 			);
 		} finally {
 			setIsLoading(false);
@@ -108,7 +110,7 @@ export default function KeywordsPage() {
 
 	// Delete keyword
 	const handleDeleteKeyword = async (id: string) => {
-		if (!confirm('Are you sure you want to delete this keyword?')) return;
+		if (!confirm(t.keywords.confirmDelete)) return;
 
 		try {
 			const response = await fetch(`/api/keywords/${id}`, {
@@ -117,14 +119,14 @@ export default function KeywordsPage() {
 
 			if (!response.ok) {
 				const error = await response.text();
-				throw new Error(error || 'Failed to delete keyword');
+				throw new Error(error || t.keywords.messages.deleteError);
 			}
 
-			toast.success('Keyword deleted successfully');
+			toast.success(t.keywords.messages.deleteSuccess);
 			fetchKeywords();
 		} catch (error) {
 			toast.error(
-				error instanceof Error ? error.message : 'Failed to delete keyword'
+				error instanceof Error ? error.message : t.keywords.messages.deleteError
 			);
 		}
 	};
@@ -140,14 +142,14 @@ export default function KeywordsPage() {
 
 			if (!response.ok) {
 				const error = await response.text();
-				throw new Error(error || 'Failed to update keyword');
+				throw new Error(error || t.keywords.messages.updateError);
 			}
 
-			toast.success('Keyword updated successfully');
+			toast.success(t.keywords.messages.updateSuccess);
 			fetchKeywords();
 		} catch (error) {
 			toast.error(
-				error instanceof Error ? error.message : 'Failed to update keyword'
+				error instanceof Error ? error.message : t.keywords.messages.updateError
 			);
 		}
 	};
@@ -155,13 +157,13 @@ export default function KeywordsPage() {
 	return (
 		<div className='container mx-auto p-4'>
 			<div className='mb-6 flex items-center justify-between'>
-				<h1 className='text-2xl font-bold'>Keywords</h1>
+				<h1 className='text-2xl font-bold'>{t.keywords.title}</h1>
 				<CsvUpload onUploadComplete={fetchKeywords} />
 			</div>
 			{/* Add Keyword Form */}
 			<div className='mb-6 rounded-xl bg-white p-6 shadow-sm dark:bg-gray-dark'>
 				<h2 className='mb-4 text-lg font-medium text-gray-900 dark:text-white'>
-					{editingKeyword ? 'Edit Keyword' : 'Add New Keyword'}
+					{editingKeyword ? t.keywords.editKeyword : t.keywords.addNew}
 				</h2>
 				<form
 					onSubmit={editingKeyword ? handleEditKeyword : handleAddKeyword}
@@ -175,7 +177,7 @@ export default function KeywordsPage() {
 								? setEditingKeyword({ ...editingKeyword, term: e.target.value })
 								: setNewKeyword(e.target.value)
 						}
-						placeholder='Enter a keyword to track'
+						placeholder={t.keywords.placeholder}
 						className='flex-1 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-gray-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:focus:border-blue-500'
 						disabled={isLoading}
 					/>
@@ -186,11 +188,11 @@ export default function KeywordsPage() {
 					>
 						{isLoading
 							? editingKeyword
-								? 'Updating...'
-								: 'Adding...'
+								? t.keywords.updating
+								: t.keywords.adding
 							: editingKeyword
-								? 'Update Keyword'
-								: 'Add Keyword'}
+								? t.keywords.updateButton
+								: t.keywords.addButton}
 					</button>
 					{editingKeyword && (
 						<button
@@ -198,7 +200,7 @@ export default function KeywordsPage() {
 							onClick={() => setEditingKeyword(null)}
 							className='inline-flex items-center justify-center rounded-lg bg-gray-100 px-6 py-2.5 text-center text-sm font-medium text-gray-900 hover:bg-gray-200 focus:ring-4 focus:ring-gray-500/25 disabled:opacity-50 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700'
 						>
-							Cancel
+							{t.keywords.cancelButton}
 						</button>
 					)}
 				</form>
@@ -208,33 +210,33 @@ export default function KeywordsPage() {
 			<div className='rounded-xl bg-white shadow-sm dark:bg-gray-dark'>
 				<div className='p-6'>
 					<h2 className='mb-4 text-lg font-medium text-gray-900 dark:text-white'>
-						Your Keywords
+						{t.keywords.yourKeywords}
 					</h2>
 					<div className='overflow-x-auto'>
 						<table className='w-full'>
 							<thead>
 								<tr className='border-b border-gray-200 dark:border-gray-800'>
-									<th className='pb-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400'>
-										Keyword
+									<th className='pb-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400'>
+										{t.keywords.tableHeaders.keyword}
 									</th>
-									<th className='pb-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400'>
-										Status
+									<th className='pb-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400'>
+										{t.keywords.tableHeaders.status}
 									</th>
-									<th className='pb-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400'>
-										Created
+									<th className='pb-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400'>
+										{t.keywords.tableHeaders.created}
 									</th>
-									<th className='pb-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400'>
-										Actions
+									<th className='pb-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400'>
+										{t.keywords.tableHeaders.actions}
 									</th>
 								</tr>
 							</thead>
 							<tbody className='divide-y divide-gray-200 dark:divide-gray-800'>
 								{keywords.map((keyword) => (
 									<tr key={keyword.id}>
-										<td className='py-4 text-sm text-gray-900 dark:text-white'>
+										<td className='py-4 text-right text-sm text-gray-900 dark:text-white'>
 											{keyword.term}
 										</td>
-										<td className='py-4'>
+										<td className='py-4 text-right'>
 											<button
 												onClick={() =>
 													handleToggleKeyword(keyword.id, keyword.enabled)
@@ -245,24 +247,24 @@ export default function KeywordsPage() {
 														: 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400'
 												}`}
 											>
-												{keyword.enabled ? 'Active' : 'Inactive'}
+												{keyword.enabled ? t.keywords.status.active : t.keywords.status.inactive}
 											</button>
 										</td>
-										<td className='py-4 text-sm text-gray-500 dark:text-gray-400'>
-											{new Date(keyword.createdAt).toLocaleDateString()}
+										<td className='py-4 text-right text-sm text-gray-500 dark:text-gray-400'>
+											{new Date(keyword.createdAt).toLocaleDateString('ar-SA')}
 										</td>
-										<td className='space-x-3 py-4'>
+										<td className='space-x-3 py-4 text-right'>
 											<button
 												onClick={() => setEditingKeyword(keyword)}
 												className='text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300'
 											>
-												Edit
+												{t.keywords.actions.edit}
 											</button>
 											<button
 												onClick={() => handleDeleteKeyword(keyword.id)}
 												className='text-sm font-medium text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300'
 											>
-												Delete
+												{t.keywords.actions.delete}
 											</button>
 										</td>
 									</tr>
@@ -273,7 +275,7 @@ export default function KeywordsPage() {
 											colSpan={4}
 											className='py-8 text-center text-sm text-gray-500 dark:text-gray-400'
 										>
-											No keywords found. Add your first keyword above.
+											{t.keywords.noKeywords}
 										</td>
 									</tr>
 								)}

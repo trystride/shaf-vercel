@@ -7,6 +7,7 @@ import axios from 'axios';
 import type { FC } from 'react';
 import Image from 'next/image';
 import { pricingData } from '@/pricing/pricingData';
+import { useTranslation } from '@/app/context/TranslationContext';
 
 interface PaylinkBillingProps {
 	isBilling?: boolean;
@@ -15,6 +16,7 @@ interface PaylinkBillingProps {
 const PaylinkBilling: FC<PaylinkBillingProps> = ({ isBilling = true }) => {
 	const router = useRouter();
 	const [prices] = useState(pricingData);
+	const t = useTranslation();
 
 	const handlePayment = async (
 		priceId: string,
@@ -40,7 +42,7 @@ const PaylinkBilling: FC<PaylinkBillingProps> = ({ isBilling = true }) => {
 			}
 		} catch (error) {
 			console.error('Subscription error:', error);
-			alert('Failed to create subscription. Please try again later.');
+			alert(t.billing.errors.subscription);
 		}
 	};
 
@@ -48,22 +50,22 @@ const PaylinkBilling: FC<PaylinkBillingProps> = ({ isBilling = true }) => {
 		<div className='mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8'>
 			<div className='mb-16 text-center'>
 				<h2 className='mb-4 text-4xl font-bold text-gray-900'>
-					Simple Affordable Pricing
+					{t.billing.header.title}
 				</h2>
 				{isBilling ? (
 					<p className='mx-auto max-w-3xl text-xl text-gray-600'>
-						Start with a 14-day free trial. No credit card required.
+						{t.billing.header.subtitle}
 					</p>
 				) : (
 					<h2 className='text-2xl font-bold text-gray-900 dark:text-white'>
-						We&apos;ll help you choose
+						{t.billing.header.helpChoose}
 					</h2>
 				)}
 			</div>
 
 			<div className='grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3'>
 				{prices.map((price) => {
-					const isPro = price.nickname.toLowerCase().includes('pro');
+					const isPro = price.nickname === t.billing.plans.pro.name;
 					return (
 						<div
 							key={price.priceId}
@@ -74,7 +76,7 @@ const PaylinkBilling: FC<PaylinkBillingProps> = ({ isBilling = true }) => {
 							{isPro && (
 								<div className='absolute right-4 top-4'>
 									<span className='rounded-full bg-white px-4 py-1 text-sm font-medium text-blue-600'>
-										Popular
+										{t.billing.plans.pro.popular}
 									</span>
 								</div>
 							)}
@@ -118,7 +120,7 @@ const PaylinkBilling: FC<PaylinkBillingProps> = ({ isBilling = true }) => {
 									${price.unit_amount / 100}
 								</span>
 								<span className={isPro ? 'text-white/80' : 'text-gray-500'}>
-									/month
+									{t.billing.pricing.perMonth}
 								</span>
 							</div>
 
@@ -128,7 +130,7 @@ const PaylinkBilling: FC<PaylinkBillingProps> = ({ isBilling = true }) => {
 										isPro ? 'text-white' : 'text-gray-900'
 									}`}
 								>
-									What&apos;s included
+									{t.billing.features.included}
 								</h4>
 								<ul className='space-y-4'>
 									{price.includes.map((feature) => (
@@ -174,11 +176,11 @@ const PaylinkBilling: FC<PaylinkBillingProps> = ({ isBilling = true }) => {
 										: 'bg-blue-600 text-white hover:bg-blue-700'
 								} ${(!isBilling || !price.active) && 'cursor-not-allowed opacity-50'}`}
 							>
-								{isBilling ? 'Get Started' : 'Available'}
+								{isBilling ? t.billing.pricing.getStarted : t.billing.pricing.available}
 							</button>
 							{!isBilling && (
 								<span className='text-sm text-gray-500'>
-									We&apos;ll help you find the best plan for your needs.
+									{t.billing.pricing.helpText}
 								</span>
 							)}
 						</div>

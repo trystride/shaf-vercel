@@ -2,6 +2,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useTranslation } from '@/lib/useTranslation';
 
 export default function Sidebar({
 	sidebarOthersData,
@@ -9,6 +10,12 @@ export default function Sidebar({
 	sidebarRef,
 }: any) {
 	const pathname = usePathname();
+	const { t } = useTranslation();
+
+	const getMenuTranslationKey = (title: string) => {
+		// Convert "Account Settings" to "accountSettings"
+		return title.toLowerCase().replace(/\s(.)/g, (_, char) => char.toUpperCase());
+	};
 
 	return (
 		<>
@@ -34,7 +41,7 @@ export default function Sidebar({
 				</Link>
 				<div className='mb-6'>
 					<p className='mb-4 font-satoshi text-sm font-medium uppercase text-body dark:text-gray-6'>
-						Main menu
+						{t('menu.mainMenu')}
 					</p>
 					<ul className='space-y-2'>
 						{sidebarData &&
@@ -49,7 +56,7 @@ export default function Sidebar({
 										}`}
 									>
 										<span className='h-[24px] w-[24px]'>{item?.icon}</span>
-										{item?.title}
+										<span>{t(`menu.${getMenuTranslationKey(item.title)}`)}</span>
 
 										{item?.comingSoon && (
 											<span
@@ -71,7 +78,7 @@ export default function Sidebar({
 				{sidebarOthersData && (
 					<div>
 						<p className='mb-4 font-satoshi text-sm font-medium uppercase text-body dark:text-gray-6'>
-							Others
+							{t('menu.others')}
 						</p>
 						<ul className='space-y-2'>
 							{sidebarOthersData?.map((item: any) => (
@@ -85,7 +92,7 @@ export default function Sidebar({
 										}`}
 									>
 										<span>{item?.icon}</span>
-										{item?.title}
+										<span>{t(`menu.${getMenuTranslationKey(item.title)}`)}</span>
 									</Link>
 								</li>
 							))}
