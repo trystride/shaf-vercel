@@ -20,6 +20,51 @@ export default function KeywordsPage() {
 	const [editingKeyword, setEditingKeyword] = useState<Keyword | null>(null);
 	const _router = useRouter();
 	const t = useTranslation();
+	
+	// Type guard to check if messages property exists
+	const hasMessages = (obj: any): obj is { messages: Record<string, string> } => {
+		return obj && typeof obj === 'object' && 'messages' in obj;
+	};
+
+	// Helper function to get the correct message from translations
+	const getMessage = (key: string): string => {
+		// Check if the message is in t.keywords.messages.{key} (Arabic structure)
+		if (hasMessages(t.keywords) && key in t.keywords.messages) {
+			// Use type assertion to handle the string indexing
+			return (t.keywords.messages as Record<string, string>)[key];
+		}
+		// Otherwise check if it's directly in t.keywords.{key} (English structure)
+		if (key in t.keywords) {
+			const value = t.keywords[key as keyof typeof t.keywords];
+			if (typeof value === 'string') {
+				return value;
+			}
+		}
+		// Fallback
+		return key;
+	};
+	
+	// Helper function to safely access any translation key
+	const getTranslation = (key: string): string => {
+		if (key in t.keywords) {
+			const value = t.keywords[key as keyof typeof t.keywords];
+			if (typeof value === 'string') {
+				return value;
+			}
+		}
+		return key;
+	};
+	
+	// Helper function to safely access nested translation objects
+	const getNestedTranslation = (obj: any, key: string, fallback: string): string => {
+		if (obj && typeof obj === 'object' && key in obj) {
+			const value = obj[key];
+			if (typeof value === 'string') {
+				return value;
+			}
+		}
+		return fallback;
+	};
 
 	// Fetch keywords
 	const fetchKeywords = async () => {
@@ -27,13 +72,13 @@ export default function KeywordsPage() {
 			const response = await fetch('/api/keywords');
 			if (!response.ok) {
 				const error = await response.text();
-				throw new Error(error || t.keywords.messages.fetchError);
+				throw new Error(error || getMessage('fetchError'));
 			}
 			const data = await response.json();
 			setKeywords(data);
 		} catch (error) {
 			toast.error(
-				error instanceof Error ? error.message : t.keywords.messages.fetchError
+				error instanceof Error ? error.message : getMessage('fetchError')
 			);
 		}
 	};
@@ -46,7 +91,7 @@ export default function KeywordsPage() {
 	const handleAddKeyword = async (e: React.FormEvent) => {
 		e.preventDefault();
 		if (!newKeyword.trim()) {
-			toast.error(t.keywords.messages.enterKeyword);
+			toast.error(getMessage('enterKeyword'));
 			return;
 		}
 
@@ -60,15 +105,15 @@ export default function KeywordsPage() {
 
 			if (!response.ok) {
 				const error = await response.text();
-				throw new Error(error || t.keywords.messages.addError);
+				throw new Error(error || getMessage('addError'));
 			}
 
-			toast.success(t.keywords.messages.addSuccess);
+			toast.success(getMessage('addSuccess'));
 			setNewKeyword('');
 			fetchKeywords();
 		} catch (error) {
 			toast.error(
-				error instanceof Error ? error.message : t.keywords.messages.addError
+				error instanceof Error ? error.message : getMessage('addError')
 			);
 		} finally {
 			setIsLoading(false);
@@ -79,7 +124,7 @@ export default function KeywordsPage() {
 	const handleEditKeyword = async (e: React.FormEvent) => {
 		e.preventDefault();
 		if (!editingKeyword || !editingKeyword.term.trim()) {
-			toast.error(t.keywords.messages.enterKeyword);
+			toast.error(getMessage('enterKeyword'));
 			return;
 		}
 
@@ -110,7 +155,7 @@ export default function KeywordsPage() {
 
 	// Delete keyword
 	const handleDeleteKeyword = async (id: string) => {
-		if (!confirm(t.keywords.confirmDelete)) return;
+		if (!confirm(getMessage('confirmDelete'))) return;
 
 		try {
 			const response = await fetch(`/api/keywords/${id}`, {
@@ -119,14 +164,14 @@ export default function KeywordsPage() {
 
 			if (!response.ok) {
 				const error = await response.text();
-				throw new Error(error || t.keywords.messages.deleteError);
+				throw new Error(error || getMessage('deleteError'));
 			}
 
-			toast.success(t.keywords.messages.deleteSuccess);
+			toast.success(getMessage('deleteSuccess'));
 			fetchKeywords();
 		} catch (error) {
 			toast.error(
-				error instanceof Error ? error.message : t.keywords.messages.deleteError
+				error instanceof Error ? error.message : getMessage('deleteError')
 			);
 		}
 	};
@@ -177,7 +222,7 @@ export default function KeywordsPage() {
 								? setEditingKeyword({ ...editingKeyword, term: e.target.value })
 								: setNewKeyword(e.target.value)
 						}
-						placeholder={t.keywords.placeholder}
+						placeholder={getTranslation('placeholder')}
 						className='flex-1 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-gray-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:focus:border-blue-500'
 						disabled={isLoading}
 					/>
@@ -188,11 +233,11 @@ export default function KeywordsPage() {
 					>
 						{isLoading
 							? editingKeyword
-								? t.keywords.updating
-								: t.keywords.adding
+								? getTranslation('updating')
+								: getTranslation('adding')
 							: editingKeyword
-								? t.keywords.updateButton
-								: t.keywords.addButton}
+								? getTranslation('updateButton')
+								: getTranslation('addButton')}
 					</button>
 					{editingKeyword && (
 						<button
@@ -200,7 +245,7 @@ export default function KeywordsPage() {
 							onClick={() => setEditingKeyword(null)}
 							className='inline-flex items-center justify-center rounded-lg bg-gray-100 px-6 py-2.5 text-center text-sm font-medium text-gray-900 hover:bg-gray-200 focus:ring-4 focus:ring-gray-500/25 disabled:opacity-50 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700'
 						>
-							{t.keywords.cancelButton}
+							{getTranslation('cancelButton')}
 						</button>
 					)}
 				</form>
@@ -210,23 +255,23 @@ export default function KeywordsPage() {
 			<div className='rounded-xl bg-white shadow-sm dark:bg-gray-dark'>
 				<div className='p-6'>
 					<h2 className='mb-4 text-lg font-medium text-gray-900 dark:text-white'>
-						{t.keywords.yourKeywords}
+						{getTranslation('yourKeywords')}
 					</h2>
 					<div className='overflow-x-auto'>
 						<table className='w-full'>
 							<thead>
 								<tr className='border-b border-gray-200 dark:border-gray-800'>
 									<th className='pb-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400'>
-										{t.keywords.tableHeaders.keyword}
+										{getNestedTranslation(t.keywords.tableHeaders, 'keyword', 'Keyword')}
 									</th>
 									<th className='pb-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400'>
-										{t.keywords.tableHeaders.status}
+										{getNestedTranslation(t.keywords.tableHeaders, 'status', 'Status')}
 									</th>
 									<th className='pb-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400'>
-										{t.keywords.tableHeaders.created}
+										{getNestedTranslation(t.keywords.tableHeaders, 'created', 'Created')}
 									</th>
 									<th className='pb-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400'>
-										{t.keywords.tableHeaders.actions}
+										{getNestedTranslation(t.keywords.tableHeaders, 'actions', 'Actions')}
 									</th>
 								</tr>
 							</thead>
@@ -247,7 +292,7 @@ export default function KeywordsPage() {
 														: 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400'
 												}`}
 											>
-												{keyword.enabled ? t.keywords.status.active : t.keywords.status.inactive}
+												{keyword.enabled ? getNestedTranslation(t.keywords.status, 'active', 'Active') : getNestedTranslation(t.keywords.status, 'inactive', 'Inactive')}
 											</button>
 										</td>
 										<td className='py-4 text-right text-sm text-gray-500 dark:text-gray-400'>
@@ -258,13 +303,13 @@ export default function KeywordsPage() {
 												onClick={() => setEditingKeyword(keyword)}
 												className='text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300'
 											>
-												{t.keywords.actions.edit}
+												{getNestedTranslation(t.keywords.actions, 'edit', 'Edit')}
 											</button>
 											<button
 												onClick={() => handleDeleteKeyword(keyword.id)}
 												className='text-sm font-medium text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300'
 											>
-												{t.keywords.actions.delete}
+												{getNestedTranslation(t.keywords.actions, 'delete', 'Delete')}
 											</button>
 										</td>
 									</tr>
@@ -275,7 +320,7 @@ export default function KeywordsPage() {
 											colSpan={4}
 											className='py-8 text-center text-sm text-gray-500 dark:text-gray-400'
 										>
-											{t.keywords.noKeywords}
+											{getTranslation('noKeywords')}
 										</td>
 									</tr>
 								)}

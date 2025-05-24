@@ -1,10 +1,11 @@
-import { withAuth } from 'next-auth/middleware';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { getToken } from 'next-auth/jwt';
 
 const locales = ['en', 'ar'];
 const defaultLocale = 'en';
 
+// Function to handle locale redirects
 function localeMiddleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
@@ -55,55 +56,68 @@ function localeMiddleware(request: NextRequest) {
   return NextResponse.next();
 }
 
-const authMiddleware = withAuth({
-  callbacks: {
-    authorized: ({ token, req }) => {
-      const path = req.nextUrl.pathname;
-
-      // Public routes that don't require authentication
-      if (
-        path.endsWith('/signin') ||
-        path.endsWith('/register') ||
-        path === `/${defaultLocale}` ||
-        path === '/ar' ||
-        path === '/en' ||
-        path === '/'
-      ) {
-        return true;
-      }
-
-      // Only protect routes that require authentication
-      if (
-        path.includes('/user/') ||
-        path.includes('/admin/') ||
-        path.startsWith('/api/user/') ||
-        path.startsWith('/api/admin/')
-      ) {
-        if (!token) return false;
-
-        // Protect admin routes
-        if (path.includes('/admin/')) {
-          return token.role === 'ADMIN';
-        }
-
-        // Protect user routes
-        return token.role === 'USER' || token.role === 'ADMIN';
-      }
-
-      // Allow access to all other routes
-      return true;
-    },
-  },
-});
-
-export default function middleware(req: NextRequest) {
+// Main middleware function
+export default async function middleware(req: NextRequest) {
   // First, run the locale middleware
   const localeResponse = localeMiddleware(req);
   if (localeResponse.status !== 200) {
     return localeResponse;
   }
-  // Then, run the auth middleware
-  return authMiddleware(req);
+  
+  // Get the path from the request
+  const path = req.nextUrl.pathname;
+  
+  // Public routes that don't require authentication
+  if (
+    path.endsWith('/signin') ||
+    path.endsWith('/register') ||
+    path === `/${defaultLocale}` ||
+    path === '/ar' ||
+    path === '/en' ||
+    path === '/'
+  ) {
+    return NextResponse.next();
+  }
+  
+  // Get the token from the request
+  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+  
+  // Check if the path requires authentication
+  if (
+    path.includes('/user/') ||
+    path.includes('/admin') ||
+    path.startsWith('/api/user/') ||
+    path.startsWith('/api/admin/')
+  ) {
+    // If no token, redirect to sign in
+    if (!token) {
+      // Determine the language prefix for the redirect
+      const langPrefix = path.startsWith('/ar') ? '/ar' : '/en';
+      const url = new URL(`${langPrefix}/auth/signin`, req.url);
+      url.searchParams.set('callbackUrl', req.url);
+      return NextResponse.redirect(url);
+    }
+    
+    // Protect admin routes - including base /admin route and its localized versions
+    if (
+      path.includes('/admin')
+    ) {
+      if (token.role !== 'ADMIN') {
+        // Redirect to sign in with error if not admin
+        const langPrefix = path.startsWith('/ar') ? '/ar' : '/en';
+        const url = new URL(`${langPrefix}/auth/signin`, req.url);
+        url.searchParams.set('callbackUrl', req.url);
+        url.searchParams.set('error', 'AccessDenied');
+        return NextResponse.redirect(url);
+      }
+    }
+    
+    // For user routes, both USER and ADMIN roles are allowed
+    // No additional checks needed here as we've already verified token exists
+  }
+  
+  // Allow access to all other routes
+  return NextResponse.next();
 }
 
 export const config = {

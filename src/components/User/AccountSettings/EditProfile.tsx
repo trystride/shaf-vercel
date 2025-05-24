@@ -10,17 +10,35 @@ import { useTranslation } from '@/app/context/TranslationContext';
 export default function EditProfile() {
 	const { data: session, update } = useSession();
 	const t = useTranslation();
+	// Create a safer way to access accountSettings translations
+	const accountSettingsT = t.accountSettings || {};
+	// Create a safer way to access editProfile translations
+	const editProfileT = accountSettingsT.editProfile || {};
+	// Create a safer way to access messages translations
+	const messagesT = editProfileT.messages || {};
+	
 	const [data, setData] = useState({
 		name: session?.user.name as string,
 		email: '',
 	});
 	const [loading, setLoading] = useState(false);
 	const isDemo = session?.user?.email?.includes('demo-');
+	
+	// Helper function to safely access nested translation objects
+	const getNestedTranslation = (obj: any, key: string, fallback: string): string => {
+		if (obj && typeof obj === 'object' && key in obj) {
+			const value = obj[key];
+			if (typeof value === 'string') {
+				return value;
+			}
+		}
+		return fallback;
+	};
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		if (isDemo) {
-			toast.error(t.accountSettings.editProfile.messages.demoError);
+			toast.error(getNestedTranslation(messagesT, 'demoError', 'Demo accounts cannot be updated'));
 			return;
 		}
 
@@ -37,7 +55,7 @@ export default function EditProfile() {
 			});
 
 			if (!res.ok) {
-				throw new Error(t.accountSettings.editProfile.messages.updateError);
+				throw new Error(getNestedTranslation(messagesT, 'updateError', 'Failed to update profile'));
 			}
 
 			const result = await res.json();
@@ -54,7 +72,7 @@ export default function EditProfile() {
 				},
 			});
 
-			toast.success(t.accountSettings.editProfile.messages.updateSuccess);
+			toast.success(getNestedTranslation(messagesT, 'updateSuccess', 'Profile updated successfully'));
 		} catch (error) {
 			toast.error(
 				error instanceof Error
@@ -74,14 +92,14 @@ export default function EditProfile() {
 		<Card className='w-full xl:w-1/3'>
 			<div className='border-b border-stroke py-4 px-7'>
 				<h3 className='font-medium text-black'>
-					{t.accountSettings.editProfile.title}
+					{getNestedTranslation(editProfileT, 'title', 'Edit Profile')}
 				</h3>
 			</div>
 			<div className='p-7'>
 				<form onSubmit={handleSubmit}>
 					<div className='mb-5.5'>
 						<InputGroup
-							label={t.accountSettings.editProfile.name}
+							label={getNestedTranslation(editProfileT, 'name', 'Name')}
 							type='text'
 							name='name'
 							value={data.name}
@@ -91,7 +109,7 @@ export default function EditProfile() {
 					</div>
 					<div className='mb-5.5'>
 						<InputGroup
-							label={t.accountSettings.editProfile.email}
+							label={getNestedTranslation(editProfileT, 'email', 'Email')}
 							type='email'
 							name='email'
 							value={session?.user?.email || ''}
@@ -101,8 +119,8 @@ export default function EditProfile() {
 					</div>
 					<FormButton
 						loading={loading}
-						text={t.accountSettings.editProfile.updateProfile}
-						loadingText={t.accountSettings.editProfile.updating}
+						text={getNestedTranslation(editProfileT, 'updateProfile', 'Update Profile')}
+						loadingText={getNestedTranslation(editProfileT, 'updating', 'Updating...')}
 					/>
 				</form>
 			</div>
