@@ -1,3 +1,7 @@
+const withBundleAnalyzer = require('@next/bundle-analyzer')({  
+  enabled: process.env.ANALYZE === 'true',
+});
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
 	images: {
@@ -39,8 +43,33 @@ const nextConfig = {
 			cssModules: true,
 		},
 	},
-	webpack: (config, { isServer }) => {
+	webpack: (config, { isServer, dev }) => {
+		// Exclude problematic files from being processed
+		config.module.rules.push({
+			test: /node-pre-gyp.*\.html$/,
+			use: 'null-loader',
+		});
+
 		if (!isServer) {
+			// Add comprehensive fallbacks for Node.js modules that shouldn't be bundled for the client
+			config.resolve.fallback = {
+				...config.resolve.fallback, // Preserve existing fallbacks if any
+				_http_common: false,        // Target of the error
+				http: false,                // Often related
+				https: false,               // Often related
+				zlib: false,                // Sometimes pulled in by http/s related libs
+				stream: false,              // Often related
+				util: false,                // General Node utility
+				crypto: false,              // bcrypt might try to pull this if misconfigured for client
+				os: false,
+				path: false,
+				fs: false,                  // Definitely server-side
+				net: false,                 // Server-side
+				tls: false,                 // Server-side
+				child_process: false,       // Server-side
+				'node-gyp-build': false    // For bcrypt/node-pre-gyp
+			};
+
 			config.optimization.splitChunks = {
 				chunks: 'all',
 				minSize: 20000,
@@ -71,4 +100,4 @@ const nextConfig = {
 	},
 };
 
-module.exports = nextConfig;
+module.exports = withBundleAnalyzer(nextConfig);

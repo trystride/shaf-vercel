@@ -1,135 +1,56 @@
-// "use client";
-// import { Faq } from "@/types/faq";
-// import React, { useState, useEffect, useRef } from "react";
+import { Faq } from '@/types/faq';
 
-// const FaqItem = ({ faq }: { faq: Faq }) => {
-// 	const [open, setOpen] = useState(false);
-// 	const faqRef = useRef(null);
+const FaqItem = ({
+	faq,
+	activeFaq,
+	handleFaqToggle,
+}: {
+	faq: Faq;
+	activeFaq: string | number;
+	handleFaqToggle: (id: string | number) => void;
+}) => {
+	const { id, question, answer } = faq;
+	return (
+		<div
+			onClick={() => handleFaqToggle(id)}
+			className='rounded-lg bg-white p-5 dark:bg-black/20 sm:p-8'
+		>
+			<button className='flex w-full items-center justify-between'>
+				<div>
+					<h4 className='text-base font-semibold text-black dark:text-white sm:text-lg'>
+						{question}
+					</h4>
+				</div>
+				<div className='flex h-10 w-10 items-center justify-center rounded-full bg-opacity-5 text-primary'>
+					<svg
+						className={`duration-200 ease-in-out fill-primary stroke-primary ${
+							activeFaq === id ? 'rotate-180' : ''
+						}`}
+						width='17'
+						height='10'
+						viewBox='0 0 17 10'
+						xmlns='http://www.w3.org/2000/svg'
+					>
+						<path
+							d='M7.28687 8.43257L7.28679 8.43265L7.29496 8.43985C7.62576 8.73124 8.02464 8.86001 8.41472 8.86001C8.83092 8.86001 9.22376 8.69083 9.53447 8.41713L9.53454 8.41721L9.54184 8.41052L15.7631 2.70784L15.7691 2.70231L15.7749 2.69659C16.0981 2.38028 16.1985 1.80579 15.7981 1.41393C15.4803 1.1028 14.9167 1.00854 14.5249 1.38489L8.41472 7.00806L2.29995 1.38063L2.29151 1.37286L2.28271 1.36548C1.93092 1.07036 1.38469 1.06804 1.03129 1.41393L1.01755 1.42738L1.00488 1.44184C0.69687 1.79355 0.695778 2.34549 1.0545 2.69659L1.05999 2.70196L1.06565 2.70717L7.28687 8.43257Z'
+							fill=''
+							stroke=''
+						/>
+					</svg>
+				</div>
+			</button>
 
-// 	const handleClickOutside = (event: MouseEvent) => {
-// 		const target = event.target as HTMLElement;
-
-// 		if (faqRef.current && !target.closest(".content")) {
-// 			setOpen(false);
-// 		}
-// 	};
-
-// 	useEffect(() => {
-// 		document.addEventListener("click", handleClickOutside);
-// 		return () => {
-// 			document.removeEventListener("click", handleClickOutside);
-// 		};
-// 	}, []);
-
-// 	return (
-// 		<div
-// 			ref={faqRef}
-// 			className='content rounded-lg bg-white shadow-1 dark:bg-gray-dark'
-// 		>
-// 			<button
-// 				onClick={() => setOpen(!open)}
-// 				className='flex w-full items-center justify-between gap-2 px-6 py-4'
-// 			>
-// 				<div>
-// 					<h3 className='font-satoshi text-xl font-medium text-black dark:text-white'>
-// 						{faq?.question}
-// 					</h3>
-// 				</div>
-// 				<div className={`transition-transform ${open ? "rotate-180" : ""}`}>
-// 					<svg
-// 						width='24'
-// 						height='24'
-// 						viewBox='0 0 24 24'
-// 						fill='none'
-// 						className='dark:text-white'
-// 						xmlns='http://www.w3.org/2000/svg'
-// 					>
-// 						<path
-// 							fillRule='evenodd'
-// 							clipRule='evenodd'
-// 							d='M4.43057 8.51192C4.70014 8.19743 5.17361 8.161 5.48811 8.43057L12 14.0122L18.5119 8.43057C18.8264 8.16101 19.2999 8.19743 19.5695 8.51192C19.839 8.82642 19.8026 9.29989 19.4881 9.56946L12.4881 15.5695C12.2072 15.8102 11.7928 15.8102 11.5119 15.5695L4.51192 9.56946C4.19743 9.29989 4.161 8.82641 4.43057 8.51192Z'
-// 							fill='currentColor'
-// 						/>
-// 					</svg>
-// 				</div>
-// 			</button>
-
-// 			<div
-// 				className={`border-t border-stroke px-6 pb-6 pt-7 duration-200 ease-in-out dark:border-stroke-dark ${
-// 					open ? "block" : "hidden"
-// 				}`}
-// 			>
-// 				<p className='dark:text-gray-4'>{faq?.answer}</p>
-// 			</div>
-// 		</div>
-// 	);
-// };
-
-// export default FaqItem;
-
-type PropsType = {
-	faq: {
-		id: number | string;
-		question: string;
-		answer: string;
-	};
-	handleFaqToggle: (id: number | string) => void;
-	activeFaq: number | string;
+			<div
+				className={`pl-0 duration-200 ease-in-out ${
+					activeFaq === id ? 'block' : 'hidden'
+				}`}
+			>
+				<p className='py-3 text-base leading-relaxed text-body-color dark:text-body-color-dark'>
+					{answer}
+				</p>
+			</div>
+		</div>
+	);
 };
 
-export default function FaqItem({
-	faq,
-	handleFaqToggle,
-	activeFaq,
-}: PropsType) {
-	const { id, question, answer } = faq;
-
-	return (
-		<>
-			<div className='rounded-lg bg-white shadow-1 dark:bg-gray-dark'>
-				<button
-					onClick={() => {
-						handleFaqToggle(id);
-					}}
-					className={`text-medium flex w-full items-center justify-between px-6 py-4 text-left text-lg text-dark dark:text-white md:text-xl`}
-				>
-					{question}
-
-					<span
-						className={`duration-300 ${activeFaq === id ? 'rotate-180' : ''}`}
-					>
-						<svg
-							width='24'
-							height='25'
-							viewBox='0 0 24 25'
-							fill='none'
-							xmlns='http://www.w3.org/2000/svg'
-						>
-							<path
-								fillRule='evenodd'
-								clipRule='evenodd'
-								d='M4.43057 8.87618C4.70014 8.56168 5.17361 8.52526 5.48811 8.79483L12 14.3765L18.5119 8.79483C18.8264 8.52526 19.2999 8.56168 19.5695 8.87618C19.839 9.19067 19.8026 9.66415 19.4881 9.93371L12.4881 15.9337C12.2072 16.1745 11.7928 16.1745 11.5119 15.9337L4.51192 9.93371C4.19743 9.66415 4.161 9.19067 4.43057 8.87618Z'
-								fill='currentColor'
-							/>
-						</svg>
-					</span>
-				</button>
-				<div
-					className={`grid`}
-					style={{
-						gridTemplateRows: `${activeFaq === id ? '1fr' : '0fr'}`,
-						transition: 'grid-template-rows 300ms',
-					}}
-				>
-					<div className={`overflow-hidden transition-all duration-300`}>
-						<p
-							className={`border-t border-stroke px-6 py-7 dark:border-stroke-dark`}
-						>
-							{answer}
-						</p>
-					</div>
-				</div>
-			</div>
-		</>
-	);
-}
+export default FaqItem;

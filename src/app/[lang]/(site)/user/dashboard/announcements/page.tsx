@@ -15,6 +15,7 @@ import { Badge } from '@/components/ui/badge';
 import { ShareIcon, CalendarIcon, DownloadIcon } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
 import DOMPurify from 'isomorphic-dompurify';
+import { useTranslation } from '@/app/context/TranslationContext';
 
 // Safe HTML rendering component
 const SafeHTML: React.FC<{ html: string; className?: string }> = ({
@@ -69,6 +70,72 @@ export default function AnnouncementsPage() {
 	const [keywords, setKeywords] = useState<string[]>([]);
 	const [currentPage, setCurrentPage] = useState(1);
 	const itemsPerPage = 10;
+	const t = useTranslation();
+	// Create a safer way to access announcements translations
+	const announcementsT = t.announcements || {};
+	
+	// Type guard to check if messages property exists
+	const hasMessages = (obj: any): obj is { messages: Record<string, string> } => {
+		return obj && typeof obj === 'object' && 'messages' in obj;
+	};
+
+	// Helper function to get the correct message from translations
+	const getMessage = (key: string): string => {
+		// Check if the message is in announcementsT.messages.{key} (Arabic structure)
+		if (hasMessages(announcementsT) && key in announcementsT.messages) {
+			// Use type assertion to handle the string indexing
+			return (announcementsT.messages as Record<string, string>)[key];
+		}
+		// Otherwise check if it's directly in announcementsT.{key} (English structure)
+		if (key in announcementsT) {
+			const value = announcementsT[key as keyof typeof announcementsT];
+			if (typeof value === 'string') {
+				return value;
+			}
+		}
+		// Fallback
+		return key;
+	};
+	
+	// Helper function to safely access any translation key
+	const getTranslation = (key: string, fallback: string = key): string => {
+		if (key in announcementsT) {
+			const value = announcementsT[key as keyof typeof announcementsT];
+			if (typeof value === 'string') {
+				return value;
+			}
+		}
+		return fallback;
+	};
+	
+	// Helper function to safely access nested translation objects
+	const getNestedTranslation = (obj: any, key1: string, key2: string | null = null, fallback: string): string => {
+		// If obj is undefined or not an object, return fallback
+		if (!obj || typeof obj !== 'object') {
+			return fallback;
+		}
+
+		// If we're only looking for a single level (key2 is null)
+		if (key2 === null) {
+			if (key1 in obj) {
+				const value = obj[key1];
+				if (typeof value === 'string') {
+					return value;
+				}
+			}
+			return fallback;
+		}
+
+		// For two levels of nesting
+		if (key1 in obj && typeof obj[key1] === 'object' && obj[key1] !== null && key2 in obj[key1]) {
+			const value = obj[key1][key2];
+			if (typeof value === 'string') {
+				return value;
+			}
+		}
+
+		return fallback;
+	};
 
 	const formatDate = (date: string) => {
 		try {
@@ -114,8 +181,7 @@ export default function AnnouncementsPage() {
 					});
 
 					toast.error(
-						announcementsError?.error ||
-							'Failed to load announcements. Please try again later.'
+						announcementsError?.error || getNestedTranslation(announcementsT, 'errors', 'fetchFailed', 'Failed to fetch announcements')
 					);
 					return;
 				}
@@ -132,25 +198,25 @@ export default function AnnouncementsPage() {
 						'Invalid announcements data format:',
 						announcementsData
 					);
-					toast.error('Received invalid data format from server');
+					toast.error(getNestedTranslation(announcementsT, 'errors', 'invalidData', 'Invalid data format'));
 				}
 
 				if (Array.isArray(keywordsData)) {
 					setKeywords(keywordsData.map((k) => k.term));
 				} else {
 					console.error('Invalid keywords data format:', keywordsData);
-					toast.error('Failed to load keywords');
+					toast.error(getNestedTranslation(announcementsT, 'errors', 'keywordsFailed', 'Failed to load keywords'));
 				}
 			} catch (error) {
 				console.error('Error in fetchData:', error);
-				toast.error('An error occurred while fetching data');
+				toast.error(getNestedTranslation(announcementsT, 'errors', 'generalError', 'An error occurred while loading data'));
 			} finally {
 				setLoading(false);
 			}
 		};
 
 		fetchData();
-	}, [session]);
+	}, [session, t]);
 
 	const filteredAnnouncements = announcements.filter((ann) =>
 		selectedKeyword === 'all' ? true : ann.matchedKeyword === selectedKeyword
@@ -184,13 +250,13 @@ export default function AnnouncementsPage() {
 
 		// Define CSV headers and map announcement data
 		const headers = [
-			'Announcement ID',
-			'Title',
-			'Action Type',
-			'Court',
-			'Publish Date',
-			'Matched Keyword',
-			'Link',
+			'رقم الإعلان',
+			'العنوان',
+			'نوع الإجراء',
+			'المحكمة',
+			'تاريخ النشر',
+			'الكلمة المفتاحية المطابقة',
+			'الرابط',
 		];
 
 		const csvData = announcements.map((announcement) => [
@@ -217,7 +283,7 @@ export default function AnnouncementsPage() {
 		link.setAttribute('href', url);
 		link.setAttribute(
 			'download',
-			`announcements_${new Date().toISOString().split('T')[0]}.csv`
+			`${getNestedTranslation(announcementsT, 'export', 'filename', 'announcements')}_${new Date().toISOString().split('T')[0]}.csv`
 		);
 		document.body.appendChild(link);
 		link.click();
@@ -231,7 +297,7 @@ export default function AnnouncementsPage() {
 				<div className='mb-8 flex items-center justify-between'>
 					<div className='flex items-center gap-4'>
 						<h1 className='text-2xl font-semibold text-gray-700'>
-							Matched Announcements
+							{getNestedTranslation(announcementsT, 'title', null, 'Announcements')}
 						</h1>
 						{announcements.length > 0 && (
 							<Button
@@ -241,7 +307,7 @@ export default function AnnouncementsPage() {
 								onClick={exportToCSV}
 							>
 								<DownloadIcon className='mr-2 h-4 w-4' />
-								Export CSV
+								{getNestedTranslation(announcementsT, 'export', 'button', 'Export to CSV')}
 							</Button>
 						)}
 					</div>
@@ -255,10 +321,10 @@ export default function AnnouncementsPage() {
 						>
 							<SelectTrigger className='w-full border-gray-200 bg-white focus:ring-[#00A7B1] focus:ring-offset-0'>
 								<div className='flex items-center gap-2'>
-									<span className='text-gray-600'>Filter by:</span>
+									<span className='text-gray-600'>{getNestedTranslation(announcementsT, 'filter', 'label', 'Filter by keyword')}</span>
 									<span className='font-medium text-gray-900'>
 										{selectedKeyword === 'all'
-											? 'All Keywords'
+											? getNestedTranslation(announcementsT, 'filter', 'allKeywords', 'All keywords')
 											: selectedKeyword}
 									</span>
 								</div>
@@ -272,7 +338,7 @@ export default function AnnouncementsPage() {
 									className='px-3 py-2 text-gray-900 hover:bg-[#00A7B1]/5 focus:bg-[#00A7B1]/5'
 								>
 									<div className='flex items-center gap-2'>
-										<span className='font-medium'>All Keywords</span>
+										<span className='font-medium'>{getNestedTranslation(announcementsT, 'filter', 'allKeywords', 'All keywords')}</span>
 									</div>
 								</SelectItem>
 								<div className='max-h-[200px] overflow-auto'>
@@ -301,7 +367,6 @@ export default function AnnouncementsPage() {
 				{loading ? (
 					<div className='grid gap-4'>
 						{[...Array(3)].map((_, i) => (
-							// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
 							<Card key={i} className='bg-white'>
 								<CardContent className='p-6'>
 									<div className='mb-4 flex items-center justify-between'>
@@ -316,7 +381,7 @@ export default function AnnouncementsPage() {
 					</div>
 				) : (
 					<div className='grid gap-4'>
-						{paginatedAnnouncements.map((announcement, _index) => (
+						{paginatedAnnouncements.map((announcement) => (
 							<Card
 								key={announcement.Id}
 								className='mb-4 border border-gray-100 bg-white transition-shadow hover:shadow-md'
@@ -337,6 +402,7 @@ export default function AnnouncementsPage() {
 													type='button'
 													onClick={() => handleShare(announcement)}
 													className='text-gray-600 hover:text-gray-800'
+													title={getNestedTranslation(announcementsT, 'card', 'share', 'Share')}
 												>
 													<ShareIcon className='h-4 w-4' />
 												</Button>
@@ -360,7 +426,7 @@ export default function AnnouncementsPage() {
 													className='mb-2 text-sm leading-relaxed text-gray-600'
 													html={`${announcement.Comment} <a href="https://bankruptcy.gov.sa/ar/Announcements/Pages/announcementDetails.aspx?AdID=${announcement.url}" 
                               class="text-[#00A7B1] hover:text-[#008288]">
-                            المزيد...
+                              ${getNestedTranslation(announcementsT, 'card', 'readMore', 'Read More')}
                           </a>`}
 												/>
 											</div>
@@ -371,8 +437,8 @@ export default function AnnouncementsPage() {
 												html={announcement.Body}
 											/>
 										)}
-										<p className='mt-2 text-sm text-gray-500'>
-											{`Matched keyword: ${announcement.matchedKeyword}`}
+										<p className='mt-2 text-sm text-gray-500' dir='rtl'>
+											{getNestedTranslation(announcementsT, 'card', 'matchedKeyword', 'Matched keyword')} ${announcement.matchedKeyword}
 										</p>
 									</div>
 								</CardContent>
@@ -389,10 +455,10 @@ export default function AnnouncementsPage() {
 							disabled={currentPage === 1}
 							className='border-[#00A7B1] text-[#00A7B1] hover:bg-[#00A7B1] hover:text-white'
 						>
-							Previous
+							{getNestedTranslation(announcementsT, 'pagination', 'previous', 'Previous')}
 						</Button>
-						<div className='mx-4 flex items-center text-sm text-gray-600'>
-							Page {currentPage} of{' '}
+						<div className='mx-4 flex items-center text-sm text-gray-600' dir='rtl'>
+							{getNestedTranslation(announcementsT, 'pagination', 'page', 'Page')} {currentPage} {getNestedTranslation(announcementsT, 'pagination', 'of', 'of')}{' '}
 							{Math.ceil(filteredAnnouncements.length / itemsPerPage)}
 						</div>
 						<Button
@@ -411,14 +477,14 @@ export default function AnnouncementsPage() {
 							}
 							className='border-[#00A7B1] text-[#00A7B1] hover:bg-[#00A7B1] hover:text-white'
 						>
-							Next
+							{getNestedTranslation(announcementsT, 'pagination', 'next', 'Next')}
 						</Button>
 					</div>
 				)}
 
 				{!loading && filteredAnnouncements.length === 0 && (
 					<div className='py-12 text-center'>
-						<p className='text-gray-500'>No announcements found</p>
+						<p className='text-gray-500'>{getTranslation('noResults')}</p>
 					</div>
 				)}
 			</div>

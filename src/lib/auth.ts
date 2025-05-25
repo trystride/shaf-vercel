@@ -6,7 +6,7 @@ import GitHubProvider from 'next-auth/providers/github';
 import GoogleProvider from 'next-auth/providers/google';
 import EmailProvider from 'next-auth/providers/email';
 import { getServerSession } from 'next-auth';
-import bcrypt from 'bcrypt';
+import { comparePasswords } from './bcrypt-utils'; // Import from server-only utility
 import logger from './logger';
 
 declare module 'next-auth' {
@@ -92,7 +92,7 @@ export const authOptions: NextAuthOptions = {
 						throw new Error('Invalid credentials');
 					}
 
-					const isValid = await bcrypt.compare(
+					const isValid = await comparePasswords(
 						credentials.password,
 						user.password
 					);

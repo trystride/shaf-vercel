@@ -4,15 +4,15 @@ import Breadcrumb from '@/components/Common/Dashboard/Breadcrumb';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-	title: `Billing - ${process.env.SITE_NAME}`,
-	description: `This is Billing page for ${process.env.SITE_NAME}`,
+	title: 'الفواتير',
+	description: 'صفحة الفواتير',
 	// other discriptions
 };
 
 const BillingPage = () => {
 	return (
 		<>
-			<Breadcrumb pageTitle='Billing' />
+			<Breadcrumb pageTitle='الفواتير' />
 			<Billing />
 		</>
 	);

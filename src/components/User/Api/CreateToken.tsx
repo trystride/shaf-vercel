@@ -5,18 +5,20 @@ import InputGroup from '@/components/Common/Dashboard/InputGroup';
 import { createApiKey } from '@/actions/api-key';
 import { useRef } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from '@/app/context/TranslationContext';
 
 export default function CreateToken() {
 	const ref = useRef<HTMLFormElement>(null);
+	const t = useTranslation();
 
 	return (
 		<div className='lg:w-2/6'>
 			<Card>
 				<div className='mb-6'>
 					<h3 className='mb-2.5 font-satoshi text-custom-2xl font-bold tracking-[-.5px] text-dark dark:text-white'>
-						Want to use the API?
+						{t.api.createToken.title}
 					</h3>
-					<p className='text-body'>Create a new token to get the access.</p>
+					<p className='text-body'>{t.api.createToken.description}</p>
 				</div>
 
 				<form
@@ -24,9 +26,9 @@ export default function CreateToken() {
 					action={async (formData) => {
 						try {
 							await createApiKey(formData.get('token') as string);
-							toast.success('Token created successfully');
+							toast.success(t.api.createToken.success);
 						} catch (error) {
-							toast.error('Unable to create token');
+							toast.error(t.api.createToken.error);
 						}
 
 						ref.current?.reset();
@@ -34,14 +36,14 @@ export default function CreateToken() {
 					className='space-y-5.5'
 				>
 					<InputGroup
-						label='Token name'
+						label={t.api.createToken.tokenName}
 						name='token'
-						placeholder='Enter a token name'
+						placeholder={t.api.createToken.tokenNamePlaceholder}
 						type='text'
 						required={true}
 					/>
 
-					<FormButton>Create Token</FormButton>
+					<FormButton>{t.api.createToken.createButton}</FormButton>
 				</form>
 			</Card>
 		</div>

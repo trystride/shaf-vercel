@@ -23,6 +23,7 @@ import {
 	AccordionItem,
 	AccordionTrigger,
 } from '@/components/ui/accordion';
+import { useTranslation } from '@/app/context/TranslationContext';
 
 const features = [
 	{
@@ -130,29 +131,6 @@ const targetAudience = [
 	{ id: 'ta6', title: 'Market Researchers', icon: Search },
 ];
 
-const steps = [
-	{
-		id: 'st1',
-		name: 'Set Your Keywords',
-		description:
-			'Add company names, business entities, or specific terms you want to track.',
-		icon: Search,
-	},
-	{
-		id: 'st2',
-		name: 'Automated Monitoring',
-		description:
-			'Our system continuously monitors multiple sources for your keywords.',
-		icon: BellIcon,
-	},
-	{
-		id: 'st3',
-		name: 'Instant Notifications',
-		description: 'Receive real-time alerts when your keywords are mentioned.',
-		icon: Zap,
-	},
-];
-
 const faqs = [
 	{
 		id: 'fq1',
@@ -181,26 +159,43 @@ const faqs = [
 ];
 
 export default function Home() {
+	const t = useTranslation();
+
+	const steps = [
+		{
+			id: 'st1',
+			name: t.steps?.[0]?.name ?? 'Set Up Keywords',
+			description: t.steps?.[0]?.description ?? 'Define the terms and companies you want to monitor',
+			icon: Search,
+		},
+		{
+			id: 'st2',
+			name: t.steps?.[1]?.name ?? 'Configure Alerts',
+			description: t.steps?.[1]?.description ?? 'Choose how and when you want to receive notifications',
+			icon: BellIcon,
+		},
+		{
+			id: 'st3',
+			name: t.steps?.[2]?.name ?? 'Stay Informed',
+			description: t.steps?.[2]?.description ?? 'Get real-time updates when your keywords are mentioned',
+			icon: Zap,
+		},
+	];
+
 	return (
 		<>
 			<Header />
+
 			{/* Hero Section */}
 			<section className='relative isolate pt-14'>
 				<div className='py-24 sm:py-32'>
 					<div className='mx-auto max-w-7xl px-6 lg:px-8'>
 						<div className='mx-auto max-w-2xl text-center'>
 							<h1 className='text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-6xl'>
-								Stay Ahead with{' '}
-								<span className='relative whitespace-nowrap'>
-									<span className='relative bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent'>
-										Real-Time
-									</span>
-								</span>{' '}
-								Business Intelligence
+								{t.hero?.title ?? 'Stay Ahead with Real-Time Business Intelligence'}
 							</h1>
 							<p className='mt-6 text-lg leading-8 text-gray-600 dark:text-gray-400'>
-								Transform the way you track important business announcements
-								across Saudi Arabia&apos;s most trusted sources.
+								{t.hero?.subtitle ?? 'Monitor critical business announcements across Saudi Arabia\'s most trusted sources'}
 							</p>
 							<div className='mt-10 flex items-center justify-center gap-x-6'>
 								<Link href='/auth/signup'>
@@ -208,7 +203,7 @@ export default function Home() {
 										size='lg'
 										className='rounded-full bg-indigo-600 px-8 py-6 text-lg font-medium text-white shadow-lg transition-all duration-200 hover:bg-indigo-500 hover:shadow-xl'
 									>
-										Get Started
+										{t.common?.getStarted ?? 'Get Started'}
 										<ArrowRight className='ml-2 h-5 w-5' />
 									</Button>
 								</Link>
@@ -218,103 +213,65 @@ export default function Home() {
 				</div>
 			</section>
 
-			{/* Logo Cloud / Network Section */}
-			<section
-				id='network'
-				className='relative overflow-hidden bg-gradient-to-b from-gray-50 to-white py-16 dark:from-gray-800 dark:to-gray-900 sm:py-24'
-			>
-				{/* Background Pattern */}
-				<div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-10 [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] dark:bg-[url('/grid-dark.svg')]"></div>
-
-				<div className='relative mx-auto max-w-7xl px-6 lg:px-8'>
+			{/* Network Section */}
+			<section id="network" className='py-24 sm:py-32'>
+				<div className='mx-auto max-w-7xl px-6 lg:px-8'>
 					<div className='mx-auto max-w-2xl text-center'>
-						<h2 className='bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-3xl font-bold tracking-tight text-transparent dark:from-white dark:to-gray-300 sm:text-4xl'>
-							Our Growing Network
+						<h2 className='text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl'>
+							{t.network?.title ?? 'Trusted by Leading Organizations'}
 						</h2>
-						<p className='mt-4 text-lg leading-8 text-gray-600 dark:text-gray-400'>
-							Trusted sources across Saudi Arabia&apos;s media landscape
+						<p className='mt-6 text-lg leading-8 text-gray-600 dark:text-gray-400'>
+							{t.network?.subtitle ?? 'Our network of trusted sources provides you with the most accurate and up-to-date information'}
 						</p>
 					</div>
-
-					<div className='relative mx-auto mt-16 h-24 w-full max-w-5xl overflow-hidden rounded-xl bg-white dark:bg-gray-800'>
-						<div className='absolute left-0 top-0 z-10 h-full w-32 bg-gradient-to-r from-white to-transparent dark:from-gray-800'></div>
-						<div className='absolute right-0 top-0 z-10 h-full w-32 bg-gradient-to-l from-white to-transparent dark:from-gray-800'></div>
-						<div className='animate-scroll flex'>
-							{/* First set of logos */}
-							{sources.map((source) => (
-								<div
-									key={source.id}
-									className='group mx-8 flex h-24 w-48 flex-none items-center justify-center'
-								>
-									<div className='relative flex h-full w-full items-center justify-center grayscale transition-all duration-300 hover:grayscale-0'>
-										<Image
-											src={source.logo}
-											alt={source.name}
-											width={200}
-											height={100}
-											className='max-h-12 w-auto'
-										/>
-										<div className='absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-gray-900 px-3 py-1 text-sm text-white opacity-0 transition-opacity group-hover:opacity-100 dark:bg-white dark:text-gray-900'>
-											{source.name}
-										</div>
-									</div>
-								</div>
-							))}
-							{/* Duplicate set of logos for seamless loop */}
-							{sources.map((source) => (
-								<div
-									key={source.id}
-									className='group mx-8 flex h-24 w-48 flex-none items-center justify-center'
-								>
-									<div className='relative flex h-full w-full items-center justify-center grayscale transition-all duration-300 hover:grayscale-0'>
-										<Image
-											src={source.logo}
-											alt={source.name}
-											width={200}
-											height={100}
-											className='max-h-12 w-auto'
-										/>
-										<div className='absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-gray-900 px-3 py-1 text-sm text-white opacity-0 transition-opacity group-hover:opacity-100 dark:bg-white dark:text-gray-900'>
-											{source.name}
-										</div>
-									</div>
-								</div>
-							))}
-						</div>
+					<div className='mx-auto mt-16 grid max-w-lg grid-cols-4 items-center gap-x-8 gap-y-10 sm:max-w-xl sm:grid-cols-6 sm:gap-x-10 lg:mx-0 lg:max-w-none lg:grid-cols-5'>
+						{sources.map((source) => (
+							<div key={source.id} className="col-span-2 lg:col-span-1">
+								<Image
+									src={source.logo}
+									alt={source.name}
+									className='max-h-12 w-full object-contain'
+									width={158}
+									height={48}
+								/>
+							</div>
+						))}
 					</div>
 				</div>
 			</section>
 
-			{/* Security Features Section */}
-			<section id='security' className='bg-white py-24 dark:bg-gray-900'>
+			{/* Security Section */}
+			<section id="security" className='py-24 sm:py-32 bg-gray-50 dark:bg-gray-900'>
 				<div className='mx-auto max-w-7xl px-6 lg:px-8'>
-					<div className='mx-auto max-w-2xl lg:text-center'>
-						<h2 className='text-base font-semibold leading-7 text-indigo-600 dark:text-indigo-400'>
-							ENTERPRISE-GRADE SECURITY
+					<div className='mx-auto max-w-2xl text-center'>
+						<h2 className='text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl'>
+							{t.security?.title ?? 'Enterprise-Grade Security'}
 						</h2>
-						<p className='mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl'>
-							Your Data, Our Priority
+						<p className='mt-2 text-lg leading-8 text-gray-600 dark:text-gray-400'>
+							{t.security?.subtitle ?? 'Your Data, Our Priority'}
 						</p>
-						<p className='mt-6 text-lg leading-8 text-gray-600 dark:text-gray-400'>
-							Built with security and privacy at its core, ensuring your
-							sensitive business data remains protected
+						<p className='mt-6 text-base leading-7 text-gray-600 dark:text-gray-400'>
+							{t.security?.description ?? 'Built with security and privacy at its core, ensuring your sensitive business data is protected'}
 						</p>
 					</div>
 					<div className='mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none'>
-						<dl className='grid max-w-xl grid-cols-1 gap-x-8 gap-y-10 lg:max-w-none lg:grid-cols-4'>
-							{securityFeatures.map((feature) => (
-								<div key={feature.id} className='relative pl-16'>
+						<dl className='grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-4'>
+							{t.security?.features?.map((feature) => (
+								<div key={feature.id} className='flex flex-col'>
 									<dt className='text-base font-semibold leading-7 text-gray-900 dark:text-white'>
-										<div className='absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-600'>
-											<Shield
-												className='h-6 w-6 text-white'
-												aria-hidden='true'
-											></Shield>
-										</div>
 										{feature.title}
 									</dt>
-									<dd className='mt-2 text-base leading-7 text-gray-600 dark:text-gray-400'>
-										{feature.description}
+									<dd className='mt-1 flex flex-auto flex-col text-base leading-7 text-gray-600 dark:text-gray-400'>
+										<p className='flex-auto'>{feature.description}</p>
+									</dd>
+								</div>
+							)) ?? securityFeatures.map((feature) => (
+								<div key={feature.id} className='flex flex-col'>
+									<dt className='text-base font-semibold leading-7 text-gray-900 dark:text-white'>
+										{feature.title}
+									</dt>
+									<dd className='mt-1 flex flex-auto flex-col text-base leading-7 text-gray-600 dark:text-gray-400'>
+										<p className='flex-auto'>{feature.description}</p>
 									</dd>
 								</div>
 							))}
@@ -323,43 +280,34 @@ export default function Home() {
 				</div>
 			</section>
 
-			{/* Perfect For Section */}
-			<section
-				id='target-audience'
-				className='bg-gray-50 py-24 dark:bg-gray-800'
-			>
+			{/* Industry Section */}
+			<section id="industry" className='py-24 sm:py-32'>
 				<div className='mx-auto max-w-7xl px-6 lg:px-8'>
-					<div className='mx-auto max-w-2xl lg:text-center'>
-						<h2 className='text-base font-semibold leading-7 text-indigo-600 dark:text-indigo-400'>
-							PERFECT FOR
+					<div className='mx-auto max-w-2xl text-center'>
+						<h2 className='text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl'>
+							{t.industry?.title ?? 'Perfect For'}
 						</h2>
-						<p className='mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl'>
-							Tailored for Your Industry
+						<p className='mt-2 text-lg leading-8 text-gray-600 dark:text-gray-400'>
+							{t.industry?.subtitle ?? 'Designed for Your Industry'}
 						</p>
-						<p className='mt-6 text-lg leading-8 text-gray-600 dark:text-gray-400'>
-							Designed to meet the specific needs of various business
-							professionals and organizations
+						<p className='mt-6 text-base leading-7 text-gray-600 dark:text-gray-400'>
+							{t.industry?.description ?? 'Tailored to meet the specific needs of various professionals and business institutions'}
 						</p>
 					</div>
 					<div className='mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none'>
-						<dl className='grid grid-cols-2 gap-8 sm:grid-cols-3 lg:grid-cols-6'>
-							{targetAudience.map((audience) => (
-								<div
-									key={audience.id}
-									className='group relative rounded-2xl bg-white p-8 text-center shadow-sm ring-1 ring-gray-200 transition-all duration-200 hover:bg-indigo-50 dark:bg-gray-900 dark:ring-gray-800 dark:hover:bg-gray-800'
-								>
-									<dt>
-										<div className='mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-indigo-100 transition-colors duration-200 group-hover:bg-indigo-200 dark:bg-indigo-900 dark:group-hover:bg-indigo-800'>
-											<audience.icon
-												className='h-8 w-8 text-indigo-600 dark:text-indigo-400'
-												aria-hidden='true'
-											></audience.icon>
-										</div>
-										<p className='mt-6 text-sm font-semibold leading-6 text-gray-900 dark:text-white'>
-											{audience.title}
-										</p>
-									</dt>
-								</div>
+						<dl className='grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-3'>
+							{t.industry?.categories?.map((category) => (
+								<Card key={category.id} className='flex flex-col items-center text-center p-6 dark:bg-gray-800'>
+									<h3 className='text-lg font-semibold leading-7 tracking-tight text-gray-900 dark:text-white'>
+										{category.title}
+									</h3>
+								</Card>
+							)) ?? targetAudience.map((category) => (
+								<Card key={category.id} className='flex flex-col items-center text-center p-6 dark:bg-gray-800'>
+									<h3 className='text-lg font-semibold leading-7 tracking-tight text-gray-900 dark:text-white'>
+										{category.title}
+									</h3>
+								</Card>
 							))}
 						</dl>
 					</div>
@@ -369,48 +317,50 @@ export default function Home() {
 			{/* Features Section */}
 			<section
 				id='features'
-				className='bg-white py-24 dark:bg-gray-900 sm:py-32'
+				className='mx-auto max-w-7xl px-6 lg:px-8 py-24 sm:py-32'
 			>
-				<div className='mx-auto max-w-7xl px-6 lg:px-8'>
-					<div className='mx-auto max-w-2xl text-center'>
-						<h2 className='text-4xl font-medium tracking-tight text-slate-900 dark:text-white sm:text-5xl'>
-							Precision Monitoring
-						</h2>
-					</div>
-					<div className='mx-auto mt-16 max-w-7xl'>
-						<div className='grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4'>
-							{features.map((feature) => (
-								<Card
-									key={feature.id}
-									className='relative overflow-hidden rounded-3xl p-8 transition-all duration-200 hover:shadow-lg dark:bg-gray-800/50'
-								>
-									<div className='relative z-10'>
-										<div className='mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-indigo-500/10 dark:bg-indigo-500/20'>
-											<feature.icon className='h-8 w-8 text-indigo-600 dark:text-indigo-400' />
-										</div>
-										<h3 className='mb-3 text-xl font-semibold text-slate-900 dark:text-white'>
-											{feature.title}
-										</h3>
-										<p className='text-slate-600 dark:text-slate-400'>
-											{feature.description}
-										</p>
-									</div>
-								</Card>
-							))}
-						</div>
-					</div>
+				<div className='mx-auto max-w-2xl lg:text-center'>
+					<h2 className='text-base font-semibold leading-7 text-indigo-600'>
+						{t.features?.[0]?.title ?? features[0].title}
+					</h2>
+					<p className='mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl'>
+						{t.features?.[0]?.description ?? features[0].description}
+					</p>
+				</div>
+
+				<div className='mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none'>
+					<dl className='grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-4'>
+						{(t.features ?? features).map((feature) => (
+							<Card
+								key={feature.id}
+								className='flex flex-col dark:bg-gray-900'
+							>
+								<div className='flex items-center gap-x-4 p-6'>
+									{feature.icon && (
+										<feature.icon className='h-6 w-6 text-indigo-600' />
+									)}
+									<h3 className='text-base font-semibold leading-7 tracking-tight text-gray-900 dark:text-white'>
+										{feature.title}
+									</h3>
+								</div>
+								<div className='p-6 pt-0 text-base leading-7 text-gray-600 dark:text-gray-400'>
+									{feature.description}
+								</div>
+							</Card>
+						))}
+					</dl>
 				</div>
 			</section>
 
 			{/* How it Works Section */}
-			<section id='how-it-works' className='bg-gray-50 py-24 dark:bg-gray-800'>
+			<section id='how-it-works' className='bg-gray-50 py-24 dark:bg-gray-900'>
 				<div className='mx-auto max-w-7xl px-6 lg:px-8'>
-					<div className='mx-auto max-w-2xl lg:text-center'>
-						<h2 className='text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-6xl'>
-							How It Works
+					<div className='mx-auto max-w-2xl text-center'>
+						<h2 className='text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl'>
+							{t.stepsSection.title}
 						</h2>
-						<p className='mt-6 text-lg leading-8 text-gray-600 dark:text-gray-400'>
-							Get started in minutes with our simple three-step process
+						<p className='mt-2 text-lg leading-8 text-gray-600 dark:text-gray-400'>
+							{t.stepsSection.subtitle}
 						</p>
 					</div>
 					<div className='mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none'>
@@ -437,25 +387,28 @@ export default function Home() {
 			</section>
 
 			{/* FAQ Section */}
-			<section id='faq' className='bg-white py-24 dark:bg-gray-900'>
-				<div className='mx-auto max-w-7xl px-6 lg:px-8'>
-					<div className='mx-auto max-w-4xl divide-y divide-gray-900/10 dark:divide-gray-100/10'>
-						<h2 className='mb-16 text-center text-2xl font-bold leading-10 tracking-tight text-gray-900 dark:text-white'>
-							Frequently Asked Questions
-						</h2>
-						<Accordion type='single' collapsible className='w-full'>
-							{faqs.map((faq) => (
-								<AccordionItem key={faq.id} value={`item-${faq.id}`}>
-									<AccordionTrigger className='text-left text-lg font-semibold text-gray-900 dark:text-white'>
+			<section
+				id='faq'
+				className='mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:px-8 lg:py-40'
+			>
+				<div className='mx-auto max-w-4xl divide-y divide-gray-900/10 dark:divide-gray-700'>
+					<h2 className='text-2xl font-bold leading-10 tracking-tight text-gray-900 dark:text-white'>
+						{t.faqSection.title}
+					</h2>
+					<dl className='mt-10 space-y-6 divide-y divide-gray-900/10 dark:divide-gray-700'>
+						{t.faqs.map((faq) => (
+							<Accordion key={faq.id} type='single' collapsible>
+								<AccordionItem value={faq.id}>
+									<AccordionTrigger className='text-right'>
 										{faq.question}
 									</AccordionTrigger>
-									<AccordionContent className='text-gray-600 dark:text-gray-400'>
+									<AccordionContent className='text-right'>
 										{faq.answer}
 									</AccordionContent>
 								</AccordionItem>
-							))}
-						</Accordion>
-					</div>
+							</Accordion>
+						))}
+					</dl>
 				</div>
 			</section>
 
@@ -476,7 +429,7 @@ export default function Home() {
 									size='lg'
 									className='rounded-full bg-white px-8 py-6 text-lg font-medium text-indigo-600 hover:bg-indigo-50'
 								>
-									Get Started
+									{t.common.getStarted}
 									<ArrowRight className='ml-2 h-5 w-5' />
 								</Button>
 							</Link>

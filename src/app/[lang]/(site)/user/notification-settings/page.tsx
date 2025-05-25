@@ -7,7 +7,7 @@ import { BellIcon } from '@heroicons/react/24/outline';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-	title: 'Notification Settings',
+	title: 'إعدادات الإشعارات',
 };
 
 export default async function NotificationSettingsPage() {
@@ -29,7 +29,7 @@ export default async function NotificationSettingsPage() {
 		<div className='space-y-4'>
 			<div className='flex items-center gap-2'>
 				<BellIcon className='h-6 w-6' />
-				<h1 className='text-2xl font-bold'>Notification Settings</h1>
+				<h1 className='text-2xl font-bold'>إعدادات الإشعارات</h1>
 			</div>
 			<Card>
 				<NotificationSettingsForm preferences={preferences} />

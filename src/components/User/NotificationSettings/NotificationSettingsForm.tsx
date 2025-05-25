@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 import { ClockIcon, CalendarDaysIcon } from '@heroicons/react/24/outline';
+import { useTranslation } from '@/app/context/TranslationContext';
 
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
@@ -50,6 +51,7 @@ export default function NotificationSettingsForm({
 	const [formData, setFormData] = useState<NotificationPreference>(
 		preferences || DEFAULT_PREFERENCES
 	);
+	const t = useTranslation();
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -67,15 +69,15 @@ export default function NotificationSettingsForm({
 			const data = await response.json();
 
 			if (!response.ok) {
-				throw new Error(data.message || 'Failed to save preferences');
+				throw new Error(data.message || t.notificationSettings.messages.error);
 			}
 
-			toast.success('Notification preferences saved successfully');
+			toast.success(t.notificationSettings.messages.success);
 			router.refresh();
 		} catch (error) {
 			console.error('Error saving preferences:', error);
 			toast.error(
-				error instanceof Error ? error.message : 'Failed to save preferences'
+				error instanceof Error ? error.message : t.notificationSettings.messages.error
 			);
 		} finally {
 			setLoading(false);
@@ -89,10 +91,10 @@ export default function NotificationSettingsForm({
 				<div className='flex items-center justify-between'>
 					<div className='flex-grow'>
 						<h3 className='text-base font-medium text-gray-900 dark:text-white'>
-							Email Notifications
+							{t.notificationSettings.emailNotifications.title}
 						</h3>
 						<p className='mt-1 text-sm text-gray-500 dark:text-gray-400'>
-							Receive notifications about new bankruptcy announcements via email
+							{t.notificationSettings.emailNotifications.description}
 						</p>
 					</div>
 					<Switch
@@ -129,7 +131,7 @@ export default function NotificationSettingsForm({
 									aria-hidden='true'
 								/>
 								<span className='text-base font-medium text-gray-900 dark:text-white'>
-									Notification Frequency
+									{t.notificationSettings.frequency.title}
 								</span>
 							</div>
 							<select
@@ -151,9 +153,9 @@ export default function NotificationSettingsForm({
 								}
 								className='mt-1 block w-full rounded-md border-gray-300 bg-white py-2 pl-3 pr-10 text-base focus:border-primary focus:outline-none focus:ring-primary dark:border-gray-600 dark:bg-gray-700 dark:text-white sm:text-sm'
 							>
-								<option value='IMMEDIATE'>Send Immediately</option>
-								<option value='DAILY'>Daily Digest</option>
-								<option value='WEEKLY'>Weekly Digest</option>
+								<option value='IMMEDIATE'>{t.notificationSettings.frequency.immediate}</option>
+								<option value='DAILY'>{t.notificationSettings.frequency.daily}</option>
+								<option value='WEEKLY'>{t.notificationSettings.frequency.weekly}</option>
 							</select>
 						</label>
 
@@ -166,7 +168,7 @@ export default function NotificationSettingsForm({
 										aria-hidden='true'
 									/>
 									<span className='text-base font-medium text-gray-900 dark:text-white'>
-										Delivery Time
+										{t.notificationSettings.deliveryTime.title}
 									</span>
 								</div>
 
@@ -184,7 +186,7 @@ export default function NotificationSettingsForm({
 										>
 											{DAYS_OF_WEEK.map((day) => (
 												<option key={day} value={day}>
-													{day.charAt(0) + day.slice(1).toLowerCase()}
+													{t.notificationSettings.deliveryTime.days[day]}
 												</option>
 											))}
 										</select>
@@ -209,7 +211,7 @@ export default function NotificationSettingsForm({
 			)}
 
 			<Button type='submit' disabled={loading} className='w-full'>
-				{loading ? 'Saving...' : 'Save Changes'}
+				{loading ? t.notificationSettings.buttons.saving : t.notificationSettings.buttons.save}
 			</Button>
 		</form>
 	);

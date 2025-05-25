@@ -1,10 +1,11 @@
 'use client';
 import React, { useState } from 'react';
-import faqData from './faqData';
 import FaqItem from './FaqItem';
 import SectionHeader from '@/components/Common/SectionHeader';
+import { useTranslation } from '@/lib/useTranslation';
 
 const FAQ = () => {
+	const { t } = useTranslation();
 	const [activeFaq, setActiveFaq] = useState<number | string>(1);
 
 	const handleFaqToggle = (id: number | string) => {
@@ -16,14 +17,14 @@ const FAQ = () => {
 			{/* <!-- section title --> */}
 
 			<SectionHeader
-				title={'Frequently Ask Questionss'}
-				description='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent condimentum dictum euismod malesuada lacus, non consequat quam.'
+				title={t('faqs.title')}
+				description={t('faqs.description')}
 			/>
 
 			<div className='mx-auto w-full max-w-[662px] px-4 sm:px-8 xl:px-0'>
 				<div className='flex flex-col gap-4 '>
 					{/* <!-- Accordion Item --> */}
-					{faqData?.map((faq, key) => (
+					{(t('faqs') as any[])?.map((faq, key) => (
 						<FaqItem
 							key={key}
 							faq={faq}

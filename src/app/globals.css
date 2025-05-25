@@ -3,20 +3,84 @@
 @tailwind utilities;
 
 :root {
-	--foreground-rgb: 0, 0, 0;
-	--background-start-rgb: 214, 219, 220;
-	--background-end-rgb: 255, 255, 255;
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
 }
 
 @media (prefers-color-scheme: dark) {
-	:root {
-		--foreground-rgb: 255, 255, 255;
-		--background-start-rgb: 0, 0, 0;
-		--background-end-rgb: 0, 0, 0;
-	}
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
 }
 
 body {
-	color: rgb(var(--foreground-rgb));
-	background: rgb(var(--background-start-rgb));
+  color: rgb(var(--foreground-rgb));
+  background: rgb(var(--background-start-rgb));
+}
+
+/* RTL Support */
+[dir="rtl"] {
+  text-align: right;
+}
+
+[dir="rtl"] .ltr {
+  direction: ltr;
+}
+
+/* Tailwind RTL Fixes */
+[dir="rtl"] .space-x-4 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-x-reverse: 1;
+}
+
+[dir="rtl"] .space-x-reverse > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-x-reverse: 0;
+}
+
+/* Additional RTL Styles */
+[dir="rtl"] {
+  /* Flip margins */
+  .ml-auto {
+    margin-left: 0;
+    margin-right: auto;
+  }
+  .mr-auto {
+    margin-right: 0;
+    margin-left: auto;
+  }
+
+  /* Flip padding */
+  .pl-4 {
+    padding-left: 0;
+    padding-right: 1rem;
+  }
+  .pr-4 {
+    padding-right: 0;
+    padding-left: 1rem;
+  }
+
+  /* Flip borders */
+  .border-l {
+    border-left: none;
+    border-right: 1px solid;
+  }
+  .border-r {
+    border-right: none;
+    border-left: 1px solid;
+  }
+
+  /* Flip transforms */
+  .rotate-90 {
+    transform: rotate(-90deg);
+  }
+  .rotate-180 {
+    transform: rotate(-180deg);
+  }
+
+  /* Flip icons and images if needed */
+  .flip-x {
+    transform: scaleX(-1);
+  }
 }

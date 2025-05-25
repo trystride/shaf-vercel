@@ -5,18 +5,20 @@ import { useState } from 'react';
 import { ApiKey } from '@prisma/client';
 import { deleteApiKey } from '@/actions/api-key';
 import toast from 'react-hot-toast';
+import { useTranslation } from '@/app/context/TranslationContext';
 
 export default function TokenList({ tokens }: { tokens: ApiKey[] }) {
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
 	const [loading, setLodading] = useState(false);
 	const [id, setId] = useState('');
+	const t = useTranslation();
 
 	const handleDelete = async () => {
 		setLodading(true);
 		try {
 			await deleteApiKey(id);
 		} catch (error) {
-			toast.error('Failed to delete token');
+			toast.error(t.api.tokenList.delete.error);
 		}
 
 		setLodading(false);
@@ -30,20 +32,20 @@ export default function TokenList({ tokens }: { tokens: ApiKey[] }) {
 					<>
 						<div className='border-b border-stroke px-9 py-5 dark:border-stroke-dark'>
 							<h3 className='font-satoshi text-custom-2xl font-bold tracking-[-.5px] text-dark dark:text-white'>
-								List of active tokens
+								{t.api.tokenList.title}
 							</h3>
 						</div>
 						<table className='w-full'>
 							<thead className='border-b border-stroke dark:border-stroke-dark'>
 								<tr>
 									<th className='p-3 pl-9 text-left font-satoshi text-base font-medium text-body dark:text-gray-5'>
-										Name
+										{t.api.tokenList.columns.name}
 									</th>
 									<th className='hidden p-3 text-left font-satoshi text-base font-medium text-body dark:text-gray-5 md:table-cell'>
-										Date
+										{t.api.tokenList.columns.date}
 									</th>
 									<th className='p-3 pr-9 text-right font-satoshi text-base font-medium text-body dark:text-gray-5'>
-										Action
+										{t.api.tokenList.columns.action}
 									</th>
 								</tr>
 							</thead>
@@ -55,22 +57,21 @@ export default function TokenList({ tokens }: { tokens: ApiKey[] }) {
 									>
 										<td className='p-4.5 pl-9 text-left tracking-[-.16px] text-dark dark:text-white'>
 											<span className='text-body dark:text-gray-5 md:hidden'>
-												Name:{' '}
+												{t.api.tokenList.columns.name}:{' '}
 											</span>
 											{token?.name}
 											<span className='block md:hidden'>
 												<span className='text-body dark:text-gray-5'>
-													Date:{' '}
-													{new Date(token?.createdAt).toLocaleDateString()}
+													{t.api.tokenList.columns.date}:{' '}
+													{new Date(token?.createdAt).toLocaleDateString('ar')}
 												</span>
 											</span>
 										</td>
 										<td className='hidden p-4.5 text-left tracking-[-.16px] text-dark dark:text-white md:table-cell'>
-											{new Date(token?.createdAt).toLocaleDateString()}
+											{new Date(token?.createdAt).toLocaleDateString('ar')}
 										</td>
 										<td className='p-4.5 pr-9 tracking-[-.16px] text-dark dark:text-white'>
 											<div className='flex items-center justify-end gap-3.5'>
-												{/* <DeleteToken id={token?.id} /> */}
 												<button
 													onClick={() => {
 														setId(token?.id);
@@ -106,7 +107,7 @@ export default function TokenList({ tokens }: { tokens: ApiKey[] }) {
 													</svg>
 												</button>
 
-												<CopyToClipboard text={token.key} label='Copy' />
+												<CopyToClipboard text={token.key} label={t.api.tokenList.copy} />
 											</div>
 										</td>
 									</tr>
@@ -118,7 +119,7 @@ export default function TokenList({ tokens }: { tokens: ApiKey[] }) {
 				<div>
 					{tokens?.length === 0 && (
 						<p className='flex justify-center px-9 py-20 tracking-[-.16px] text-body dark:text-gray-5'>
-							No active token available!
+							{t.api.tokenList.noTokens}
 						</p>
 					)}
 				</div>
@@ -127,7 +128,7 @@ export default function TokenList({ tokens }: { tokens: ApiKey[] }) {
 			<DeleteModal
 				showDeleteModal={showDeleteModal}
 				setShowDeleteModal={setShowDeleteModal}
-				deleteText='Delete API Key'
+				deleteText={t.api.tokenList.delete.title}
 				handleDelete={handleDelete}
 				loading={loading}
 			/>
